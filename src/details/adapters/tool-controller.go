@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+	usecases "github.com/seadiaz/adoption/src/details/adapters/use-cases"
 )
 
 // ToolController ...
 type ToolController struct {
-	repository *ToolRepository
+	service *usecases.ToolService
 }
 
 // CreateToolController ...
-func CreateToolController(repository *ToolRepository) ToolController {
+func CreateToolController(service *usecases.ToolService) ToolController {
 	return ToolController{
-		repository: repository,
+		service: service,
 	}
 }
 
@@ -26,13 +26,14 @@ func (c *ToolController) AddRoutes(s Server) {
 }
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
-	response := c.repository.GetAllTools()
+	response, _ := c.service.GetAllTools()
 	json.NewEncoder(w).Encode(response)
 }
 
 func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
-	var entity *entities.Tool
+	var entity map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&entity)
-	entity, _ = c.repository.CreateTool(entity)
-	json.NewEncoder(w).Encode(entity)
+	name := entity["name"].(string)
+	response, _ := c.service.CreateTool(name)
+	json.NewEncoder(w).Encode(response)
 }

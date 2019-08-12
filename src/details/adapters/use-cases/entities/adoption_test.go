@@ -10,8 +10,8 @@ import (
 
 func createDummyPersonWithNameAndToolName(personName string, toolName string) *entities.Person {
 	tool := entities.BuildToolWithName(toolName)
-	person := entities.BuildPerson(personName)
-	person.AdoptTool(*tool)
+	person := entities.CreatePersonWithName(personName)
+	person.AdoptTool(tool)
 	return person
 }
 
@@ -28,7 +28,7 @@ var _ = Describe("adoption", func() {
 
 		for i := 1; i <= 2; i++ {
 			personName := fmt.Sprintf("Dummy %d", i)
-			person := entities.BuildPerson(personName)
+			person := entities.CreatePersonWithName(personName)
 			adoption.IncludePerson(*person)
 		}
 

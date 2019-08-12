@@ -6,7 +6,7 @@ type Tool struct {
 	Name string
 }
 
-// BuildToolWithName ...
-func BuildToolWithName(name string) *Tool {
+// CreateToolWithName ...
+func CreateToolWithName(name string) *Tool {
 	return &Tool{Name: name}
 }

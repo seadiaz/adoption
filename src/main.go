@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/details"
 	"github.com/seadiaz/adoption/src/details/adapters"
+	usecases "github.com/seadiaz/adoption/src/details/adapters/use-cases"
 )
 
 func init() {
@@ -22,11 +23,16 @@ func main() {
 	httpServer := &http.Server{Addr: ":10000", Handler: router}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
-	memory := make(map[string]interface{})
-	persistence := details.BuildMemoryPersistence(memory)
-	toolRepository := adapters.CreateToolRepository(persistence)
-	toolController := adapters.CreateToolController(toolRepository)
+	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
+	toolService := usecases.CreateToolService(toolRepository)
+	toolController := adapters.CreateToolController(toolService)
 	toolController.AddRoutes(server)
+
+	personRepository := adapters.CreatePersonRepository(details.BuildMemoryPersistence())
+	personService := usecases.CreatePersonService(personRepository)
+	personController := adapters.CreatePersonController(personService)
+	personController.AddRoutes(server)
+
 	server.Run()
 }
 

@@ -13,14 +13,23 @@ type MemoryPersistence struct {
 }
 
 // BuildMemoryPersistence ...
-func BuildMemoryPersistence(memory map[string]interface{}) adapters.Persistence {
+func BuildMemoryPersistence() adapters.Persistence {
 	return &MemoryPersistence{
-		memory: memory,
+		memory: make(map[string]interface{}),
 	}
 }
 
 // Create ...
 func (p *MemoryPersistence) Create(id string, obj interface{}) error {
+	if id == "" {
+		return errors.New("you must provide an id")
+	}
+	p.memory[id] = obj
+	return nil
+}
+
+// Update ...
+func (p *MemoryPersistence) Update(id string, obj interface{}) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -44,4 +53,9 @@ func (p *MemoryPersistence) GetAll() []interface{} {
 		list.Add(value)
 	}
 	return list.Values()
+}
+
+// Find ...
+func (p *MemoryPersistence) Find(id string) interface{} {
+	return p.memory[id]
 }

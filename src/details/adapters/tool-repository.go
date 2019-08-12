@@ -34,8 +34,8 @@ func (r *ToolRepository) GetAllTools() []entities.Tool {
 	return output
 }
 
-// CreateTool ...
-func (r *ToolRepository) CreateTool(entity *entities.Tool) (*entities.Tool, error) {
+// SaveTool ...
+func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error) {
 	glog.Info("create tool called")
 	if entity.ID == "" {
 		entity.ID = uuid.New().String()
