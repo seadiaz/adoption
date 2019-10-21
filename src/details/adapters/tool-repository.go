@@ -5,16 +5,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
-	"github.com/walmartdigital/katalog/src/server/persistence"
 )
 
 // ToolRepository ...
 type ToolRepository struct {
-	persistence persistence.Persistence
+	persistence Persistence
 }
 
 // CreateToolRepository ...
-func CreateToolRepository(persistence persistence.Persistence) *ToolRepository {
+func CreateToolRepository(persistence Persistence) *ToolRepository {
 	return &ToolRepository{
 		persistence: persistence,
 	}
