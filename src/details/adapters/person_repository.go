@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/mitchellh/mapstructure"
-	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
 )
 
 // PersonRepository ...
@@ -20,7 +20,7 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 	}
 }
 
-// GetAllTools ...
+// GetAllPeople ...
 func (r *PersonRepository) GetAllPeople() []entities.Person {
 	glog.Info("get all tools called")
 	var output []entities.Person

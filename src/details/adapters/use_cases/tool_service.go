@@ -1,6 +1,6 @@
 package usecases
 
-import "github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+import "github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
 
 type toolRepository interface {
 	GetAllTools() []entities.Tool

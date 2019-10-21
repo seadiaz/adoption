@@ -1,23 +1,15 @@
 package main
 
 import (
-	"flag"
 	"net/http"
 
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/details"
 	"github.com/seadiaz/adoption/src/details/adapters"
 	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
 )
 
-func init() {
-	flag.Set("logtostderr", "true")
-	flag.Parse()
-}
-
-func main() {
-	glog.Info("server starting...")
+func start() {
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
 	httpServer := &http.Server{Addr: ":10000", Handler: router}

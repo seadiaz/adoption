@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	usecases "github.com/seadiaz/adoption/src/details/adapters/use-cases"
+	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
 )
 
 // ToolController ...

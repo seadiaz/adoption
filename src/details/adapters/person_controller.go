@@ -7,8 +7,8 @@ import (
 
 	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
-	usecases "github.com/seadiaz/adoption/src/details/adapters/use-cases"
-	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
+	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
 )
 
 // PersonController ...
