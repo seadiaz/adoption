@@ -21,12 +21,12 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 }
 
 // GetAllPeople ...
-func (r *PersonRepository) GetAllPeople() ([]entities.Person, error) {
+func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 	glog.Info("get all tools called")
-	var output []entities.Person
+	var output []*entities.Person
 	items := r.persistence.GetAll()
 	for _, item := range items {
-		var entity entities.Person
+		var entity *entities.Person
 		mapstructure.Decode(item, &entity)
 		output = append(output, entity)
 	}

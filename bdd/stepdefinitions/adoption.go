@@ -11,7 +11,7 @@ var adoptions map[string]interface{} = make(map[string]interface{})
 // WeAskForTheLevelOfAdoptionOfTheTool ...
 func WeAskForTheLevelOfAdoptionOfTheTool(toolName string) error {
 	tool := tools[toolName].(map[string]interface{})
-	toolID := tool["ID"].(string)
+	toolID := tool["id"].(string)
 	res, err := drivers.CalculateAdoptionForTool(toolID)
 	adoptions[toolName] = res
 	return err

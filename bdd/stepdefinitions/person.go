@@ -15,7 +15,7 @@ func APersonNamedWhichHaveAdoptedTool(personName string, toolName string) error 
 	people[personName] = res
 
 	tool := tools[toolName].(map[string]interface{})
-	_, err = drivers.AdoptToolByPerson(tool["ID"].(string), res["Email"].(string))
+	_, err = drivers.AdoptToolByPerson(tool["id"].(string), res["email"].(string))
 	return err
 }
 

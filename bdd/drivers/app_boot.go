@@ -9,13 +9,14 @@ import (
 	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
 )
 
-var baseURL string = "http://localhost:10000"
+var port string = "10000"
+var baseURL string = "http://localhost:" + port
 
 // StartApp ...
 func StartApp() {
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
-	httpServer := &http.Server{Addr: ":10000", Handler: router}
+	httpServer := &http.Server{Addr: ":" + port, Handler: router}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())

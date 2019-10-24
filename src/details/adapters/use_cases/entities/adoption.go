@@ -2,19 +2,19 @@ package entities
 
 // Adoption ...
 type Adoption struct {
-	People []Person
+	People []*Person
 	Tool   Tool
 }
 
 // CreateAdoption ...
 func CreateAdoption() *Adoption {
 	return &Adoption{
-		People: make([]Person, 0),
+		People: make([]*Person, 0),
 	}
 }
 
 // IncludePerson ...
-func (a *Adoption) IncludePerson(person Person) error {
+func (a *Adoption) IncludePerson(person *Person) error {
 	a.People = append(a.People, person)
 	return nil
 }

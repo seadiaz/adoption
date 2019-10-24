@@ -11,6 +11,8 @@ import (
 	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
 )
 
+var port = flag.String("port", "3000", "listen port")
+
 func init() {
 	flag.Set("logtostderr", "true")
 	flag.Parse()
@@ -20,17 +22,20 @@ func main() {
 	glog.Info("server starting...")
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
-	httpServer := &http.Server{Addr: ":10000", Handler: router}
+	httpServer := &http.Server{Addr: ":" + *port, Handler: router}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
-	toolService := usecases.CreateToolService(toolRepository)
-	toolController := adapters.CreateToolController(toolService)
-	toolController.AddRoutes(server)
-
 	personRepository := adapters.CreatePersonRepository(details.BuildMemoryPersistence())
+
+	toolService := usecases.CreateToolService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository)
+	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository)
+
+	toolController := adapters.CreateToolController(toolService, adoptionService)
 	personController := adapters.CreatePersonController(personService)
+
+	toolController.AddRoutes(server)
 	personController.AddRoutes(server)
 
 	server.Run()

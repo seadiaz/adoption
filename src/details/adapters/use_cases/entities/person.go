@@ -4,7 +4,7 @@ package entities
 type Person struct {
 	Email string
 	Name  string
-	Tools []Tool
+	Tools []*Tool
 }
 
 // CreatePersonWithNameAndEmail ...
@@ -12,13 +12,13 @@ func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
 		Email: email,
 		Name:  name,
-		Tools: make([]Tool, 0),
+		Tools: make([]*Tool, 0),
 	}
 }
 
 // AdoptTool ...
 func (p *Person) AdoptTool(tool *Tool) error {
-	p.Tools = append(p.Tools, *tool)
+	p.Tools = append(p.Tools, tool)
 	return nil
 }
 

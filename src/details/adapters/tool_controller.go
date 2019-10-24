@@ -31,6 +31,7 @@ func (c *ToolController) AddRoutes(s Server) {
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
 	response, _ := c.service.GetAllTools()
+	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -38,8 +39,10 @@ func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
 	var entity map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&entity)
 	name := entity["name"].(string)
-	response, _ := c.service.CreateTool(name)
-	json.NewEncoder(w).Encode(response)
+	res, _ := c.service.CreateTool(name)
+	output := CreateToolResponseFromTool(res)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(output)
 }
 
 func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +53,6 @@ func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusConflict)
 		return
 	}
-
+	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

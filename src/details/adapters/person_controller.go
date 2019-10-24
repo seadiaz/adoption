@@ -36,8 +36,10 @@ func (c *PersonController) AddRoutes(s Server) {
 }
 
 func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) {
-	response, _ := c.service.GetAllPeople()
-	json.NewEncoder(w).Encode(response)
+	res, _ := c.service.GetAllPeople()
+	output := CreatePersonResponseListFromPersonList(res)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(output)
 }
 
 func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) {
@@ -51,11 +53,14 @@ func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) 
 	if v.Validate() {
 		name, _ := data.Get("name")
 		email, _ := data.Get("email")
-		response, _ := c.service.CreatePerson(name.(string), email.(string))
-		json.NewEncoder(w).Encode(response)
+		res, _ := c.service.CreatePerson(name.(string), email.(string))
+		output := CreatePersonResponseFromPerson(res)
+		w.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(output)
 	} else {
 		fmt.Println(v.Errors)
 		fmt.Println(v.Errors.One())
+		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(v.Errors)
 	}
 }
@@ -65,7 +70,8 @@ func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Reques
 	json.NewDecoder(r.Body).Decode(&entity)
 	vars := mux.Vars(r)
 	id := vars["id"]
-	person, _ := c.service.AddToolToPerson(entity, id)
+	res, _ := c.service.AddToolToPerson(entity, id)
+	output := CreatePersonResponseFromPerson(res)
 	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(person)
+	json.NewEncoder(w).Encode(output)
 }
