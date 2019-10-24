@@ -5,17 +5,19 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
 )
 
-func createDummyPersonWithNameAndToolName(personName string, toolName string) *entities.Person {
-	tool := entities.BuildToolWithName(toolName)
-	person := entities.CreatePersonWithName(personName)
+func createDummyPersonWithNameAndEmailAndToolWithName(personName string, personEmail string, toolName string) *entities.Person {
+	tool := entities.CreateToolWithName(toolName)
+	person := entities.CreatePersonWithNameAndEmail(personName, personEmail)
 	person.AdoptTool(tool)
 	return person
 }
 
 var _ = Describe("adoption", func() {
+	defaultEmail := "dummy@tld.rd"
+
 	It("should create an instance", func() {
 		actual := entities.BuildAdoption()
 
@@ -28,7 +30,7 @@ var _ = Describe("adoption", func() {
 
 		for i := 1; i <= 2; i++ {
 			personName := fmt.Sprintf("Dummy %d", i)
-			person := entities.CreatePersonWithName(personName)
+			person := entities.CreatePersonWithNameAndEmail(personName, defaultEmail)
 			adoption.IncludePerson(*person)
 		}
 
@@ -39,10 +41,10 @@ var _ = Describe("adoption", func() {
 
 	It("should get 0 adoption when nobody adopt the tool", func() {
 		adoption := entities.BuildAdoption()
-		person := createDummyPersonWithNameAndToolName("Stanley Sherman", "Tool 1")
+		person := createDummyPersonWithNameAndEmailAndToolWithName("Stanley Sherman", defaultEmail, "Tool 1")
 		adoption.IncludePerson(*person)
 		expectedToolName := "Tool 2"
-		expectedTool := entities.BuildToolWithName(expectedToolName)
+		expectedTool := entities.CreateToolWithName(expectedToolName)
 
 		actual, _ := adoption.CalculateForTool(*expectedTool)
 
@@ -51,16 +53,16 @@ var _ = Describe("adoption", func() {
 
 	It("should get 25 adoption when 1 of 4 people adopt the tool", func() {
 		adoption := entities.BuildAdoption()
-		person1 := createDummyPersonWithNameAndToolName("Stanley Sherman", "Tool 1")
+		person1 := createDummyPersonWithNameAndEmailAndToolWithName("Stanley Sherman", defaultEmail, "Tool 1")
 		adoption.IncludePerson(*person1)
-		person2 := createDummyPersonWithNameAndToolName("Marie Holloway", "Tool 2")
+		person2 := createDummyPersonWithNameAndEmailAndToolWithName("Marie Holloway", defaultEmail, "Tool 2")
 		adoption.IncludePerson(*person2)
-		person3 := createDummyPersonWithNameAndToolName("Fanny Watson", "Tool 2")
+		person3 := createDummyPersonWithNameAndEmailAndToolWithName("Fanny Watson", defaultEmail, "Tool 2")
 		adoption.IncludePerson(*person3)
-		person4 := createDummyPersonWithNameAndToolName("Winifred McKinney", "Tool 2")
+		person4 := createDummyPersonWithNameAndEmailAndToolWithName("Winifred McKinney", defaultEmail, "Tool 2")
 		adoption.IncludePerson(*person4)
 		expectedToolName := "Tool 1"
-		expectedTool := entities.BuildToolWithName(expectedToolName)
+		expectedTool := entities.CreateToolWithName(expectedToolName)
 
 		actual, _ := adoption.CalculateForTool(*expectedTool)
 

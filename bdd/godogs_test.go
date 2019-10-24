@@ -5,8 +5,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/seadiaz/adoption/bdd/drivers"
+	"github.com/seadiaz/adoption/bdd/stepdefinitions"
+
 	"github.com/golang/glog"
-	stepdefinition "github.com/seadiaz/adoption/bdd/step_definition"
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/colors"
@@ -15,6 +17,7 @@ import (
 var opt = godog.Options{Output: colors.Colored(os.Stdout)}
 
 func init() {
+	flag.Set("logtostderr", "true")
 	godog.BindFlags("godog.", flag.CommandLine, &opt)
 }
 
@@ -33,14 +36,16 @@ func TestMain(m *testing.M) {
 }
 
 func FeatureContext(s *godog.Suite) {
-	s.Step(`^there are (\d+) godogs$`, stepdefinition.ThereAreGodogs)
-	s.Step(`^I eat (\d+)$`, stepdefinition.IEat)
-	s.Step(`^there should be (\d+) remaining$`, stepdefinition.ThereShouldBeRemaining)
+	s.Step(`^there is a tool named (\w+)$`, stepdefinitions.ThereIsAToolNamed)
+	s.Step(`^a person named (\w+) which have adopted tool (\w+)$`, stepdefinitions.APersonNamedWhichHaveAdoptedTool)
+	s.Step(`^a person named (\w+)$`, stepdefinitions.APersonNamed)
+	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, stepdefinitions.WeAskForTheLevelOfAdoptionOfTheTool)
+	s.Step(`^the adoption level of tool (\w+) should be (\d+) percent$`, stepdefinitions.TheAdoptionLevelOfToolShouldBePercent)
 
 	s.BeforeScenario(func(interface{}) {
-		stepdefinition.Godogs = 0 // clean the state before every scenario
 	})
 	s.BeforeSuite(func() {
-		glog.Infoln("Before suite")
+		glog.Infoln("starting app...")
+		drivers.StartApp()
 	})
 }

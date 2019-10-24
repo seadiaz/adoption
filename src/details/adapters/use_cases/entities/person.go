@@ -21,3 +21,14 @@ func (p *Person) AdoptTool(tool *Tool) error {
 	p.Tools = append(p.Tools, *tool)
 	return nil
 }
+
+// HasAdoptedTool ...
+func (p *Person) HasAdoptedTool(tool *Tool) bool {
+	for _, item := range p.Tools {
+		if item.ID == tool.ID {
+			return true
+		}
+	}
+
+	return false
+}

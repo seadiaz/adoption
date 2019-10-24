@@ -1,6 +1,8 @@
 package adapters
 
 import (
+	"errors"
+
 	"github.com/golang/glog"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
@@ -44,4 +46,19 @@ func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error)
 	}
 
 	return entity, nil
+}
+
+// GetTool ...
+func (r *ToolRepository) GetTool(id string) (*entities.Tool, error) {
+	glog.Info("get tool called")
+	res, err := r.persistence.Find(id)
+	if err != nil {
+		glog.Warning(err)
+		return nil, errors.New("error getting tool")
+	}
+	if res == nil {
+		return nil, errors.New("tool doesn't exists")
+	}
+
+	return res.(*entities.Tool), nil
 }

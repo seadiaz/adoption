@@ -5,18 +5,20 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/seadiaz/adoption/src/details/adapters/use-cases/entities"
+	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
 )
 
 func createDummyToolWithName(name string) *entities.Tool {
-	return entities.BuildToolWithName(name)
+	return entities.CreateToolWithName(name)
 }
 
 var _ = Describe("person", func() {
+	defaultEmail := "dummy@tld.rd"
+
 	It("should create an instance", func() {
 		name := "Janie Soto"
 
-		actual := entities.CreatePersonWithName(name)
+		actual := entities.CreatePersonWithNameAndEmail(name, defaultEmail)
 
 		Expect(actual).ToNot(BeNil())
 		Expect(actual.Tools).To(HaveLen(0))
@@ -24,11 +26,11 @@ var _ = Describe("person", func() {
 
 	It("should create adopt 2 tools", func() {
 		name := "Myra Wise"
-		person := entities.CreatePersonWithName(name)
+		person := entities.CreatePersonWithNameAndEmail(name, defaultEmail)
 
 		for i := 1; i <= 2; i++ {
 			toolName := fmt.Sprintf("Dummy %d", i)
-			tool := entities.BuildToolWithName(toolName)
+			tool := entities.CreateToolWithName(toolName)
 			person.AdoptTool(tool)
 		}
 

@@ -1,14 +1,13 @@
 package entities
 
-import "fmt"
-
 // Adoption ...
 type Adoption struct {
 	People []Person
+	Tool   Tool
 }
 
-// BuildAdoption ...
-func BuildAdoption() *Adoption {
+// CreateAdoption ...
+func CreateAdoption() *Adoption {
 	return &Adoption{
 		People: make([]Person, 0),
 	}
@@ -21,9 +20,13 @@ func (a *Adoption) IncludePerson(person Person) error {
 }
 
 // CalculateForTool ...
-func (a *Adoption) CalculateForTool(tool Tool) (int, error) {
-	for i := 0; i < len(a.People); i++ {
-		fmt.Println(a.People[i].Name)
+func (a *Adoption) CalculateForTool(tool *Tool) int {
+	total := len(a.People)
+	counter := 0
+	for _, person := range a.People {
+		if person.HasAdoptedTool(tool) {
+			counter++
+		}
 	}
-	return 0, nil
+	return 100 * counter / total
 }

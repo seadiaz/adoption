@@ -21,7 +21,7 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 }
 
 // GetAllPeople ...
-func (r *PersonRepository) GetAllPeople() []entities.Person {
+func (r *PersonRepository) GetAllPeople() ([]entities.Person, error) {
 	glog.Info("get all tools called")
 	var output []entities.Person
 	items := r.persistence.GetAll()
@@ -31,14 +31,14 @@ func (r *PersonRepository) GetAllPeople() []entities.Person {
 		output = append(output, entity)
 	}
 
-	return output
+	return output, nil
 }
 
 // FindPerson ...
 func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
 	glog.Info("get person called")
 	var output entities.Person
-	item := r.persistence.Find(id)
+	item, _ := r.persistence.Find(id)
 	mapstructure.Decode(item, &output)
 
 	return &output, nil
@@ -46,7 +46,7 @@ func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
 
 // SavePerson ...
 func (r *PersonRepository) SavePerson(entity *entities.Person) error {
-	glog.Info("create tool called")
+	glog.Info("create person called")
 	if entity.Email == "" {
 		return errors.New("person should have an email")
 	}

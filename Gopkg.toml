@@ -61,10 +61,6 @@
   name = "github.com/onsi/gomega"
   version = "1.7.0"
 
-[[constraint]]
-  branch = "master"
-  name = "github.com/walmartdigital/katalog"
-
 [prune]
   go-tests = true
   unused-packages = true

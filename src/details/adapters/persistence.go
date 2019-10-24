@@ -6,5 +6,5 @@ type Persistence interface {
 	Update(id string, obj interface{}) error
 	Delete(id string) error
 	GetAll() []interface{}
-	Find(id string) interface{}
+	Find(id string) (interface{}, error)
 }

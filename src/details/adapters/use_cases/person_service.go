@@ -8,7 +8,7 @@ import (
 type personRepository interface {
 	FindPerson(id string) (*entities.Person, error)
 	SavePerson(entity *entities.Person) error
-	GetAllPeople() []entities.Person
+	GetAllPeople() ([]entities.Person, error)
 }
 
 // PersonService ...
@@ -25,7 +25,7 @@ func CreatePersonService(repository personRepository) *PersonService {
 
 // GetAllPeople ...
 func (s *PersonService) GetAllPeople() ([]entities.Person, error) {
-	people := s.repository.GetAllPeople()
+	people, _ := s.repository.GetAllPeople()
 	return people, nil
 }
 

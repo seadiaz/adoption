@@ -56,6 +56,7 @@ func (p *MemoryPersistence) GetAll() []interface{} {
 }
 
 // Find ...
-func (p *MemoryPersistence) Find(id string) interface{} {
-	return p.memory[id]
+func (p *MemoryPersistence) Find(id string) (interface{}, error) {
+	output := p.memory[id]
+	return output, nil
 }

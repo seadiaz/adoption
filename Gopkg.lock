@@ -138,14 +138,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b4d4a29ba05d7e06008aaaf3b7c6293203e87d098b78b61a4c5c4047f12e1a8a"
-  name = "github.com/walmartdigital/katalog"
-  packages = ["src/server/persistence"]
-  pruneopts = "UT"
-  revision = "534318255ce1ca835b1d015ebf25fc5a356d4a6e"
-
-[[projects]]
-  branch = "master"
   digest = "1:94002ae1eb37d085f9aca990b3246b0cf6f0d114b5c0924aedd8eaf2a912143f"
   name = "golang.org/x/net"
   packages = [
@@ -154,15 +146,15 @@
     "html/charset",
   ]
   pruneopts = "UT"
-  revision = "491137f692577e390404f177a0515c9f86f79754"
+  revision = "ec77196f6094c3492a8b61f2c11cf937f78992ae"
 
 [[projects]]
   branch = "master"
-  digest = "1:7c927f17d868be652a4cfe7de23e4292dea5b14d974a1d536e3b7cb7e79fd695"
+  digest = "1:70b2bf25c4ed23c61dae668e4151d87a7edc5965bc3ccfecd1b9fe5f1752092a"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "b09406accb4736d857a32bf9444cd7edae2ffa79"
+  revision = "742c48ecaeb7c624c475e02f3eb0827ebb4970d4"
 
 [[projects]]
   digest = "1:8a0baffd5559acaa560f854d7d525c02f4fec2d4f8a214398556fb661a10f6e0"
@@ -229,7 +221,6 @@
     "github.com/mitchellh/mapstructure",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
-    "github.com/walmartdigital/katalog/src/server/persistence",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

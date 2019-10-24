@@ -66,5 +66,6 @@ func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Reques
 	vars := mux.Vars(r)
 	id := vars["id"]
 	person, _ := c.service.AddToolToPerson(entity, id)
+	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(person)
 }
