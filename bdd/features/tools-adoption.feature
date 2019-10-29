@@ -9,3 +9,9 @@ Feature: know people adoption
     And a person named Fujobme which have adopted tool Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of tool Uzojoje should be 50 percent
+
+  Scenario: Nobody have adopted
+    Given there is a tool named Uzojoje
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the adoption level of tool Uzojoje should be 0 percent
+    

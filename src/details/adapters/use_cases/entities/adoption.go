@@ -22,6 +22,10 @@ func (a *Adoption) IncludePerson(person *Person) error {
 // CalculateForTool ...
 func (a *Adoption) CalculateForTool(tool *Tool) int {
 	total := len(a.People)
+	if total == 0 {
+		return 0
+	}
+
 	counter := 0
 	for _, person := range a.People {
 		if person.HasAdoptedTool(tool) {
