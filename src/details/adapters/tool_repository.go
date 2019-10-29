@@ -22,17 +22,17 @@ func CreateToolRepository(persistence Persistence) *ToolRepository {
 }
 
 // GetAllTools ...
-func (r *ToolRepository) GetAllTools() []entities.Tool {
+func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 	glog.Info("get all tools called")
-	var output []entities.Tool
+	output := make([]*entities.Tool, 0, 0)
 	items := r.persistence.GetAll()
 	for _, item := range items {
-		var entity entities.Tool
+		var entity *entities.Tool
 		mapstructure.Decode(item, &entity)
 		output = append(output, entity)
 	}
 
-	return output
+	return output, nil
 }
 
 // SaveTool ...

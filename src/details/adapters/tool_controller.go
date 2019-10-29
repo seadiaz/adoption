@@ -30,9 +30,10 @@ func (c *ToolController) AddRoutes(s Server) {
 }
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
-	response, _ := c.service.GetAllTools()
+	res, _ := c.service.GetAllTools()
+	output := CreateToolResponseListFromToolList(res)
 	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(output)
 }
 
 func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
@@ -48,11 +49,11 @@ func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
 func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	response, err := c.adoptionService.CalculateAdoptionForTool(id)
+	res, err := c.adoptionService.CalculateAdoptionForTool(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusConflict)
 		return
 	}
 	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(res)
 }

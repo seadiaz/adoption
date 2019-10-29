@@ -5,7 +5,7 @@ import (
 )
 
 type toolRepository interface {
-	GetAllTools() []entities.Tool
+	GetAllTools() ([]*entities.Tool, error)
 	SaveTool(entity *entities.Tool) (*entities.Tool, error)
 	GetTool(id string) (*entities.Tool, error)
 }
@@ -23,8 +23,8 @@ func CreateToolService(repository toolRepository) *ToolService {
 }
 
 // GetAllTools ...
-func (s *ToolService) GetAllTools() ([]entities.Tool, error) {
-	tools := s.repository.GetAllTools()
+func (s *ToolService) GetAllTools() ([]*entities.Tool, error) {
+	tools, _ := s.repository.GetAllTools()
 	return tools, nil
 }
 

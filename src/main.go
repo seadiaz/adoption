@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"github.com/seadiaz/adoption/src/details"
 	"github.com/seadiaz/adoption/src/details/adapters"
 	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
@@ -19,10 +20,10 @@ func init() {
 }
 
 func main() {
-	glog.Info("server starting...")
+	glog.Info("server starting on port: ", *port)
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
-	httpServer := &http.Server{Addr: ":" + *port, Handler: router}
+	httpServer := &http.Server{Addr: ":" + *port, Handler: cors.Default().Handler(router)}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
