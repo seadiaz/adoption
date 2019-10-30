@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	usecases "github.com/seadiaz/adoption/src/details/adapters/use_cases"
+	"github.com/seadiaz/adoption/src/details/adapters/usecases"
 )
 
 // ToolController ...

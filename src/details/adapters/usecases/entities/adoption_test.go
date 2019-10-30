@@ -5,7 +5,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
+	"github.com/seadiaz/adoption/src/details/adapters/usecases/entities"
 )
 
 func createDummyPersonWithNameAndEmailAndToolWithName(personName string, personEmail string, toolName string) *entities.Person {

@@ -6,7 +6,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
-	"github.com/seadiaz/adoption/src/details/adapters/use_cases/entities"
+	"github.com/seadiaz/adoption/src/details/adapters/usecases/entities"
 )
 
 // ToolRepository ...

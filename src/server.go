@@ -1,22 +1,21 @@
-package drivers
+package main
 
 import (
 	"net/http"
 
+	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"github.com/seadiaz/adoption/src/details"
 	"github.com/seadiaz/adoption/src/details/adapters"
-	usecases "github.com/seadiaz/adoption/src/details/adapters/usecases"
+	"github.com/seadiaz/adoption/src/details/adapters/usecases"
 )
 
-var port string = "10000"
-var baseURL string = "http://localhost:" + port
-
-// StartApp ...
-func StartApp() {
+func mainServer() {
+	glog.Info("server starting on port: ", *port)
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
-	httpServer := &http.Server{Addr: ":" + port, Handler: router}
+	httpServer := &http.Server{Addr: ":" + *port, Handler: cors.Default().Handler(router)}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
@@ -32,7 +31,7 @@ func StartApp() {
 	toolController.AddRoutes(server)
 	personController.AddRoutes(server)
 
-	go server.Run()
+	server.Run()
 }
 
 type routerWrapper struct {
