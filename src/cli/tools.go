@@ -4,6 +4,7 @@ const toolsPath = "/tools"
 
 // Tool ...
 type Tool struct {
+	ID   string `json:"id, omitempty"`
 	Name string `json:"name"`
 }
 
@@ -32,4 +33,26 @@ func (c *Client) postTools(tools []*Tool) {
 
 func (c *Client) postTool(tool *Tool) {
 	doPostRequest(tool, c.URL+toolsPath)
+}
+
+func (c *Client) getTools() []*Tool {
+	res := doGetRequest(c.URL + toolsPath)
+	output := make([]*Tool, 0, 0)
+	for _, item := range res {
+		output = append(output, &Tool{
+			ID:   item["id"].(string),
+			Name: item["name"].(string),
+		})
+	}
+	return output
+}
+
+func findToolByName(tools []*Tool, name string) *Tool {
+	for _, item := range tools {
+		if item.Name == name {
+			return item
+		}
+	}
+
+	return nil
 }

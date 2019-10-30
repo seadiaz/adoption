@@ -31,18 +31,16 @@ func mainCLI() {
 
 	app.Commands = []urfavecli.Command{
 		{
-			Name:    "load",
-			Aliases: []string{"l"},
-			Usage:   "load csv data into adoption server",
-			Action:  loadData,
+			Name:      "load",
+			Aliases:   []string{"l"},
+			Usage:     "load csv data into adoption server",
+			UsageText: "cli load [command options] <kind>",
+			Action:    loadData,
 			Flags: []urfavecli.Flag{
 				urfavecli.StringFlag{
-					Name:  "file, f",
-					Usage: "Load data from `FILE`",
-				},
-				urfavecli.StringFlag{
-					Name:  "kind, k",
-					Usage: "Kind of data to load",
+					Name:     "file, f",
+					Usage:    "Load data from `FILE`",
+					Required: true,
 				},
 			},
 		},
@@ -59,7 +57,7 @@ func mainCLI() {
 
 func loadData(c *urfavecli.Context) error {
 	filename := c.String("file")
-	kind := c.String("kind")
+	kind := c.Args().Get(0)
 	client := &cli.Client{
 		URL:      c.GlobalString("URL"),
 		Filename: filename,
@@ -69,6 +67,8 @@ func loadData(c *urfavecli.Context) error {
 		client.LoadTools()
 	case "people":
 		client.LoadPeople()
+	case "adoptions":
+		client.LoadAdoptions()
 	default:
 		glog.Fatalf("kind %s not supported", kind)
 	}

@@ -36,6 +36,7 @@ func readCsvFile(fileName string) [][]string {
 }
 
 func doPostRequest(body interface{}, url string) {
+	glog.Info(url)
 	reqBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(reqBodyBytes).Encode(body)
 	req, _ := http.NewRequest(http.MethodPost, url, reqBodyBytes)
@@ -45,5 +46,17 @@ func doPostRequest(body interface{}, url string) {
 		glog.Error(err)
 	}
 	defer res.Body.Close()
-	glog.Infof("payload %s created", body)
+}
+
+func doGetRequest(url string) []map[string]interface{} {
+	req, _ := http.NewRequest(http.MethodGet, url, nil)
+	req.Header.Add("Content-Type", "application/json")
+	res, err := http.DefaultClient.Do(req)
+	if err != nil || res.StatusCode != 200 {
+		glog.Error(err)
+	}
+	defer res.Body.Close()
+	var output []map[string]interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output
 }
