@@ -40,6 +40,8 @@ func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interf
 	}
 	output := make(map[string]interface{})
 	output["adoption"] = adoption.CalculateForTool(tool)
+	output["adopters"] = adoption.FilterAdoptersForTool(tool)
+	output["absentees"] = adoption.FilterAbsenteesForTool(tool)
 
 	return output, nil
 }

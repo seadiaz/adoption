@@ -34,3 +34,33 @@ func (a *Adoption) CalculateForTool(tool *Tool) int {
 	}
 	return 100 * counter / total
 }
+
+// FilterAdoptersForTool ...
+func (a *Adoption) FilterAdoptersForTool(tool *Tool) []*Person {
+	output := make([]*Person, 0, 0)
+	if len(a.People) == 0 {
+		return output
+	}
+
+	for _, person := range a.People {
+		if person.HasAdoptedTool(tool) {
+			output = append(output, person)
+		}
+	}
+	return output
+}
+
+// FilterAbsenteesForTool ...
+func (a *Adoption) FilterAbsenteesForTool(tool *Tool) []*Person {
+	output := make([]*Person, 0, 0)
+	if len(a.People) == 0 {
+		return output
+	}
+
+	for _, person := range a.People {
+		if !person.HasAdoptedTool(tool) {
+			output = append(output, person)
+		}
+	}
+	return output
+}

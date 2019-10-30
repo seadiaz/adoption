@@ -8,10 +8,40 @@ Feature: know people adoption
     And a person named Locakag
     And a person named Fujobme which have adopted tool Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
-    Then the adoption level of tool Uzojoje should be 50 percent
+    Then the adoption level of the tool Uzojoje should be 50 percent
+
+  Scenario: 75% of adoption
+    Given there is a tool named Uzojoje
+    And a person named Locakag
+    And a person named Fujobme which have adopted tool Uzojoje
+    And a person named Dupilze which have adopted tool Uzojoje
+    And a person named Jullakiko which have adopted tool Uzojoje
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the adoption level of the tool Uzojoje should be 75 percent
 
   Scenario: Nobody have adopted
     Given there is a tool named Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
-    Then the adoption level of tool Uzojoje should be 0 percent
-    
+    Then the adoption level of the tool Uzojoje should be 0 percent
+
+  Scenario: Retrieve adopter list
+    Given there is a tool named Uzojoje
+    And a person named Fujobme which have adopted tool Uzojoje
+    And a person named Dupilze which have adopted tool Uzojoje
+    And a person named Jullakiko which have adopted tool Uzojoje
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the list of adopters of the tool Uzojoje should contain to Fujobme
+    And the list of adopters of the tool Uzojoje should contain to Dupilze
+    And the list of adopters of the tool Uzojoje should contain to Jullakiko
+    And the list of adopters of the tool Uzojoje should not contain to Kavdanah
+
+  Scenario: Retrieve absentees list
+    Given there is a tool named Uzojoje
+    And a person named Fujobme
+    And a person named Dupilze
+    And a person named Jullakiko
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the list of absentees of the tool Uzojoje should contain to Fujobme
+    And the list of absentees of the tool Uzojoje should contain to Dupilze
+    And the list of absentees of the tool Uzojoje should contain to Jullakiko
+    And the list of absentees of the tool Uzojoje should not contain to Kavdanah

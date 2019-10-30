@@ -40,7 +40,11 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^a person named (\w+) which have adopted tool (\w+)$`, stepdefinitions.APersonNamedWhichHaveAdoptedTool)
 	s.Step(`^a person named (\w+)$`, stepdefinitions.APersonNamed)
 	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, stepdefinitions.WeAskForTheLevelOfAdoptionOfTheTool)
-	s.Step(`^the adoption level of tool (\w+) should be (\d+) percent$`, stepdefinitions.TheAdoptionLevelOfToolShouldBePercent)
+	s.Step(`^the adoption level of the tool (\w+) should be (\d+) percent$`, stepdefinitions.TheAdoptionLevelOfTheToolShouldBePercent)
+	s.Step(`^the list of adopters of the tool (\w+) should contain to (\w+)$`, stepdefinitions.TheListOfAdoptersOfTheToolShouldContainTo)
+	s.Step(`^the list of adopters of the tool (\w+) should not contain to (\w+)$`, stepdefinitions.TheListOfAdoptersOfTheToolShouldNotContainTo)
+	s.Step(`^the list of absentees of the tool (\w+) should contain to (\w+)$`, stepdefinitions.TheListOfAbsenteesOfTheToolShouldContainTo)
+	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, stepdefinitions.TheListOfAbsenteesOfTheToolShouldNotContainTo)
 
 	s.BeforeScenario(func(interface{}) {
 	})

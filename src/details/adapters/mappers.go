@@ -6,7 +6,9 @@ import (
 
 // AdoptionResponse ...
 type AdoptionResponse struct {
-	Adoption int `json:"adoption"`
+	Adoption  int               `json:"adoption"`
+	Adopters  []*PersonResponse `json:"adopters"`
+	Absentees []*PersonResponse `json:"absentees"`
 }
 
 // PersonResponse ...
@@ -56,5 +58,14 @@ func CreateToolResponseFromTool(tool *entities.Tool) *ToolResponse {
 	return &ToolResponse{
 		ID:   tool.ID,
 		Name: tool.Name,
+	}
+}
+
+// CreateAdoptionResponseFromMap ...
+func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionResponse {
+	return &AdoptionResponse{
+		Adoption:  adoption["adoption"].(int),
+		Adopters:  CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
+		Absentees: CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
 	}
 }

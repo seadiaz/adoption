@@ -54,6 +54,7 @@ func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusConflict)
 		return
 	}
+	output := CreateAdoptionResponseFromMap(res)
 	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(res)
+	json.NewEncoder(w).Encode(output)
 }
