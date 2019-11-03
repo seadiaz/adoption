@@ -12,8 +12,13 @@ import (
 var port string = "10000"
 var baseURL string = "http://localhost:" + port
 
-// StartApp ...
-func StartApp() {
+// App ...
+type App struct {
+	server adapters.Server
+}
+
+// CreateApp ...
+func CreateApp() *App {
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
 	httpServer := &http.Server{Addr: ":" + port, Handler: router}
@@ -32,7 +37,19 @@ func StartApp() {
 	toolController.AddRoutes(server)
 	personController.AddRoutes(server)
 
-	go server.Run()
+	return &App{
+		server: server,
+	}
+}
+
+// StartApp ...
+func (a *App) StartApp() {
+	go a.server.Run()
+}
+
+// StopApp ...
+func (a *App) StopApp() {
+	a.server.Close()
 }
 
 type routerWrapper struct {

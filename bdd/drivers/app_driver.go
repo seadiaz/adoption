@@ -104,3 +104,17 @@ func getMessage(path string) (*http.Response, error) {
 
 	return res, nil
 }
+
+// GetAllTools ...
+func GetAllTools() ([]interface{}, error) {
+	path := "/tools"
+	res, err := getMessage(path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("get all tools failed")
+	}
+	defer res.Body.Close()
+	var output []interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}

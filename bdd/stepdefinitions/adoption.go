@@ -6,20 +6,18 @@ import (
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
-var adoptions map[string]interface{} = make(map[string]interface{})
-
 // WeAskForTheLevelOfAdoptionOfTheTool ...
-func WeAskForTheLevelOfAdoptionOfTheTool(toolName string) error {
-	tool := tools[toolName].(map[string]interface{})
+func (w *World) WeAskForTheLevelOfAdoptionOfTheTool(toolName string) error {
+	tool := w.Tools[toolName].(map[string]interface{})
 	toolID := tool["id"].(string)
 	res, err := drivers.CalculateAdoptionForTool(toolID)
-	adoptions[toolName] = res
+	w.Adoptions[toolName] = res
 	return err
 }
 
 // TheAdoptionLevelOfTheToolShouldBePercent ...
-func TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) error {
-	adoption := adoptions[toolName].(map[string]interface{})
+func (w *World) TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
 	actual := adoption["adoption"].(float64)
 	if actual != percent {
 		return fmt.Errorf("expected percent %f is different than %f", percent, actual)
@@ -29,8 +27,8 @@ func TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) 
 }
 
 // TheListOfAdoptersOfTheToolShouldContainTo ...
-func TheListOfAdoptersOfTheToolShouldContainTo(toolName string, personName string) error {
-	adoption := adoptions[toolName].(map[string]interface{})
+func (w *World) TheListOfAdoptersOfTheToolShouldContainTo(toolName string, personName string) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
 	adopters := adoption["adopters"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == personName {
@@ -42,8 +40,8 @@ func TheListOfAdoptersOfTheToolShouldContainTo(toolName string, personName strin
 }
 
 // TheListOfAdoptersOfTheToolShouldNotContainTo ...
-func TheListOfAdoptersOfTheToolShouldNotContainTo(toolName string, personName string) error {
-	adoption := adoptions[toolName].(map[string]interface{})
+func (w *World) TheListOfAdoptersOfTheToolShouldNotContainTo(toolName string, personName string) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
 	adopters := adoption["adopters"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == personName {
@@ -55,8 +53,8 @@ func TheListOfAdoptersOfTheToolShouldNotContainTo(toolName string, personName st
 }
 
 // TheListOfAbsenteesOfTheToolShouldContainTo ...
-func TheListOfAbsenteesOfTheToolShouldContainTo(toolName string, personName string) error {
-	adoption := adoptions[toolName].(map[string]interface{})
+func (w *World) TheListOfAbsenteesOfTheToolShouldContainTo(toolName string, personName string) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
 	absentees := adoption["absentees"].([]interface{})
 	for _, item := range absentees {
 		if item.(map[string]interface{})["name"] == personName {
@@ -68,8 +66,8 @@ func TheListOfAbsenteesOfTheToolShouldContainTo(toolName string, personName stri
 }
 
 // TheListOfAbsenteesOfTheToolShouldNotContainTo ...
-func TheListOfAbsenteesOfTheToolShouldNotContainTo(toolName string, personName string) error {
-	adoption := adoptions[toolName].(map[string]interface{})
+func (w *World) TheListOfAbsenteesOfTheToolShouldNotContainTo(toolName string, personName string) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
 	absentees := adoption["absentees"].([]interface{})
 	for _, item := range absentees {
 		if item.(map[string]interface{})["name"] == personName {

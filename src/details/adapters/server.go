@@ -1,12 +1,17 @@
 package adapters
 
 import (
+	"context"
 	"net/http"
+
+	"github.com/golang/glog"
 )
 
 // HTTPServer ...
 type HTTPServer interface {
 	ListenAndServe() error
+	Close() error
+	Shutdown(ctx context.Context) error
 }
 
 // Server ...
@@ -35,5 +40,16 @@ func CreateServer(server HTTPServer, router Router) Server {
 
 // Run ...
 func (s *Server) Run() {
-	s.HTTPServer.ListenAndServe()
+	err := s.HTTPServer.ListenAndServe()
+	glog.Error(err)
+}
+
+// Close ...
+func (s *Server) Close() {
+	s.HTTPServer.Close()
+}
+
+// Shutdown ...
+func (s *Server) Shutdown() {
+	s.HTTPServer.Shutdown(nil)
 }

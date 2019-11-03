@@ -25,9 +25,7 @@ func TestMain(m *testing.M) {
 	flag.Parse()
 	opt.Paths = flag.Args()
 
-	status := godog.RunWithOptions("godogs", func(s *godog.Suite) {
-		FeatureContext(s)
-	}, opt)
+	status := godog.RunWithOptions("adoption", contextInitializer, opt)
 
 	if st := m.Run(); st > status {
 		status = st
@@ -35,21 +33,35 @@ func TestMain(m *testing.M) {
 	os.Exit(status)
 }
 
-func FeatureContext(s *godog.Suite) {
-	s.Step(`^there is a tool named (\w+)$`, stepdefinitions.ThereIsAToolNamed)
-	s.Step(`^a person named (\w+) which have adopted tool (\w+)$`, stepdefinitions.APersonNamedWhichHaveAdoptedTool)
-	s.Step(`^a person named (\w+)$`, stepdefinitions.APersonNamed)
-	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, stepdefinitions.WeAskForTheLevelOfAdoptionOfTheTool)
-	s.Step(`^the adoption level of the tool (\w+) should be (\d+) percent$`, stepdefinitions.TheAdoptionLevelOfTheToolShouldBePercent)
-	s.Step(`^the list of adopters of the tool (\w+) should contain to (\w+)$`, stepdefinitions.TheListOfAdoptersOfTheToolShouldContainTo)
-	s.Step(`^the list of adopters of the tool (\w+) should not contain to (\w+)$`, stepdefinitions.TheListOfAdoptersOfTheToolShouldNotContainTo)
-	s.Step(`^the list of absentees of the tool (\w+) should contain to (\w+)$`, stepdefinitions.TheListOfAbsenteesOfTheToolShouldContainTo)
-	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, stepdefinitions.TheListOfAbsenteesOfTheToolShouldNotContainTo)
+func contextInitializer(s *godog.Suite) {
+	featureContext(s)
+}
 
+func featureContext(s *godog.Suite) {
+	world := stepdefinitions.CreateWorld()
+
+	s.Step(`^there is a tool named (\w+)$`, world.ThereIsAToolNamed)
+	s.Step(`^a person named (\w+) which have adopted tool (\w+)$`, world.APersonNamedWhichHaveAdoptedTool)
+	s.Step(`^a person named (\w+)$`, world.APersonNamed)
+	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, world.WeAskForTheLevelOfAdoptionOfTheTool)
+	s.Step(`^we ask for the list of managed tools$`, world.WeAskForTheListOfManagedTools)
+	s.Step(`^the adoption level of the tool (\w+) should be (\d+) percent$`, world.TheAdoptionLevelOfTheToolShouldBePercent)
+	s.Step(`^the list of adopters of the tool (\w+) should contain to (\w+)$`, world.TheListOfAdoptersOfTheToolShouldContainTo)
+	s.Step(`^the list of adopters of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAdoptersOfTheToolShouldNotContainTo)
+	s.Step(`^the list of absentees of the tool (\w+) should contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldContainTo)
+	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldNotContainTo)
+	s.Step(`^the list of the tool should have the length of (\d+)$`, world.TheListOfTheToolShouldHaveTheLengthOf)
+
+	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {
+		glog.Info("starting app...")
+		app = drivers.CreateApp()
+		app.StartApp()
+		world.Clear()
 	})
-	s.BeforeSuite(func() {
-		glog.Infoln("starting app...")
-		drivers.StartApp()
+
+	s.AfterScenario(func(interface{}, error) {
+		glog.Info("stopping app...")
+		app.StopApp()
 	})
 }
