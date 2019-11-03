@@ -3,7 +3,6 @@ Feature: know people adoption
   As a implementer of certain tool
   I need to be able to know how many people is using the tool
 
-  @done
   Scenario: 50% of adoption
     Given there is a tool named Uzojoje
     And a person named Locakag
@@ -11,7 +10,6 @@ Feature: know people adoption
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 50 percent
 
-  @done
   Scenario: 75% of adoption
     Given there is a tool named Uzojoje
     And a person named Locakag

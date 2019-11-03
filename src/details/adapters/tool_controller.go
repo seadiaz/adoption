@@ -2,6 +2,7 @@ package adapters
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -31,8 +32,8 @@ func (c *ToolController) AddRoutes(s Server) {
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
 	res, _ := c.service.GetAllTools()
-	output := CreateToolResponseListFromToolList(res)
 	w.Header().Add("Content-Type", "application/json")
+	output := CreateToolResponseListFromToolList(res)
 	json.NewEncoder(w).Encode(output)
 }
 
@@ -40,7 +41,11 @@ func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
 	var entity map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&entity)
 	name := entity["name"].(string)
-	res, _ := c.service.CreateTool(name)
+	res, err := c.service.CreateTool(name)
+	if err != nil {
+		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating tool. %s", err.Error()))
+		return
+	}
 	output := CreateToolResponseFromTool(res)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(output)

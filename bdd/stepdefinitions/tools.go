@@ -3,6 +3,7 @@ package stepdefinitions
 import (
 	"fmt"
 
+	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
@@ -11,6 +12,16 @@ func (w *World) ThereIsAToolNamed(name string) error {
 	res, err := drivers.CreateToolWithName(name)
 	w.Tools[name] = res
 	return err
+}
+
+// WeTryToCreateAToolNamed ...
+func (w *World) WeTryToCreateAToolNamed(name string) error {
+	res, err := drivers.CreateToolWithName(name)
+	if err == nil {
+		glog.Info(err)
+		w.Tools[name] = res
+	}
+	return nil
 }
 
 // WeAskForTheListOfManagedTools ...

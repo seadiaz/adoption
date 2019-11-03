@@ -45,6 +45,7 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^a person named (\w+)$`, world.APersonNamed)
 	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, world.WeAskForTheLevelOfAdoptionOfTheTool)
 	s.Step(`^we ask for the list of managed tools$`, world.WeAskForTheListOfManagedTools)
+	s.Step(`^we try to create a tool named (\w+)$`, world.WeTryToCreateAToolNamed)
 	s.Step(`^the adoption level of the tool (\w+) should be (\d+) percent$`, world.TheAdoptionLevelOfTheToolShouldBePercent)
 	s.Step(`^the list of adopters of the tool (\w+) should contain to (\w+)$`, world.TheListOfAdoptersOfTheToolShouldContainTo)
 	s.Step(`^the list of adopters of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAdoptersOfTheToolShouldNotContainTo)

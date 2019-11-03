@@ -24,6 +24,11 @@ type ToolResponse struct {
 	Name string `json:"name,omitempty"`
 }
 
+// ErrorResponse ...
+type ErrorResponse struct {
+	Message string `json:"message,omitempty"`
+}
+
 // CreatePersonResponseListFromPersonList ...
 func CreatePersonResponseListFromPersonList(persons []*entities.Person) []*PersonResponse {
 	output := make([]*PersonResponse, 0, 0)
