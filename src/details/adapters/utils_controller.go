@@ -6,10 +6,10 @@ import (
 )
 
 func replyWithError(w http.ResponseWriter, statusCode int, err error) {
-	w.WriteHeader(statusCode)
-	w.Header().Add("Content-Type", "application/json")
 	errResponse := &ErrorResponse{
 		Message: err.Error(),
 	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(errResponse)
 }

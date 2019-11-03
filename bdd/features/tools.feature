@@ -3,7 +3,6 @@ Feature: manage tools
   As a implementer of certain tool
   I need to be able to add/update/remove tools
 
-  @wip
   Scenario: Idempotency
     Given there is a tool named Catelnuw
     When we try to create a tool named Catelnuw

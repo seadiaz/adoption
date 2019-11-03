@@ -118,3 +118,17 @@ func GetAllTools() ([]interface{}, error) {
 	json.NewDecoder(res.Body).Decode(&output)
 	return output, nil
 }
+
+// GetAllPeople ...
+func GetAllPeople() ([]interface{}, error) {
+	path := "/people"
+	res, err := getMessage(path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("get all people failed")
+	}
+	defer res.Body.Close()
+	var output []interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}

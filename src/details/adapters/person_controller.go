@@ -2,7 +2,6 @@ package adapters
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gookit/validate"
@@ -58,10 +57,7 @@ func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) 
 		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(output)
 	} else {
-		fmt.Println(v.Errors)
-		fmt.Println(v.Errors.One())
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(v.Errors)
+		replyWithError(w, http.StatusBadRequest, v.Errors)
 	}
 }
 

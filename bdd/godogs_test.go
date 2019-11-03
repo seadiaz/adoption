@@ -53,6 +53,11 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldNotContainTo)
 	s.Step(`^the list of the tool should have the length of (\d+)$`, world.TheListOfTheToolShouldHaveTheLengthOf)
 
+	s.Step(`^there is a person named (\w+)$`, world.APersonNamed)
+	s.Step(`^we try to create a person named (\w+)$`, world.WeTryToCreateAPersonNamed)
+	s.Step(`^we ask for the list of people$`, world.WeAskForTheListOfPeople)
+	s.Step(`^the list of the people should have the length of (\d+)$`, world.TheListOfThePeopleShouldHaveTheLengthOf)
+
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {
 		glog.Info("starting app...")
