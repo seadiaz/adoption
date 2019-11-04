@@ -32,6 +32,7 @@ func (a *Adoption) CalculateForTool(tool *Tool) int {
 			counter++
 		}
 	}
+
 	return 100 * counter / total
 }
 

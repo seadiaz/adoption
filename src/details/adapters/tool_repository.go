@@ -2,9 +2,9 @@ package adapters
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/golang/glog"
-	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	"github.com/seadiaz/adoption/src/details/adapters/usecases/entities"
 )
@@ -39,7 +39,7 @@ func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error) {
 	glog.Info("create tool called")
 	if entity.ID == "" {
-		entity.ID = uuid.New().String()
+		return nil, fmt.Errorf("ID is missing for tool %s", entity.Name)
 	}
 	if err := r.persistence.Create(entity.ID, entity); err != nil {
 		return nil, err
