@@ -24,6 +24,12 @@ type ToolResponse struct {
 	Name string `json:"name,omitempty"`
 }
 
+// TeamResponse ...
+type TeamResponse struct {
+	ID   string `json:"id"`
+	Name string `json:"name,omitempty"`
+}
+
 // ErrorResponse ...
 type ErrorResponse struct {
 	Message string `json:"message,omitempty"`
@@ -73,4 +79,22 @@ func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionRes
 		Adopters:  CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
 		Absentees: CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
 	}
+}
+
+// CreateTeamResponseFromTeam ...
+func CreateTeamResponseFromTeam(team *entities.Team) *TeamResponse {
+	return &TeamResponse{
+		ID:   team.ID,
+		Name: team.Name,
+	}
+}
+
+// CreateTeamResponseListFromTeamList ...
+func CreateTeamResponseListFromTeamList(teams []*entities.Team) []*TeamResponse {
+	output := make([]*TeamResponse, 0, 0)
+	for _, item := range teams {
+		output = append(output, CreateTeamResponseFromTeam(item))
+	}
+
+	return output
 }

@@ -7,7 +7,7 @@ import (
 
 type personRepository interface {
 	FindPerson(id string) (*entities.Person, error)
-	SavePerson(entity *entities.Person) error
+	SavePerson(entity *entities.Person) (*entities.Person, error)
 	GetAllPeople() ([]*entities.Person, error)
 }
 
@@ -33,7 +33,7 @@ func (s *PersonService) GetAllPeople() ([]*entities.Person, error) {
 func (s *PersonService) CreatePerson(name string, email string) (*entities.Person, error) {
 	glog.Info("create person called")
 	person := entities.CreatePersonWithNameAndEmail(name, email)
-	err := s.repository.SavePerson(person)
+	_, err := s.repository.SavePerson(person)
 	if err != nil {
 		return nil, err
 	}

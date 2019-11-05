@@ -41,8 +41,7 @@ func featureContext(s *godog.Suite) {
 	world := stepdefinitions.CreateWorld()
 
 	s.Step(`^there is a tool named (\w+)$`, world.ThereIsAToolNamed)
-	s.Step(`^a person named (\w+) which have adopted tool (\w+)$`, world.APersonNamedWhichHaveAdoptedTool)
-	s.Step(`^a person named (\w+)$`, world.APersonNamed)
+	s.Step(`^there is a person named (\w+) which have adopted tool (\w+)$`, world.ThereIsAPersonNamedWhichHaveAdoptedTool)
 	s.Step(`^we ask for the level of adoption of the tool (\w+)$`, world.WeAskForTheLevelOfAdoptionOfTheTool)
 	s.Step(`^we ask for the list of managed tools$`, world.WeAskForTheListOfManagedTools)
 	s.Step(`^we try to create a tool named (\w+)$`, world.WeTryToCreateAToolNamed)
@@ -53,10 +52,16 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldNotContainTo)
 	s.Step(`^the list of the tool should have the length of (\d+)$`, world.TheListOfTheToolShouldHaveTheLengthOf)
 
-	s.Step(`^there is a person named (\w+)$`, world.APersonNamed)
+	s.Step(`^there is a person named (\w+)$`, world.ThereIsAPersonNamed)
 	s.Step(`^we try to create a person named (\w+)$`, world.WeTryToCreateAPersonNamed)
 	s.Step(`^we ask for the list of people$`, world.WeAskForTheListOfPeople)
 	s.Step(`^the list of the people should have the length of (\d+)$`, world.TheListOfThePeopleShouldHaveTheLengthOf)
+
+	s.Step(`^there is a team named (\w+)$`, world.ThereIsATeamNamed)
+	s.Step(`^the person (\w+) is member of the team (\w+)$`, world.ThePersonIsMemberOfTheTeam)
+	s.Step(`^we ask for the members of team (\w+)$`, world.WeAskForTheMembersOfTeam)
+	s.Step(`^the list of the members should have the length of (\d+)$`, world.TheListOfTheMembersShouldHaveTheLengthOf)
+	s.Step(`^the list of the members should contains to (\w+)$`, world.TheListOfTheMembersShouldContainsTo)
 
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {

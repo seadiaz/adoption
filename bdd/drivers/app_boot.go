@@ -26,16 +26,20 @@ func CreateApp() *App {
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
 	personRepository := adapters.CreatePersonRepository(details.BuildMemoryPersistence())
+	teamRepository := adapters.CreateTeamRepository(details.BuildMemoryPersistence())
 
 	toolService := usecases.CreateToolService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository)
+	teamService := usecases.CreateTeamService(teamRepository)
 	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository)
 
 	toolController := adapters.CreateToolController(toolService, adoptionService)
 	personController := adapters.CreatePersonController(personService)
+	teamController := adapters.CreateTeamController(teamService)
 
 	toolController.AddRoutes(server)
 	personController.AddRoutes(server)
+	teamController.AddRoutes(server)
 
 	return &App{
 		server: server,

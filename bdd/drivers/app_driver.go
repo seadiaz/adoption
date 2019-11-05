@@ -60,6 +60,22 @@ func CreatePersonWithName(name string) (map[string]interface{}, error) {
 	return output, nil
 }
 
+// CreateTeamWithName ...
+func CreateTeamWithName(name string) (map[string]interface{}, error) {
+	path := "/teams"
+	body := make(map[string]interface{})
+	body["name"] = name
+	res, err := postMessage(body, path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("create team with name failed")
+	}
+	defer res.Body.Close()
+	var output map[string]interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}
+
 // AdoptToolByPerson ...
 func AdoptToolByPerson(toolID string, personID string) (map[string]interface{}, error) {
 	path := "/people/" + personID + "/tools"
@@ -126,6 +142,37 @@ func GetAllPeople() ([]interface{}, error) {
 	if err != nil {
 		glog.Error(err)
 		return nil, errors.New("get all people failed")
+	}
+	defer res.Body.Close()
+	var output []interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}
+
+// AddMemberToTeam ...
+func AddMemberToTeam(personName string, teamID string) ([]interface{}, error) {
+	path := "/teams/" + teamID + "/people"
+	body := make(map[string]interface{})
+	body["name"] = personName
+	body["email"] = personName + "@dummy.tld"
+	res, err := postMessage(body, path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("add member to team failed")
+	}
+	defer res.Body.Close()
+	var output []interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}
+
+// GetMembersFromTeam ...
+func GetMembersFromTeam(id string) ([]interface{}, error) {
+	path := "/teams/" + id + "/people"
+	res, err := getMessage(path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("get members from team failed")
 	}
 	defer res.Body.Close()
 	var output []interface{}

@@ -5,17 +5,17 @@ Feature: know people adoption
 
   Scenario: 50% of adoption
     Given there is a tool named Uzojoje
-    And a person named Locakag
-    And a person named Fujobme which have adopted tool Uzojoje
+    And there is a person named Locakag
+    And there is a person named Fujobme which have adopted tool Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 50 percent
 
   Scenario: 75% of adoption
     Given there is a tool named Uzojoje
-    And a person named Locakag
-    And a person named Fujobme which have adopted tool Uzojoje
-    And a person named Dupilze which have adopted tool Uzojoje
-    And a person named Jullakiko which have adopted tool Uzojoje
+    And there is a person named Locakag
+    And there is a person named Fujobme which have adopted tool Uzojoje
+    And there is a person named Dupilze which have adopted tool Uzojoje
+    And there is a person named Jullakiko which have adopted tool Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 75 percent
 
@@ -26,9 +26,9 @@ Feature: know people adoption
 
   Scenario: Retrieve adopter list
     Given there is a tool named Uzojoje
-    And a person named Fujobme which have adopted tool Uzojoje
-    And a person named Dupilze which have adopted tool Uzojoje
-    And a person named Jullakiko which have adopted tool Uzojoje
+    And there is a person named Fujobme which have adopted tool Uzojoje
+    And there is a person named Dupilze which have adopted tool Uzojoje
+    And there is a person named Jullakiko which have adopted tool Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
     Then the list of adopters of the tool Uzojoje should contain to Fujobme
     And the list of adopters of the tool Uzojoje should contain to Dupilze
@@ -37,9 +37,9 @@ Feature: know people adoption
 
   Scenario: Retrieve absentees list
     Given there is a tool named Uzojoje
-    And a person named Fujobme
-    And a person named Dupilze
-    And a person named Jullakiko
+    And there is a person named Fujobme
+    And there is a person named Dupilze
+    And there is a person named Jullakiko
     When we ask for the level of adoption of the tool Uzojoje
     Then the list of absentees of the tool Uzojoje should contain to Fujobme
     And the list of absentees of the tool Uzojoje should contain to Dupilze

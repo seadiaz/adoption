@@ -1,7 +1,10 @@
 package entities
 
+import uuid "github.com/satori/go.uuid"
+
 // Person ...
 type Person struct {
+	ID    string
 	Email string
 	Name  string
 	Tools []*Tool
@@ -10,6 +13,7 @@ type Person struct {
 // CreatePersonWithNameAndEmail ...
 func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
+		ID:    uuid.Must(uuid.NewV4()).String(),
 		Email: email,
 		Name:  name,
 		Tools: make([]*Tool, 0),

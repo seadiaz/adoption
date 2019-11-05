@@ -7,8 +7,8 @@ import (
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
-// APersonNamedWhichHaveAdoptedTool ...
-func (w *World) APersonNamedWhichHaveAdoptedTool(personName string, toolName string) error {
+// ThereIsAPersonNamedWhichHaveAdoptedTool ...
+func (w *World) ThereIsAPersonNamedWhichHaveAdoptedTool(personName string, toolName string) error {
 	res, err := drivers.CreatePersonWithName(personName)
 	if err != nil {
 		return err
@@ -20,9 +20,10 @@ func (w *World) APersonNamedWhichHaveAdoptedTool(personName string, toolName str
 	return err
 }
 
-// APersonNamed ...
-func (w *World) APersonNamed(name string) error {
-	_, err := drivers.CreatePersonWithName(name)
+// ThereIsAPersonNamed ...
+func (w *World) ThereIsAPersonNamed(name string) error {
+	res, err := drivers.CreatePersonWithName(name)
+	w.People[name] = res
 	return err
 }
 

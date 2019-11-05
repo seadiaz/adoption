@@ -45,21 +45,21 @@ func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
 }
 
 // SavePerson ...
-func (r *PersonRepository) SavePerson(entity *entities.Person) error {
+func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person, error) {
 	glog.Info("create person called")
 	if entity.Email == "" {
-		return errors.New("person should have an email")
+		return nil, errors.New("person should have an email")
 	}
 	person, _ := r.FindPerson(entity.Email)
 	if person == nil {
 		if err := r.persistence.Create(entity.Email, entity); err != nil {
-			return err
+			return nil, err
 		}
 	} else {
 		if err := r.persistence.Update(entity.Email, entity); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return person, nil
 }
