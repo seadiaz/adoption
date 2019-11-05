@@ -52,12 +52,15 @@ func (r *TeamRepository) FindTeamByName(name string) (*entities.Team, error) {
 
 // FindTeam ...
 func (r *TeamRepository) FindTeam(id string) (*entities.Team, error) {
-	team, err := r.persistence.Find(id)
+	res, err := r.persistence.Find(id)
 	if err != nil {
 		return nil, errors.New("error finding team by name")
 	}
+	if res == nil {
+		return nil, errors.New("team doesn't exists")
+	}
 
-	return team.(*entities.Team), nil
+	return res.(*entities.Team), nil
 }
 
 // SaveTeam ...
