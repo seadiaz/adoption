@@ -69,6 +69,8 @@ func loadData(c *urfavecli.Context) error {
 		client.LoadPeople()
 	case "adoptions":
 		client.LoadAdoptions()
+	case "teams":
+		client.LoadTeams()
 	default:
 		glog.Fatalf("kind %s not supported", kind)
 	}

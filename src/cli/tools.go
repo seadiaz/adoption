@@ -4,7 +4,7 @@ const toolsPath = "/tools"
 
 // Tool ...
 type Tool struct {
-	ID   string `json:"id, omitempty"`
+	ID   string `json:"id,omitempty"`
 	Name string `json:"name"`
 }
 

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/details/adapters/usecases"
 	"github.com/seadiaz/adoption/src/details/adapters/usecases/entities"
@@ -56,7 +55,6 @@ func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
 		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating team. %s", err.Error()))
 		return
 	}
-	glog.Info(res)
 	output := CreateTeamResponseFromTeam(res)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(output)
