@@ -3,7 +3,6 @@ package details
 import (
 	"errors"
 
-	"github.com/emirpasic/gods/lists/arraylist"
 	"github.com/seadiaz/adoption/src/details/adapters"
 )
 
@@ -48,11 +47,11 @@ func (p *MemoryPersistence) Delete(id string) error {
 
 // GetAll ...
 func (p *MemoryPersistence) GetAll() []interface{} {
-	list := arraylist.New()
+	list := make([]interface{}, 0, 0)
 	for _, value := range p.memory {
-		list.Add(value)
+		list = append(list, value)
 	}
-	return list.Values()
+	return list
 }
 
 // Find ...

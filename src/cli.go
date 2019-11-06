@@ -1,65 +1,46 @@
 package main
 
 import (
-	"log"
-	"os"
-	"sort"
+	"fmt"
 
 	"github.com/golang/glog"
+	"github.com/mitchellh/go-homedir"
 	"github.com/seadiaz/adoption/src/cli"
-
-	urfavecli "github.com/urfave/cli"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 const defaultURL = "http://localhost:3000"
 
+var (
+	// Used for flags.
+	cfgFile     string
+	userLicense string
+
+	rootCmd = &cobra.Command{
+		Use:   "adoption",
+		Short: "A generator for Cobra based Applications",
+		Long:  "adoption cli for interacting with adoption server",
+	}
+
+	loadCmd = &cobra.Command{
+		Use:   "load <kind>",
+		Short: "load csv data into adoption server",
+		Long:  "load csv data into adoption server",
+		Args:  cobra.ExactArgs(1),
+		Run:   loadData,
+	}
+)
+
 func mainCLI() {
-	app := urfavecli.NewApp()
-	app.Name = "adoption"
-	app.Description = "adoption cli for interacting with adoption server"
-	app.Version = "0.1.0"
-	app.Usage = ""
-	app.UsageText = "adoption command [command options] [arguments...]"
-
-	app.Flags = []urfavecli.Flag{
-		urfavecli.StringFlag{
-			Name:  "URL, u",
-			Value: defaultURL,
-			Usage: "The URL of the running instance of adoption server",
-		},
-	}
-
-	app.Commands = []urfavecli.Command{
-		{
-			Name:      "load",
-			Aliases:   []string{"l"},
-			Usage:     "load csv data into adoption server",
-			UsageText: "cli load [command options] <kind>",
-			Action:    loadData,
-			Flags: []urfavecli.Flag{
-				urfavecli.StringFlag{
-					Name:     "file, f",
-					Usage:    "Load data from `FILE`",
-					Required: true,
-				},
-			},
-		},
-	}
-
-	sort.Sort(urfavecli.FlagsByName(app.Flags))
-	sort.Sort(urfavecli.CommandsByName(app.Commands))
-
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	rootCmd.Execute()
 }
 
-func loadData(c *urfavecli.Context) error {
-	filename := c.String("file")
-	kind := c.Args().Get(0)
+func loadData(cmd *cobra.Command, args []string) {
+	filename := cmd.Flag("file").Value.String()
+	kind := args[0]
 	client := &cli.Client{
-		URL:      c.GlobalString("URL"),
+		URL:      cmd.Flag("URL").Value.String(),
 		Filename: filename,
 	}
 	switch kind {
@@ -76,6 +57,41 @@ func loadData(c *urfavecli.Context) error {
 	default:
 		glog.Fatalf("kind %s not supported", kind)
 	}
+}
 
-	return nil
+func init() {
+	cobra.OnInitialize(initConfig)
+
+	rootCmd.PersistentFlags().StringP("URL", "u", defaultURL, "The URL of the running instance of adoption server")
+
+	loadCmd.Flags().StringP("file", "f", "", "Load data from `FILE` (required)")
+	err := loadCmd.MarkFlagRequired("file")
+	if err != nil {
+		glog.Error(err)
+	}
+
+	rootCmd.AddCommand(loadCmd)
+}
+
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := homedir.Dir()
+		if err != nil {
+			glog.Error(err)
+		}
+
+		// Search config in home directory with name ".cobra" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigName(".cobra")
+	}
+
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	}
 }

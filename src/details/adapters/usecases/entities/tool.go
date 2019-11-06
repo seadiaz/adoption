@@ -12,6 +12,6 @@ type Tool struct {
 func CreateToolWithName(name string) *Tool {
 	return &Tool{
 		Name: name,
-		ID:   uuid.Must(uuid.NewV4()).String(),
+		ID:   uuid.NewV4().String(),
 	}
 }
