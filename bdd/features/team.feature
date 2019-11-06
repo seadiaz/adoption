@@ -3,7 +3,6 @@ Feature: group people in teams
   As a implementer of certain tool
   I need to be able to add/remove people to/from teams
 
-  @wip
   Scenario: Creating team
     Given there is a team named Dinpetor
     And there is a person named Uppukmid

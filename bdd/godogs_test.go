@@ -50,6 +50,7 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of adopters of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAdoptersOfTheToolShouldNotContainTo)
 	s.Step(`^the list of absentees of the tool (\w+) should contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldContainTo)
 	s.Step(`^the list of absentees of the tool (\w+) should not contain to (\w+)$`, world.TheListOfAbsenteesOfTheToolShouldNotContainTo)
+	s.Step(`^the list of team adopters of the tool (\w+) should contain to (\w+)$`, world.TheListOfTeamAdoptersOfTheToolShouldContainTo)
 	s.Step(`^the list of the tool should have the length of (\d+)$`, world.TheListOfTheToolShouldHaveTheLengthOf)
 
 	s.Step(`^there is a person named (\w+)$`, world.ThereIsAPersonNamed)

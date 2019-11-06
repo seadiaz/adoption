@@ -3,6 +3,7 @@ package entities
 // Adoption ...
 type Adoption struct {
 	People []*Person
+	Teams  []*Team
 	Tool   Tool
 }
 
@@ -16,6 +17,25 @@ func CreateAdoption() *Adoption {
 // IncludePerson ...
 func (a *Adoption) IncludePerson(person *Person) error {
 	a.People = append(a.People, person)
+	return nil
+}
+
+// IncludeTeam ...
+func (a *Adoption) IncludeTeam(team *Team) error {
+	for i, item := range team.People {
+		team.People[i] = a.findPersonByEmail(item.Email)
+	}
+	a.Teams = append(a.Teams, team)
+	return nil
+}
+
+func (a *Adoption) findPersonByEmail(email string) *Person {
+	for _, item := range a.People {
+		if item.Email == email {
+			return item
+		}
+	}
+
 	return nil
 }
 
@@ -58,9 +78,24 @@ func (a *Adoption) FilterAbsenteesForTool(tool *Tool) []*Person {
 		return output
 	}
 
-	for _, person := range a.People {
-		if !person.HasAdoptedTool(tool) {
-			output = append(output, person)
+	for _, item := range a.People {
+		if !item.HasAdoptedTool(tool) {
+			output = append(output, item)
+		}
+	}
+	return output
+}
+
+// FilterTeamAdoptersForTool ...
+func (a *Adoption) FilterTeamAdoptersForTool(tool *Tool) []*Team {
+	output := make([]*Team, 0, 0)
+	if len(a.Teams) == 0 {
+		return output
+	}
+
+	for _, item := range a.Teams {
+		if item.HasTeamAdoptedTool(tool) {
+			output = append(output, item)
 		}
 	}
 	return output

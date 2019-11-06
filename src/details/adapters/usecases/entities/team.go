@@ -19,6 +19,7 @@ func CreateTeamWithName(name string) *Team {
 
 // AddPerson ...
 func (t *Team) AddPerson(person *Person) {
+	person.Tools = nil
 	t.People = append(t.People, person)
 }
 
@@ -30,4 +31,15 @@ func (t *Team) RemovePerson(person *Person) {
 			return
 		}
 	}
+}
+
+// HasTeamAdoptedTool ...
+func (t *Team) HasTeamAdoptedTool(tool *Tool) bool {
+	for _, item := range t.People {
+		if item.HasAdoptedTool(tool) {
+			return true
+		}
+	}
+
+	return false
 }

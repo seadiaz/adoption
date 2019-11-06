@@ -25,7 +25,7 @@ func mainServer() {
 	toolService := usecases.CreateToolService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository)
 	teamService := usecases.CreateTeamService(teamRepository)
-	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository)
+	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
 
 	toolController := adapters.CreateToolController(toolService, adoptionService)
 	personController := adapters.CreatePersonController(personService)

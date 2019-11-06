@@ -45,3 +45,16 @@ Feature: know people adoption
     And the list of absentees of the tool Uzojoje should contain to Dupilze
     And the list of absentees of the tool Uzojoje should contain to Jullakiko
     And the list of absentees of the tool Uzojoje should not contain to Kavdanah
+
+  @wip
+  Scenario: Retrieve team adopter list
+    Given there is a tool named Uzojoje
+    And there is a person named Fujobme which have adopted tool Uzojoje
+    And there is a person named Dupilze which have adopted tool Uzojoje
+    And there is a team named Mozpakkek
+    And the person Fujobme is member of the team Mozpakkek
+    And there is a team named Hunolbu
+    And the person Dupilze is member of the team Hunolbu
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the list of team adopters of the tool Uzojoje should contain to Mozpakkek
+    And the list of team adopters of the tool Uzojoje should contain to Hunolbu
