@@ -90,3 +90,16 @@ func (w *World) TheListOfTeamAdoptersOfTheToolShouldContainTo(toolName string, t
 
 	return fmt.Errorf("team %s not found", teamName)
 }
+
+// TheListOfTeamAbsenteesOfTheToolShouldContainTo ...
+func (w *World) TheListOfTeamAbsenteesOfTheToolShouldContainTo(toolName string, teamName string) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
+	adopters := adoption["team_absentees"].([]interface{})
+	for _, item := range adopters {
+		if item.(map[string]interface{})["name"] == teamName {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("team %s not found", teamName)
+}

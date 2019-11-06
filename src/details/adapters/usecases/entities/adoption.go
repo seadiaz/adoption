@@ -100,3 +100,18 @@ func (a *Adoption) FilterTeamAdoptersForTool(tool *Tool) []*Team {
 	}
 	return output
 }
+
+// FilterTeamAbsenteesForTool ...
+func (a *Adoption) FilterTeamAbsenteesForTool(tool *Tool) []*Team {
+	output := make([]*Team, 0, 0)
+	if len(a.Teams) == 0 {
+		return output
+	}
+
+	for _, item := range a.Teams {
+		if !item.HasTeamAdoptedTool(tool) {
+			output = append(output, item)
+		}
+	}
+	return output
+}
