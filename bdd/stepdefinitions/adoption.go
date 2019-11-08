@@ -26,6 +26,17 @@ func (w *World) TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percen
 	return nil
 }
 
+// TheTeamAdoptionLevelOfTheToolShouldBePercent ...
+func (w *World) TheTeamAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) error {
+	adoption := w.Adoptions[toolName].(map[string]interface{})
+	actual := adoption["team_adoption"].(float64)
+	if actual != percent {
+		return fmt.Errorf("expected percent %f is different than %f", percent, actual)
+	}
+
+	return nil
+}
+
 // TheListOfAdoptersOfTheToolShouldContainTo ...
 func (w *World) TheListOfAdoptersOfTheToolShouldContainTo(toolName string, personName string) error {
 	adoption := w.Adoptions[toolName].(map[string]interface{})

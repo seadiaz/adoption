@@ -54,10 +54,9 @@ func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interf
 	output["adoption"] = adoption.CalculateForTool(tool)
 	output["adopters"] = adoption.FilterAdoptersForTool(tool)
 	output["absentees"] = adoption.FilterAbsenteesForTool(tool)
+	output["team_adoption"] = adoption.CalculateTeamForTool(tool)
 	output["team_adopters"] = adoption.FilterTeamAdoptersForTool(tool)
 	output["team_absentees"] = adoption.FilterTeamAbsenteesForTool(tool)
-
-	glog.Info(output)
 
 	return output, nil
 }

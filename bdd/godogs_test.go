@@ -65,6 +65,8 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of the members should have the length of (\d+)$`, world.TheListOfTheMembersShouldHaveTheLengthOf)
 	s.Step(`^the list of the members should contains to (\w+)$`, world.TheListOfTheMembersShouldContainsTo)
 
+	s.Step(`^the team adoption level of the tool (\w+) should be (\d+) percent$`, world.TheTeamAdoptionLevelOfTheToolShouldBePercent)
+
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {
 		glog.Info("starting app...")

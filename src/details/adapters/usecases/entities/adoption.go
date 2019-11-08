@@ -56,6 +56,23 @@ func (a *Adoption) CalculateForTool(tool *Tool) int {
 	return 100 * counter / total
 }
 
+// CalculateTeamForTool ...
+func (a *Adoption) CalculateTeamForTool(tool *Tool) int {
+	total := len(a.Teams)
+	if total == 0 {
+		return 0
+	}
+
+	counter := 0
+	for _, team := range a.Teams {
+		if team.HasTeamAdoptedTool(tool) {
+			counter++
+		}
+	}
+
+	return 100 * counter / total
+}
+
 // FilterAdoptersForTool ...
 func (a *Adoption) FilterAdoptersForTool(tool *Tool) []*Person {
 	output := make([]*Person, 0, 0)

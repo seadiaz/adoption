@@ -58,8 +58,7 @@ Feature: know people adoption
     Then the list of team adopters of the tool Uzojoje should contain to Mozpakkek
     And the list of team adopters of the tool Uzojoje should contain to Hunolbu
 
-  @wip
-  Scenario: Retrieve team adopter list
+  Scenario: Retrieve team absentees list
     Given there is a tool named Uzojoje
     And there is a person named Fujobme
     And there is a person named Dupilze
@@ -70,3 +69,17 @@ Feature: know people adoption
     When we ask for the level of adoption of the tool Uzojoje
     Then the list of team absentees of the tool Uzojoje should contain to Mozpakkek
     And the list of team absentees of the tool Uzojoje should contain to Hunolbu
+
+  @wip
+  Scenario: Retrieve team adoption
+    Given there is a tool named Uzojoje
+    And there is a person named Fujobme which have adopted tool Uzojoje
+    And there is a person named Etuwime
+    And there is a team named Mozpakkek
+    And the person Fujobme is member of the team Mozpakkek
+    And the person Etuwime is member of the team Mozpakkek
+    And there is a person named Dupilze
+    And there is a team named Hunolbu
+    And the person Dupilze is member of the team Hunolbu
+    When we ask for the level of adoption of the tool Uzojoje
+    Then the team adoption level of the tool Uzojoje should be 50 percent

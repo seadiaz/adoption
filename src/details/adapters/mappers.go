@@ -9,6 +9,7 @@ type AdoptionResponse struct {
 	Adoption      int               `json:"adoption"`
 	Adopters      []*PersonResponse `json:"adopters"`
 	Absentees     []*PersonResponse `json:"absentees"`
+	TeamAdoption  int               `json:"team_adoption"`
 	TeamAdopters  []*TeamResponse   `json:"team_adopters"`
 	TeamAbsentees []*TeamResponse   `json:"team_absentees"`
 }
@@ -80,6 +81,7 @@ func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionRes
 		Adoption:      adoption["adoption"].(int),
 		Adopters:      CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
 		Absentees:     CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
+		TeamAdoption:  adoption["team_adoption"].(int),
 		TeamAdopters:  CreateTeamResponseListFromTeamList(adoption["team_adopters"].([]*entities.Team)),
 		TeamAbsentees: CreateTeamResponseListFromTeamList(adoption["team_absentees"].([]*entities.Team)),
 	}
