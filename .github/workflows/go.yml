@@ -1,26 +1,27 @@
 name: Go
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
 
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+      - name: Get dependencies
+        run: |
+          export
+          mkdir -p /home/runner/go/bin
+          export PATH="/home/runner/go/bin:$PATH"
+          export
+          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+          dep ensure
 
-    - name: Get dependencies
-      run: |
-        mkdir -p /home/runner/go/bin
-        curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-        dep ensure
-
-    - name: Build
-      run: go build -v .
+      - name: Build
+        run: go build -v .
