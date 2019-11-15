@@ -13,7 +13,7 @@ type Person struct {
 // CreatePersonWithNameAndEmail ...
 func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
-		ID:    uuid.NewV4().String(),
+		ID:    uuid.Must(uuid.NewV4()).String(),
 		Email: email,
 		Name:  name,
 		Tools: make([]*Tool, 0),

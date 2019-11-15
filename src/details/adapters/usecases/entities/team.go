@@ -12,7 +12,7 @@ type Team struct {
 // CreateTeamWithName ...
 func CreateTeamWithName(name string) *Team {
 	return &Team{
-		ID:   uuid.NewV4().String(),
+		ID:   uuid.Must(uuid.NewV4()).String(),
 		Name: name,
 	}
 }
