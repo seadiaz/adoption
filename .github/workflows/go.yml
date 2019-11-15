@@ -57,5 +57,5 @@ jobs:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
-          IMAGE_NAME: seadiaz/adoption
+          IMAGE_NAME: seadiaz/adoption/adoption
           LATEST: "true"
