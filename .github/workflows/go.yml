@@ -16,6 +16,7 @@ jobs:
 
       - name: Get dependencies
         run: |
+          go get -v -t -d ./...
           mkdir -p /home/runner/go/bin
           export PATH="/home/runner/go/bin:$PATH"
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
