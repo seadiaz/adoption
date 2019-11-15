@@ -55,7 +55,7 @@ jobs:
         uses: opspresso/action-docker@master
         env:
           USERNAME: ${{ secrets.GITHUB_USERNAME }}
-          PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
+          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
           REGISTRY: "docker.pkg.github.com"
           IMAGE_NAME: seadiaz/adoption
           LATEST: "true"
