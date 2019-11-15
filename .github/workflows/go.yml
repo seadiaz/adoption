@@ -20,3 +20,13 @@ jobs:
 
       - name: Build
         run: go build -v -o adoption src/*.go
+
+  docker:
+    name: docker
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Build the Docker image
+        run: docker build . --tag seadiaz/adoption:$GITHUB_SHA
+      - name: Publish the Docker image
+        run: docker publish seadiaz/adoption:$GITHUB_SHA
