@@ -27,5 +27,5 @@ jobs:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: seadiaz/adoption
-          TAG_NAME: $GITHUB_SHA
+          TAG_NAME: ${{ DOCKER_USERNAME }}
           LATEST: "true"
