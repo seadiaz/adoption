@@ -21,11 +21,17 @@ jobs:
       - name: Build
         run: go build -v -o adoption src/*.go
 
+      - name: Upload adoption binary
+        uses: actions/upload-artifact@v1
+        with:
+          name: adoption
+          path: adoption
+
       - name: Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: seadiaz/adoption
-          TAG_NAME: ${{ DOCKER_USERNAME }}
+          TAG_NAME: ${{ GITHUB_SHA }}
           LATEST: "true"
