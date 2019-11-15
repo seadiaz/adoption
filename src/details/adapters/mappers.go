@@ -33,6 +33,12 @@ type TeamResponse struct {
 	Name string `json:"name,omitempty"`
 }
 
+// HealthResponse ...
+type HealthResponse struct {
+	Status  string `json:"status,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
 // ErrorResponse ...
 type ErrorResponse struct {
 	Message string `json:"message,omitempty"`
@@ -100,6 +106,16 @@ func CreateTeamResponseListFromTeamList(teams []*entities.Team) []*TeamResponse 
 	output := make([]*TeamResponse, 0, 0)
 	for _, item := range teams {
 		output = append(output, CreateTeamResponseFromTeam(item))
+	}
+
+	return output
+}
+
+// CreateHealthResponseMap ...
+func CreateHealthResponseMap(m map[string]string) *HealthResponse {
+	output := &HealthResponse{
+		Status:  m["status"],
+		Message: m["message"],
 	}
 
 	return output

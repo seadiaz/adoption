@@ -27,10 +27,12 @@ func mainServer() {
 	teamService := usecases.CreateTeamService(teamRepository)
 	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
 
+	healthController := adapters.CreateHealthController()
 	toolController := adapters.CreateToolController(toolService, adoptionService)
 	personController := adapters.CreatePersonController(personService)
 	teamController := adapters.CreateTeamController(teamService)
 
+	healthController.AddRoutes(server)
 	toolController.AddRoutes(server)
 	personController.AddRoutes(server)
 	teamController.AddRoutes(server)
