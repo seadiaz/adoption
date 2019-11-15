@@ -16,12 +16,7 @@ jobs:
 
       - name: Get dependencies
         run: |
-          GOPATH=/home/runner/work
-          GOBIN=$GOPATH/bin
-          mkdir -p $GOBIN
-          export PATH="$GOBIN:$PATH"
-          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-          dep ensure
+          go get -v -t -d ./...
 
       - name: Build
         run: go build -v .
