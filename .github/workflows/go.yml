@@ -40,8 +40,8 @@ jobs:
       - name: Upload Dockerfile
         uses: actions/upload-artifact@v1
         with:
-          name: Dockerfile
-          path: docker
+          name: docker
+          path: Dockerfile
 
       - name: Build & Push to Docker Hub
         uses: opspresso/action-docker@master
