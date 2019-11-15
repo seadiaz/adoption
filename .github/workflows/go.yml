@@ -37,27 +37,25 @@ jobs:
           name: adoption
           path: adoption
 
-      - name: Calc coverage
-        run: |
-          export PATH=$PATH:$(go env GOPATH)/bin   
-          go test -v -covermode=count -coverprofile=coverage.out ./src/...
-
-      - name: Convert coverage to lcov
-        uses: jandelgado/gcov2lcov-action@v1.0.0
+      - name: Upload Dockerfile
+        uses: actions/upload-artifact@v1
         with:
-          infile: coverage.out
-          outfile: coverage.lcov
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@v1.0.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.lcov
+          name: Dockerfile
+          path: docker
 
       - name: Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: seadiaz/adoption
+          LATEST: "true"
+
+      - name: Build & Push to GitHub Package
+        uses: opspresso/action-docker@master
+        env:
+          USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          PASSWORD: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
+          REGISTRY: "docker.pkg.github.com"
           IMAGE_NAME: seadiaz/adoption
           LATEST: "true"
