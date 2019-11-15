@@ -15,24 +15,24 @@ func TestAll(t *testing.T) {
 
 var _ = Describe("create", func() {
 	It("should add a single object", func() {
-		memory := make(map[string]interface{})
-		persistence := details.BuildMemoryPersistence(memory)
+		persistence := details.BuildMemoryPersistence()
 		id := "4128cbf6-b279-46b3-ae19-9f90ea190978"
 		value := struct{ id string }{id}
 
-		error := details.Create(id, value)
+		error := persistence.Create(id, value)
+
+		actual, _ := persistence.Find(id)
 
 		Expect(error).To(BeNil())
-		Expect(memory["4128cbf6-b279-46b3-ae19-9f90ea190978"]).To(Equal(value))
+		Expect(actual).To(Equal(value))
 	})
 
 	It("should fail when id is empty", func() {
-		memory := make(map[string]interface{})
-		persistence := details.BuildMemoryPersistence(memory)
+		persistence := details.BuildMemoryPersistence()
 		id := ""
 		value := struct{ id string }{id}
 
-		error := details.Create(id, value)
+		error := persistence.Create(id, value)
 
 		Expect(error).NotTo(BeNil())
 	})
@@ -40,47 +40,39 @@ var _ = Describe("create", func() {
 
 var _ = Describe("delete", func() {
 	It("should remove one item", func() {
-		memory := make(map[string]interface{})
-		persistence := details.BuildMemoryPersistence(memory)
+		persistence := details.BuildMemoryPersistence()
 		id := "7879d950-e511-4798-a074-a951d9eddbb8"
 		value := struct{ id string }{id: id}
-		memory[id] = value
-		expected := make([]interface{}, 1)
-		expected[0] = value
+		persistence.Create(id, value)
 
-		error := details.Delete(id)
+		error := persistence.Delete(id)
+		actual, _ := persistence.Find(id)
 
 		Expect(error).To(BeNil())
-		Expect(len(memory)).To(Equal(0))
-		Expect(memory[id]).To(BeNil())
+		Expect(actual).To(BeNil())
+
 	})
 
 	It("should fail when id is empty", func() {
-		memory := make(map[string]interface{})
-		persistence := details.BuildMemoryPersistence(memory)
+		persistence := details.BuildMemoryPersistence()
 		id := ""
-		value := struct{ id string }{id: id}
-		memory[id] = value
-		expected := make([]interface{}, 1)
-		expected[0] = value
 
-		error := details.Delete(id)
+		error := persistence.Delete(id)
 
 		Expect(error).NotTo(BeNil())
-		Expect(memory[id]).NotTo(BeNil())
 	})
 })
 
 var _ = Describe("get all", func() {
 	It("should return all values", func() {
-		memory := make(map[string]interface{})
-		persistence := details.BuildMemoryPersistence(memory)
-		value := struct{ id string }{""}
-		memory[""] = value
+		persistence := details.BuildMemoryPersistence()
+		id := "7879d950-e511-4798-a074-a951d9eddbb8"
+		value := struct{ id string }{id: id}
+		persistence.Create(id, value)
 		expected := make([]interface{}, 1)
 		expected[0] = value
 
-		results := details.GetAll()
+		results := persistence.GetAll()
 
 		Expect(results).To(Equal(expected))
 	})

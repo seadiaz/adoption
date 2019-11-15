@@ -2,3 +2,4 @@
 vendor/
 vendor-new/
 yarn-error.log
+coverage.out
