@@ -20,6 +20,9 @@ jobs:
 
       - name: Build
         run: go build -v -o adoption src/*.go
+        env:
+          GOOS: linux
+          GOARCH: amd64
 
       - name: Get Docker image tag name
         run: |
