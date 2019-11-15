@@ -21,6 +21,12 @@ jobs:
       - name: Build
         run: go build -v -o adoption src/*.go
 
+      - name: Get Docker image tag name
+        run: |
+          export
+          mkdir target
+          echo "$GITHUB_SHA" > ./target/TAG_NAME
+
       - name: Upload adoption binary
         uses: actions/upload-artifact@v1
         with:
@@ -33,5 +39,4 @@ jobs:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: seadiaz/adoption
-          TAG_NAME: "v0.0.1"
           LATEST: "true"
