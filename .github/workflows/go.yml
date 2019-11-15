@@ -23,6 +23,7 @@ jobs:
         env:
           GOOS: linux
           GOARCH: amd64
+          CGO_ENABLED: 0
 
       - name: Get Docker image tag name
         run: |
