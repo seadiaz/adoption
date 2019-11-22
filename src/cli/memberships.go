@@ -47,5 +47,5 @@ func (c *Client) postMemberships(Memberships []*Membership) {
 
 func (c *Client) postMembership(membership *Membership) {
 	body := &Person{Email: membership.PersonEmail}
-	doPostRequest(body, c.URL+teamsPath+"/"+membership.Team.ID+peoplePath)
+	doPostRequest(body, c.URL+teamsPath+"/"+membership.Team.ID+peoplePath, c.APIKey)
 }

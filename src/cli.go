@@ -34,11 +34,10 @@ func mainCLI() {
 
 func loadData(cmd *cobra.Command, args []string) {
 	filename := cmd.Flag("file").Value.String()
+	url := cmd.Flag("url").Value.String()
+	apiKey := cmd.Flag("api-key").Value.String()
 	kind := args[0]
-	client := &cli.Client{
-		URL:      cmd.Flag("URL").Value.String(),
-		Filename: filename,
-	}
+	client := cli.CreateClient(url, filename, apiKey)
 	switch kind {
 	case "tools":
 		client.LoadTools()
@@ -56,8 +55,8 @@ func loadData(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("URL", "u", defaultURL, "The URL of the running instance of adoption server")
-
+	loadCmd.Flags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
+	loadCmd.Flags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
 	loadCmd.Flags().StringP("file", "f", "", "Load data from `FILE` (required)")
 	loadCmd.MarkFlagRequired("file")
 

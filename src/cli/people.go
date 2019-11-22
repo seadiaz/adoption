@@ -33,5 +33,5 @@ func (c *Client) postPeople(people []*Person) {
 }
 
 func (c *Client) postPerson(person *Person) {
-	doPostRequest(person, c.URL+peoplePath)
+	doPostRequest(person, c.URL+peoplePath, c.APIKey)
 }

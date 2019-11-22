@@ -32,11 +32,11 @@ func (c *Client) postTools(tools []*Tool) {
 }
 
 func (c *Client) postTool(tool *Tool) {
-	doPostRequest(tool, c.URL+toolsPath)
+	doPostRequest(tool, c.URL+toolsPath, c.APIKey)
 }
 
 func (c *Client) getTools() []*Tool {
-	res := doGetRequest(c.URL + toolsPath)
+	res := doGetRequest(c.URL+toolsPath, c.APIKey)
 	output := make([]*Tool, 0, 0)
 	for _, item := range res {
 		output = append(output, &Tool{

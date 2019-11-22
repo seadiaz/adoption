@@ -46,5 +46,5 @@ func (c *Client) postAdoptions(adoptions []*Adoption) {
 }
 
 func (c *Client) postAdoption(adoption *Adoption) {
-	doPostRequest(adoption.Tool, c.URL+peoplePath+"/"+adoption.PersonEmail+toolsPath)
+	doPostRequest(adoption.Tool, c.URL+peoplePath+"/"+adoption.PersonEmail+toolsPath, c.APIKey)
 }

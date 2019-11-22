@@ -12,6 +12,16 @@ import (
 	"github.com/golang/glog"
 )
 
+type apiClient struct {
+	key string
+}
+
+func createAPIClient(key string) *apiClient {
+	return &apiClient{
+		key: key,
+	}
+}
+
 func readCsvFile(fileName string) [][]string {
 	csvfile, err := os.Open(fileName)
 	if err != nil {
@@ -35,12 +45,15 @@ func readCsvFile(fileName string) [][]string {
 	return output
 }
 
-func doPostRequest(body interface{}, url string) {
+func doPostRequest(body interface{}, url string, apiKey string) {
 	glog.Info(url)
 	reqBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(reqBodyBytes).Encode(body)
 	req, _ := http.NewRequest(http.MethodPost, url, reqBodyBytes)
 	req.Header.Add("Content-Type", "application/json")
+	if apiKey != "" {
+		req.Header.Add("Authorization", apiKey)
+	}
 	res, err := http.DefaultClient.Do(req)
 	if err != nil || res.StatusCode != 200 {
 		glog.Error(err)
@@ -48,7 +61,7 @@ func doPostRequest(body interface{}, url string) {
 	defer res.Body.Close()
 }
 
-func doGetRequest(url string) []map[string]interface{} {
+func doGetRequest(url string, apiKey string) []map[string]interface{} {
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Add("Content-Type", "application/json")
 	res, err := http.DefaultClient.Do(req)

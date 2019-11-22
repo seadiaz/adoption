@@ -32,7 +32,7 @@ func (c *Client) postTeams(teams []*Team) {
 }
 
 func (c *Client) postTeam(team *Team) {
-	doPostRequest(team, c.URL+teamsPath)
+	doPostRequest(team, c.URL+teamsPath, c.APIKey)
 }
 
 func findTeamByName(teams []*Team, name string) *Team {
@@ -46,7 +46,7 @@ func findTeamByName(teams []*Team, name string) *Team {
 }
 
 func (c *Client) getTeams() []*Team {
-	res := doGetRequest(c.URL + teamsPath)
+	res := doGetRequest(c.URL+teamsPath, c.APIKey)
 	output := make([]*Team, 0, 0)
 	for _, item := range res {
 		output = append(output, &Team{
