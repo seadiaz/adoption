@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"net/http"
@@ -11,11 +11,17 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
 
-func mainServer() {
-	glog.Info("server starting on port: ", *port)
+// Params ...
+type Params struct {
+	Port string
+}
+
+// Boot ...
+func Boot(params *Params) {
+	glog.Info("server starting on port: ", params.Port)
 	router := mux.NewRouter().StrictSlash(true)
 	routerWrapper := &routerWrapper{router: router}
-	httpServer := &http.Server{Addr: ":" + *port, Handler: cors.Default().Handler(router)}
+	httpServer := &http.Server{Addr: ":" + params.Port, Handler: cors.Default().Handler(router)}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
 	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
