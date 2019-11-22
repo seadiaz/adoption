@@ -1,4 +1,4 @@
-package cli
+package client
 
 const peoplePath = "/people"
 
@@ -9,8 +9,8 @@ type Person struct {
 }
 
 // LoadPeople ...
-func (c *Client) LoadPeople() {
-	rawData := readCsvFile(c.Filename)
+func (c *client) LoadPeople() {
+	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToPeople(rawData)
 	c.postPeople(parsedData)
 }
@@ -26,12 +26,12 @@ func mapArrayToPeople(array [][]string) []*Person {
 	return output
 }
 
-func (c *Client) postPeople(people []*Person) {
+func (c *client) postPeople(people []*Person) {
 	for _, item := range people {
 		c.postPerson(item)
 	}
 }
 
-func (c *Client) postPerson(person *Person) {
-	doPostRequest(person, c.URL+peoplePath, c.APIKey)
+func (c *client) postPerson(person *Person) {
+	doPostRequest(person, c.url+peoplePath, c.apiKey)
 }

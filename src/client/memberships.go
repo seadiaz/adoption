@@ -1,4 +1,4 @@
-package cli
+package client
 
 // Membership ...
 type Membership struct {
@@ -8,8 +8,8 @@ type Membership struct {
 }
 
 // LoadMemberships ...
-func (c *Client) LoadMemberships() {
-	rawData := readCsvFile(c.Filename)
+func (c *client) LoadMemberships() {
+	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToMemberships(rawData)
 	teams := c.getTeams()
 	parsedData = fulfillMembershipTeamFromTeamName(parsedData, teams)
@@ -39,13 +39,13 @@ func fulfillMembershipTeamFromTeamName(Memberships []*Membership, teams []*Team)
 	return output
 }
 
-func (c *Client) postMemberships(Memberships []*Membership) {
+func (c *client) postMemberships(Memberships []*Membership) {
 	for _, item := range Memberships {
 		c.postMembership(item)
 	}
 }
 
-func (c *Client) postMembership(membership *Membership) {
+func (c *client) postMembership(membership *Membership) {
 	body := &Person{Email: membership.PersonEmail}
-	doPostRequest(body, c.URL+teamsPath+"/"+membership.Team.ID+peoplePath, c.APIKey)
+	doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
 }

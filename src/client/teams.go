@@ -1,4 +1,4 @@
-package cli
+package client
 
 const teamsPath = "/teams"
 
@@ -9,8 +9,8 @@ type Team struct {
 }
 
 // LoadTeams ...
-func (c *Client) LoadTeams() {
-	rawData := readCsvFile(c.Filename)
+func (c *client) LoadTeams() {
+	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToTeams(rawData)
 	c.postTeams(parsedData)
 }
@@ -25,14 +25,14 @@ func mapArrayToTeams(array [][]string) []*Team {
 	return output
 }
 
-func (c *Client) postTeams(teams []*Team) {
+func (c *client) postTeams(teams []*Team) {
 	for _, item := range teams {
 		c.postTeam(item)
 	}
 }
 
-func (c *Client) postTeam(team *Team) {
-	doPostRequest(team, c.URL+teamsPath, c.APIKey)
+func (c *client) postTeam(team *Team) {
+	doPostRequest(team, c.url+teamsPath, c.apiKey)
 }
 
 func findTeamByName(teams []*Team, name string) *Team {
@@ -45,8 +45,8 @@ func findTeamByName(teams []*Team, name string) *Team {
 	return nil
 }
 
-func (c *Client) getTeams() []*Team {
-	res := doGetRequest(c.URL+teamsPath, c.APIKey)
+func (c *client) getTeams() []*Team {
+	res := doGetRequest(c.url+teamsPath, c.apiKey)
 	output := make([]*Team, 0, 0)
 	for _, item := range res {
 		output = append(output, &Team{

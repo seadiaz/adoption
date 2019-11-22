@@ -1,15 +1,13 @@
 package main
 
 import (
-	"github.com/golang/glog"
-	"github.com/seadiaz/adoption/src/cli"
+	"github.com/seadiaz/adoption/src/client"
 	"github.com/spf13/cobra"
 )
 
 const defaultURL = "http://localhost:3000"
 
 var (
-	// Used for flags.
 	cfgFile     string
 	userLicense string
 
@@ -24,7 +22,7 @@ var (
 		Short: "load csv data into adoption server",
 		Long:  "load csv data into adoption server",
 		Args:  cobra.ExactArgs(1),
-		Run:   loadData,
+		Run:   doLoadData,
 	}
 )
 
@@ -32,26 +30,14 @@ func mainCLI() {
 	rootCmd.Execute()
 }
 
-func loadData(cmd *cobra.Command, args []string) {
-	filename := cmd.Flag("file").Value.String()
-	url := cmd.Flag("url").Value.String()
-	apiKey := cmd.Flag("api-key").Value.String()
-	kind := args[0]
-	client := cli.CreateClient(url, filename, apiKey)
-	switch kind {
-	case "tools":
-		client.LoadTools()
-	case "people":
-		client.LoadPeople()
-	case "adoptions":
-		client.LoadAdoptions()
-	case "teams":
-		client.LoadTeams()
-	case "memberships":
-		client.LoadMemberships()
-	default:
-		glog.Fatalf("kind %s not supported", kind)
+func doLoadData(cmd *cobra.Command, args []string) {
+	params := &client.Params{
+		Filename: cmd.Flag("file").Value.String(),
+		URL:      cmd.Flag("url").Value.String(),
+		APIKey:   cmd.Flag("api-key").Value.String(),
+		Kind:     args[0],
 	}
+	client.LoadData(params)
 }
 
 func init() {

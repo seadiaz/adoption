@@ -1,4 +1,4 @@
-package cli
+package client
 
 import (
 	"bytes"
@@ -59,6 +59,9 @@ func doPostRequest(body interface{}, url string, apiKey string) {
 		glog.Error(err)
 	}
 	defer res.Body.Close()
+	var output []map[string]interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	glog.Info("response:", output)
 }
 
 func doGetRequest(url string, apiKey string) []map[string]interface{} {

@@ -1,4 +1,4 @@
-package cli
+package client
 
 // Adoption ...
 type Adoption struct {
@@ -8,8 +8,8 @@ type Adoption struct {
 }
 
 // LoadAdoptions ...
-func (c *Client) LoadAdoptions() {
-	rawData := readCsvFile(c.Filename)
+func (c *client) LoadAdoptions() {
+	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToAdoptions(rawData)
 	tools := c.getTools()
 	parsedData = fulfillAdoptionToolIDFromTools(parsedData, tools)
@@ -39,12 +39,12 @@ func fulfillAdoptionToolIDFromTools(adoptions []*Adoption, tools []*Tool) []*Ado
 	return output
 }
 
-func (c *Client) postAdoptions(adoptions []*Adoption) {
+func (c *client) postAdoptions(adoptions []*Adoption) {
 	for _, item := range adoptions {
 		c.postAdoption(item)
 	}
 }
 
-func (c *Client) postAdoption(adoption *Adoption) {
-	doPostRequest(adoption.Tool, c.URL+peoplePath+"/"+adoption.PersonEmail+toolsPath, c.APIKey)
+func (c *client) postAdoption(adoption *Adoption) {
+	doPostRequest(adoption.Tool, c.url+peoplePath+"/"+adoption.PersonEmail+toolsPath, c.apiKey)
 }
