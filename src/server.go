@@ -6,9 +6,9 @@ import (
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
-	"github.com/seadiaz/adoption/src/details"
-	"github.com/seadiaz/adoption/src/details/adapters"
-	"github.com/seadiaz/adoption/src/details/adapters/usecases"
+	"github.com/seadiaz/adoption/src/server/details"
+	"github.com/seadiaz/adoption/src/server/details/adapters"
+	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
 
 func mainServer() {

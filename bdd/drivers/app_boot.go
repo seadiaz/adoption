@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/seadiaz/adoption/src/details"
-	"github.com/seadiaz/adoption/src/details/adapters"
-	usecases "github.com/seadiaz/adoption/src/details/adapters/usecases"
+	"github.com/seadiaz/adoption/src/server/details"
+	"github.com/seadiaz/adoption/src/server/details/adapters"
+	usecases "github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
 
 var port string = "10000"
