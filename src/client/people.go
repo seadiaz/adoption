@@ -1,5 +1,7 @@
 package client
 
+import "fmt"
+
 const peoplePath = "/people"
 
 // Person ...
@@ -27,11 +29,26 @@ func mapArrayToPeople(array [][]string) []*Person {
 }
 
 func (c *client) postPeople(people []*Person) {
+	channel := make(chan string)
 	for _, item := range people {
-		c.postPerson(item)
+		go c.postPerson(item, channel)
+	}
+
+	receiveResponses(channel, len(people))
+}
+
+func receiveResponses(channel chan string, quantity int) {
+	counter := 0
+	for value := range channel {
+		fmt.Println(value)
+		counter++
+		if counter == quantity {
+			close(channel)
+		}
 	}
 }
 
-func (c *client) postPerson(person *Person) {
+func (c *client) postPerson(person *Person, channel chan string) {
 	doPostRequest(person, c.url+peoplePath, c.apiKey)
+	channel <- person.Name
 }
