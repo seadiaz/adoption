@@ -40,11 +40,15 @@ func fulfillAdoptionToolIDFromTools(adoptions []*Adoption, tools []*Tool) []*Ado
 }
 
 func (c *client) postAdoptions(adoptions []*Adoption) {
+	channel := make(chan string)
 	for _, item := range adoptions {
-		c.postAdoption(item)
+		go c.postAdoption(item, channel)
 	}
+
+	receiveResponses(channel, len(adoptions))
 }
 
-func (c *client) postAdoption(adoption *Adoption) {
+func (c *client) postAdoption(adoption *Adoption, channel chan string) {
 	doPostRequest(adoption.Tool, c.url+peoplePath+"/"+adoption.PersonEmail+toolsPath, c.apiKey)
+	channel <- adoption.PersonEmail + " " + toolsPath
 }

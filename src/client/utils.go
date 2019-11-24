@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -75,4 +76,15 @@ func doGetRequest(url string, apiKey string) []map[string]interface{} {
 	var output []map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&output)
 	return output
+}
+
+func receiveResponses(channel chan string, quantity int) {
+	counter := 0
+	for value := range channel {
+		fmt.Println(value)
+		counter++
+		if counter == quantity {
+			close(channel)
+		}
+	}
 }

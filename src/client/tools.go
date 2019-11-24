@@ -26,13 +26,17 @@ func mapArrayToTools(array [][]string) []*Tool {
 }
 
 func (c *client) postTools(tools []*Tool) {
+	channel := make(chan string)
 	for _, item := range tools {
-		c.postTool(item)
+		go c.postTool(item, channel)
 	}
+
+	receiveResponses(channel, len(tools))
 }
 
-func (c *client) postTool(tool *Tool) {
+func (c *client) postTool(tool *Tool, channel chan string) {
 	doPostRequest(tool, c.url+toolsPath, c.apiKey)
+	channel <- toolsPath
 }
 
 func (c *client) getTools() []*Tool {

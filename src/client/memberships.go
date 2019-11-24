@@ -39,13 +39,17 @@ func fulfillMembershipTeamFromTeamName(Memberships []*Membership, teams []*Team)
 	return output
 }
 
-func (c *client) postMemberships(Memberships []*Membership) {
-	for _, item := range Memberships {
-		c.postMembership(item)
+func (c *client) postMemberships(memberships []*Membership) {
+	channel := make(chan string)
+	for _, item := range memberships {
+		go c.postMembership(item, channel)
 	}
+
+	receiveResponses(channel, len(memberships))
 }
 
-func (c *client) postMembership(membership *Membership) {
+func (c *client) postMembership(membership *Membership, channel chan string) {
 	body := &Person{Email: membership.PersonEmail}
 	doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
+	channel <- membership.PersonEmail
 }

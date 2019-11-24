@@ -1,7 +1,5 @@
 package client
 
-import "fmt"
-
 const peoplePath = "/people"
 
 // Person ...
@@ -35,17 +33,6 @@ func (c *client) postPeople(people []*Person) {
 	}
 
 	receiveResponses(channel, len(people))
-}
-
-func receiveResponses(channel chan string, quantity int) {
-	counter := 0
-	for value := range channel {
-		fmt.Println(value)
-		counter++
-		if counter == quantity {
-			close(channel)
-		}
-	}
 }
 
 func (c *client) postPerson(person *Person, channel chan string) {

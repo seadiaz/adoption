@@ -26,13 +26,17 @@ func mapArrayToTeams(array [][]string) []*Team {
 }
 
 func (c *client) postTeams(teams []*Team) {
+	channel := make(chan string)
 	for _, item := range teams {
-		c.postTeam(item)
+		go c.postTeam(item, channel)
 	}
+
+	receiveResponses(channel, len(teams))
 }
 
-func (c *client) postTeam(team *Team) {
+func (c *client) postTeam(team *Team, channel chan string) {
 	doPostRequest(team, c.url+teamsPath, c.apiKey)
+	channel <- teamsPath
 }
 
 func findTeamByName(teams []*Team, name string) *Team {
