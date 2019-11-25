@@ -1,5 +1,7 @@
 package client
 
+import "github.com/golang/glog"
+
 const teamsPath = "/teams"
 
 // Team ...
@@ -50,8 +52,13 @@ func findTeamByName(teams []*Team, name string) *Team {
 }
 
 func (c *client) getTeams() []*Team {
-	res := doGetRequest(c.url+teamsPath, c.apiKey)
+	res, err := doGetRequest(c.url+teamsPath, c.apiKey)
 	output := make([]*Team, 0, 0)
+	if err != nil {
+		glog.Error(err)
+		return output
+	}
+
 	for _, item := range res {
 		output = append(output, &Team{
 			ID:   item["id"].(string),

@@ -40,7 +40,7 @@ func (c *client) postTool(tool *Tool, channel chan string) {
 }
 
 func (c *client) getTools() []*Tool {
-	res := doGetRequest(c.url+toolsPath, c.apiKey)
+	res, _ := doGetRequest(c.url+toolsPath, c.apiKey)
 	output := make([]*Tool, 0, 0)
 	for _, item := range res {
 		output = append(output, &Tool{

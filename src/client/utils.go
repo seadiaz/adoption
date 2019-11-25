@@ -46,7 +46,7 @@ func readCsvFile(fileName string) [][]string {
 	return output
 }
 
-func doPostRequest(body interface{}, url string, apiKey string) {
+func doPostRequest(body interface{}, url string, apiKey string) error {
 	glog.Info(url)
 	reqBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(reqBodyBytes).Encode(body)
@@ -56,26 +56,39 @@ func doPostRequest(body interface{}, url string, apiKey string) {
 		req.Header.Add("Authorization", apiKey)
 	}
 	res, err := http.DefaultClient.Do(req)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil {
 		glog.Error(err)
+		return err
+	}
+	if res.StatusCode != 200 {
+		glog.Errorf("request not succeed: %d", res.StatusCode)
+		return fmt.Errorf("do post request fail with status: %s", res.Status)
 	}
 	defer res.Body.Close()
 	var output []map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&output)
-	glog.Info("response:", output)
+	return nil
 }
 
-func doGetRequest(url string, apiKey string) []map[string]interface{} {
+func doGetRequest(url string, apiKey string) ([]map[string]interface{}, error) {
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Add("Content-Type", "application/json")
+	if apiKey != "" {
+		req.Header.Add("Authorization", apiKey)
+	}
 	res, err := http.DefaultClient.Do(req)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil {
 		glog.Error(err)
+		return nil, err
+	}
+	if res.StatusCode != 200 {
+		glog.Errorf("request not succeed: %s", res.Status)
+		return nil, fmt.Errorf("do get request fail with status: %s", res.Status)
 	}
 	defer res.Body.Close()
 	var output []map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&output)
-	return output
+	return output, nil
 }
 
 func receiveResponses(channel chan string, quantity int) {

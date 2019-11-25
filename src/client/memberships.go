@@ -1,5 +1,7 @@
 package client
 
+import "fmt"
+
 // Membership ...
 type Membership struct {
 	PersonEmail string
@@ -50,6 +52,10 @@ func (c *client) postMemberships(memberships []*Membership) {
 
 func (c *client) postMembership(membership *Membership, channel chan string) {
 	body := &Person{Email: membership.PersonEmail}
-	doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
-	channel <- membership.PersonEmail
+	err := doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
+	if err != nil {
+		channel <- fmt.Sprintf("fail adding %s to %s: %s", membership.PersonEmail, membership.TeamName, err.Error())
+	} else {
+		channel <- fmt.Sprintf("%s added to %s", membership.PersonEmail, membership.TeamName)
+	}
 }
