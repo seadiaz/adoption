@@ -65,6 +65,11 @@ func (s *TeamService) CreateTeam(name string) (*entities.Team, error) {
 // AddMemberToTeam ...
 func (s *TeamService) AddMemberToTeam(person *entities.Person, teamID string) (*entities.Team, error) {
 	team, _ := s.repository.FindTeam(teamID)
+	if memberExists(team, person) {
+		glog.Infof("person %s is already a member of %s", team.Name, person.Name)
+		return team, nil
+	}
+
 	team.AddPerson(person)
 	team, err := s.repository.SaveTeam(team)
 	if err != nil {
@@ -73,4 +78,14 @@ func (s *TeamService) AddMemberToTeam(person *entities.Person, teamID string) (*
 	}
 
 	return team, nil
+}
+
+func memberExists(team *entities.Team, person *entities.Person) bool {
+	for _, item := range team.People {
+		if item.ID == person.ID {
+			return true
+		}
+	}
+
+	return false
 }
