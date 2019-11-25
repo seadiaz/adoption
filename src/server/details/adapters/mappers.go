@@ -23,8 +23,15 @@ type PersonResponse struct {
 
 // ToolResponse ...
 type ToolResponse struct {
-	ID   string `json:"id"`
-	Name string `json:"name,omitempty"`
+	ID     string `json:"id"`
+	Name   string `json:"name,omitempty"`
+	Labels []*LabelResponse
+}
+
+// LabelResponse ...
+type LabelResponse struct {
+	Kind  string `json:"kind"`
+	Value string `json:"value"`
 }
 
 // TeamResponse ...
@@ -76,8 +83,9 @@ func CreateToolResponseListFromToolList(tools []*entities.Tool) []*ToolResponse 
 // CreateToolResponseFromTool ...
 func CreateToolResponseFromTool(tool *entities.Tool) *ToolResponse {
 	return &ToolResponse{
-		ID:   tool.ID,
-		Name: tool.Name,
+		ID:     tool.ID,
+		Name:   tool.Name,
+		Labels: CreateLabelResponseListFromLabelList(tool.Labels),
 	}
 }
 
@@ -119,4 +127,22 @@ func CreateHealthResponseMap(m map[string]string) *HealthResponse {
 	}
 
 	return output
+}
+
+// CreateLabelResponseListFromLabelList ...
+func CreateLabelResponseListFromLabelList(labels []*entities.Label) []*LabelResponse {
+	output := make([]*LabelResponse, 0, 0)
+	for _, item := range labels {
+		output = append(output, CreateLabelResponseFromLabel(item))
+	}
+
+	return output
+}
+
+// CreateLabelResponseFromLabel ...
+func CreateLabelResponseFromLabel(label *entities.Label) *LabelResponse {
+	return &LabelResponse{
+		Kind:  label.Kind,
+		Value: label.Value,
+	}
 }

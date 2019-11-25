@@ -62,3 +62,16 @@ func (r *ToolRepository) GetTool(id string) (*entities.Tool, error) {
 
 	return res.(*entities.Tool), nil
 }
+
+// FindTool ...
+func (r *ToolRepository) FindTool(id string) (*entities.Tool, error) {
+	res, err := r.persistence.Find(id)
+	if err != nil {
+		return nil, errors.New("error finding tool")
+	}
+	if res == nil {
+		return nil, errors.New("tool doesn't exists")
+	}
+
+	return res.(*entities.Tool), nil
+}

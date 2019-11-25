@@ -166,6 +166,23 @@ func AddMemberToTeam(personName string, teamID string) ([]interface{}, error) {
 	return output, nil
 }
 
+// AddLabelToTool ...
+func AddLabelToTool(label string, toolID string) ([]interface{}, error) {
+	path := "/tools/" + toolID + "/labels"
+	body := make(map[string]interface{})
+	body["kind"] = "tag"
+	body["value"] = label
+	res, err := postMessage(body, path)
+	if err != nil {
+		glog.Error(err)
+		return nil, errors.New("add label to tool failed")
+	}
+	defer res.Body.Close()
+	var output []interface{}
+	json.NewDecoder(res.Body).Decode(&output)
+	return output, nil
+}
+
 // GetMembersFromTeam ...
 func GetMembersFromTeam(id string) ([]interface{}, error) {
 	path := "/teams/" + id + "/people"

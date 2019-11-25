@@ -66,6 +66,11 @@ func featureContext(s *godog.Suite) {
 
 	s.Step(`^the team adoption level of the tool (\w+) should be (\d+) percent$`, world.TheTeamAdoptionLevelOfTheToolShouldBePercent)
 
+	s.Step(`^the tool (\w+) is marked with label (\w+)$`, world.TheToolIsMarkedWithLabel)
+	s.Step(`^we ask for the tool (\w+)$`, world.WeAskForTheTool)
+	s.Step(`^the list of the labels should have the length of (\d+)$`, world.TheListOfTheLabelsShouldHaveTheLengthOf)
+	s.Step(`^the list of the labels should contains to (\w+)$`, world.TheListOfTheLabelsShouldContainsTo)
+
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {
 		glog.Info("starting app...")

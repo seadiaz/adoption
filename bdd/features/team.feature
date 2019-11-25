@@ -17,7 +17,6 @@ Feature: group people in teams
     And the list of the members should contains to Puwtuvwo
     And the list of the members should contains to Donagi
 
-  @wip
   Scenario: Membership idempotency
     Given there is a team named Dinpetor
     And there is a person named Uppukmid

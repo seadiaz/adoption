@@ -70,7 +70,6 @@ Feature: know people adoption
     Then the list of team absentees of the tool Uzojoje should contain to Mozpakkek
     And the list of team absentees of the tool Uzojoje should contain to Hunolbu
 
-  @wip
   Scenario: Retrieve team adoption
     Given there is a tool named Uzojoje
     And there is a person named Fujobme which have adopted tool Uzojoje

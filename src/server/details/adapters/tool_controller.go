@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
+	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
 // ToolController ...
@@ -28,6 +29,7 @@ func (c *ToolController) AddRoutes(s Server) {
 	s.Router.HandleFunc("/tools", c.getAllTools).Methods("GET")
 	s.Router.HandleFunc("/tools", c.createTool).Methods("POST")
 	s.Router.HandleFunc("/tools/{id}/adoption", c.calculateAdoptionForTool).Methods("GET")
+	s.Router.HandleFunc("/tools/{id}/labels", c.addLabelToTool).Methods("POST")
 }
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +62,18 @@ func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http
 		return
 	}
 	output := CreateAdoptionResponseFromMap(res)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(output)
+}
+
+func (c *ToolController) addLabelToTool(w http.ResponseWriter, r *http.Request) {
+	var entity map[string]string
+	json.NewDecoder(r.Body).Decode(&entity)
+	vars := mux.Vars(r)
+	id := vars["id"]
+	label := entities.CreateLabelWithKindAndValue(entity["kind"], entity["value"])
+	res, _ := c.service.AddLabelToTool(label, id)
+	output := CreateToolResponseFromTool(res)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(output)
 }

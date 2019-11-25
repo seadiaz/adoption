@@ -3,6 +3,7 @@ package usecases
 import (
 	"fmt"
 
+	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
@@ -10,6 +11,7 @@ type toolRepository interface {
 	GetAllTools() ([]*entities.Tool, error)
 	SaveTool(entity *entities.Tool) (*entities.Tool, error)
 	GetTool(id string) (*entities.Tool, error)
+	FindTool(id string) (*entities.Tool, error)
 }
 
 // ToolService ...
@@ -41,5 +43,18 @@ func (s *ToolService) CreateTool(name string) (*entities.Tool, error) {
 
 	tool := entities.CreateToolWithName(name)
 	tool, _ = s.repository.SaveTool(tool)
+	return tool, nil
+}
+
+// AddLabelToTool ...
+func (s *ToolService) AddLabelToTool(label *entities.Label, toolID string) (*entities.Tool, error) {
+	tool, _ := s.repository.FindTool(toolID)
+	tool.AddLabel(label)
+	tool, err := s.repository.SaveTool(tool)
+	if err != nil {
+		glog.Error(err)
+		return nil, err
+	}
+
 	return tool, nil
 }

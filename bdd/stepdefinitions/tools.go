@@ -3,6 +3,7 @@ package stepdefinitions
 import (
 	"fmt"
 
+	"github.com/DATA-DOG/godog"
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
@@ -39,4 +40,9 @@ func (w *World) TheListOfTheToolShouldHaveTheLengthOf(length int) error {
 	}
 
 	return nil
+}
+
+// WeAskForTheTool ...
+func (w *World) WeAskForTheTool(name string) error {
+	return godog.ErrPending
 }
