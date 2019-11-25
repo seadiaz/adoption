@@ -17,7 +17,6 @@ import (
 var opt = godog.Options{Output: colors.Colored(os.Stdout)}
 
 func init() {
-	flag.Set("logtostderr", "true")
 	godog.BindFlags("godog.", flag.CommandLine, &opt)
 }
 

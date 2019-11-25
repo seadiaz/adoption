@@ -82,7 +82,7 @@ func (s *TeamService) AddMemberToTeam(person *entities.Person, teamID string) (*
 
 func memberExists(team *entities.Team, person *entities.Person) bool {
 	for _, item := range team.People {
-		if item.ID == person.ID {
+		if item.Email == person.Email {
 			return true
 		}
 	}

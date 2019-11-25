@@ -41,7 +41,9 @@ func CreateServer(server HTTPServer, router Router) Server {
 // Run ...
 func (s *Server) Run() {
 	err := s.HTTPServer.ListenAndServe()
-	glog.Error(err)
+	if err != nil {
+		glog.Warning(err)
+	}
 }
 
 // Close ...
