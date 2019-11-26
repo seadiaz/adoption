@@ -8,6 +8,7 @@ type World struct {
 	Teams      map[string]interface{}
 	ToolList   []interface{}
 	PeopleList []interface{}
+	LabelList  []interface{}
 }
 
 // CreateWorld ...
@@ -19,6 +20,7 @@ func CreateWorld() *World {
 		Teams:      make(map[string]interface{}),
 		ToolList:   make([]interface{}, 0, 0),
 		PeopleList: make([]interface{}, 0, 0),
+		LabelList:  make([]interface{}, 0, 0),
 	}
 }
 
@@ -30,4 +32,5 @@ func (w *World) Clear() {
 	w.Teams = make(map[string]interface{})
 	w.ToolList = make([]interface{}, 0, 0)
 	w.PeopleList = make([]interface{}, 0, 0)
+	w.LabelList = make([]interface{}, 0, 0)
 }

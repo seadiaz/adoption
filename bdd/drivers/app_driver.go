@@ -167,11 +167,11 @@ func AddMemberToTeam(personName string, teamID string) ([]interface{}, error) {
 }
 
 // AddLabelToTool ...
-func AddLabelToTool(label string, toolID string) ([]interface{}, error) {
+func AddLabelToTool(labelKind string, labelValue string, toolID string) ([]interface{}, error) {
 	path := "/tools/" + toolID + "/labels"
 	body := make(map[string]interface{})
-	body["kind"] = "tag"
-	body["value"] = label
+	body["kind"] = labelKind
+	body["value"] = labelValue
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Error(err)

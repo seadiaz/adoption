@@ -6,9 +6,9 @@ Feature: labels support
   @wip
   Scenario: Assign labels
     Given there is a tool named Jenkata
-    And the tool Jenkata is marked with label Ruabov
-    And the tool Jenkata is marked with label Afeubaji
+    And the tool Jenkata is marked with team label as Ruabov
+    And the tool Jenkata is marked with division label as Afeubaji
     When we ask for the tool Jenkata
     Then the list of the labels should have the length of 2
-    And the list of the labels should contains to Ruabov
-    And the list of the labels should contains to Afeubaji
+    And the list of the labels should contains to team=Ruabov
+    And the list of the labels should contains to division=Afeubaji

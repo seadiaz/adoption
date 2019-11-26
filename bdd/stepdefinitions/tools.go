@@ -3,7 +3,6 @@ package stepdefinitions
 import (
 	"fmt"
 
-	"github.com/DATA-DOG/godog"
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
@@ -44,5 +43,12 @@ func (w *World) TheListOfTheToolShouldHaveTheLengthOf(length int) error {
 
 // WeAskForTheTool ...
 func (w *World) WeAskForTheTool(name string) error {
-	return godog.ErrPending
+	res, err := drivers.GetAllTools()
+	for _, item := range res {
+		if name == item.(map[string]interface{})["name"] {
+			w.Tools[name] = item
+			w.LabelList = item.(map[string]interface{})["labels"].([]interface{})
+		}
+	}
+	return err
 }
