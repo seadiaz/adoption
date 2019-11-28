@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
@@ -31,7 +30,6 @@ func (s *PersonService) GetAllPeople() ([]*entities.Person, error) {
 
 // CreatePerson ...
 func (s *PersonService) CreatePerson(name string, email string) (*entities.Person, error) {
-	glog.Info("create person called")
 	person := entities.CreatePersonWithNameAndEmail(name, email)
 	_, err := s.repository.SavePerson(person)
 	if err != nil {

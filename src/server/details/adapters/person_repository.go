@@ -22,7 +22,6 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 
 // GetAllPeople ...
 func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
-	glog.Info("get all people called")
 	var output []*entities.Person
 	items := r.persistence.GetAll()
 	for _, item := range items {
@@ -36,7 +35,6 @@ func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 
 // FindPerson ...
 func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
-	glog.Info("get person called")
 	var output entities.Person
 	item, _ := r.persistence.Find(id)
 	mapstructure.Decode(item, &output)
@@ -46,7 +44,6 @@ func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
 
 // SavePerson ...
 func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person, error) {
-	glog.Info("create person called")
 	if entity.Email == "" {
 		return nil, errors.New("person should have an email")
 	}

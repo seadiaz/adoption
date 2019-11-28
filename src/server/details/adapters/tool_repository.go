@@ -23,7 +23,6 @@ func CreateToolRepository(persistence Persistence) *ToolRepository {
 
 // GetAllTools ...
 func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
-	glog.Info("get all tools called")
 	output := make([]*entities.Tool, 0, 0)
 	items := r.persistence.GetAll()
 	for _, item := range items {
@@ -37,7 +36,6 @@ func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 
 // SaveTool ...
 func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error) {
-	glog.Info("create tool called")
 	if entity.ID == "" {
 		return nil, fmt.Errorf("ID is missing for tool %s", entity.Name)
 	}
@@ -50,7 +48,6 @@ func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error)
 
 // GetTool ...
 func (r *ToolRepository) GetTool(id string) (*entities.Tool, error) {
-	glog.Info("get tool called")
 	res, err := r.persistence.Find(id)
 	if err != nil {
 		glog.Warning(err)
