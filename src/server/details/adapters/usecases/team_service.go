@@ -17,13 +17,15 @@ type teamRepository interface {
 
 // TeamService ...
 type TeamService struct {
-	repository teamRepository
+	repository       teamRepository
+	personRepository personRepository
 }
 
 // CreateTeamService ...
-func CreateTeamService(repository teamRepository) *TeamService {
+func CreateTeamService(repository teamRepository, personRepository personRepository) *TeamService {
 	return &TeamService{
-		repository: repository,
+		repository:       repository,
+		personRepository: personRepository,
 	}
 }
 
@@ -63,10 +65,11 @@ func (s *TeamService) CreateTeam(name string) (*entities.Team, error) {
 }
 
 // AddMemberToTeam ...
-func (s *TeamService) AddMemberToTeam(person *entities.Person, teamID string) (*entities.Team, error) {
+func (s *TeamService) AddMemberToTeam(personID string, teamID string) (*entities.Team, error) {
 	team, _ := s.repository.FindTeam(teamID)
+	person, _ := s.personRepository.FindPerson(personID)
 	if memberExists(team, person) {
-		glog.Infof("person %s is already a member of %s", team.Name, person.Name)
+		glog.Infof("person %s is already a member of %s", person.Name, team.Name)
 		return team, nil
 	}
 
@@ -82,7 +85,7 @@ func (s *TeamService) AddMemberToTeam(person *entities.Person, teamID string) (*
 
 func memberExists(team *entities.Team, person *entities.Person) bool {
 	for _, item := range team.People {
-		if item.Email == person.Email {
+		if item.ID == person.ID {
 			return true
 		}
 	}

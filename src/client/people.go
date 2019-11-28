@@ -4,6 +4,7 @@ const peoplePath = "/people"
 
 // Person ...
 type Person struct {
+	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
@@ -38,4 +39,27 @@ func (c *client) postPeople(people []*Person) {
 func (c *client) postPerson(person *Person, channel chan string) {
 	doPostRequest(person, c.url+peoplePath, c.apiKey)
 	channel <- person.Name
+}
+
+func (c *client) getPeople() []*Person {
+	res, _ := doGetRequest(c.url+peoplePath, c.apiKey)
+	output := make([]*Person, 0, 0)
+	for _, item := range res {
+		output = append(output, &Person{
+			ID:    item["id"].(string),
+			Name:  item["name"].(string),
+			Email: item["email"].(string),
+		})
+	}
+	return output
+}
+
+func findPersonByEmail(people []*Person, email string) *Person {
+	for _, item := range people {
+		if item.Email == email {
+			return item
+		}
+	}
+
+	return nil
 }

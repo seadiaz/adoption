@@ -47,16 +47,39 @@ func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person
 	if entity.Email == "" {
 		return nil, errors.New("person should have an email")
 	}
-	person, _ := r.FindPerson(entity.Email)
+	person, err := r.findPersonByEmail(entity.Email)
+	if err != nil {
+		glog.Error(err)
+		return nil, err
+	}
 	if person == nil {
-		if err := r.persistence.Create(entity.Email, entity); err != nil {
+		glog.Info("create")
+		if err := r.persistence.Create(entity.ID, entity); err != nil {
 			return nil, err
 		}
 	} else {
-		if err := r.persistence.Update(entity.Email, entity); err != nil {
+		glog.Infof("update %s: %s", person.Email, person.ID)
+		entity.ID = person.ID
+		if err := r.persistence.Update(person.ID, entity); err != nil {
 			return nil, err
 		}
 	}
 
 	return person, nil
+}
+
+func (r *PersonRepository) findPersonByEmail(email string) (*entities.Person, error) {
+	people, err := r.GetAllPeople()
+	if err != nil {
+		glog.Error(err)
+		return nil, err
+	}
+
+	for _, item := range people {
+		if item.Email == email {
+			return item, nil
+		}
+	}
+
+	return nil, nil
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
 // TeamController ...
@@ -61,11 +60,11 @@ func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *TeamController) addMemberToTeam(w http.ResponseWriter, r *http.Request) {
-	var entity *entities.Person
+	var entity map[string]string
 	json.NewDecoder(r.Body).Decode(&entity)
 	vars := mux.Vars(r)
 	id := vars["id"]
-	res, _ := c.service.AddMemberToTeam(entity, id)
+	res, _ := c.service.AddMemberToTeam(entity["id"], id)
 	output := CreateTeamResponseFromTeam(res)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(output)

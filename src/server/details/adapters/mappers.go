@@ -16,6 +16,7 @@ type AdoptionResponse struct {
 
 // PersonResponse ...
 type PersonResponse struct {
+	ID    string          `json:"id"`
 	Email string          `json:"email"`
 	Name  string          `json:"name"`
 	Tools []*ToolResponse `json:"tools"`
@@ -23,8 +24,8 @@ type PersonResponse struct {
 
 // ToolResponse ...
 type ToolResponse struct {
-	ID     string `json:"id"`
-	Name   string `json:"name,omitempty"`
+	ID     string           `json:"id"`
+	Name   string           `json:"name,omitempty"`
 	Labels []*LabelResponse `json:"labels,omitempty"`
 }
 
@@ -64,6 +65,7 @@ func CreatePersonResponseListFromPersonList(persons []*entities.Person) []*Perso
 // CreatePersonResponseFromPerson ...
 func CreatePersonResponseFromPerson(person *entities.Person) *PersonResponse {
 	return &PersonResponse{
+		ID:    person.ID,
 		Name:  person.Name,
 		Email: person.Email,
 		Tools: CreateToolResponseListFromToolList(person.Tools),

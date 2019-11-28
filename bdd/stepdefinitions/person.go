@@ -16,7 +16,7 @@ func (w *World) ThereIsAPersonNamedWhichHaveAdoptedTool(personName string, toolN
 	w.People[personName] = res
 
 	tool := w.Tools[toolName].(map[string]interface{})
-	_, err = drivers.AdoptToolByPerson(tool["id"].(string), res["email"].(string))
+	_, err = drivers.AdoptToolByPerson(tool["id"].(string), res["id"].(string))
 	return err
 }
 

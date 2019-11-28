@@ -38,7 +38,7 @@ func (c *client) postTeams(teams []*Team) {
 
 func (c *client) postTeam(team *Team, channel chan string) {
 	doPostRequest(team, c.url+teamsPath, c.apiKey)
-	channel <- teamsPath
+	channel <- team.Name
 }
 
 func findTeamByName(teams []*Team, name string) *Team {
