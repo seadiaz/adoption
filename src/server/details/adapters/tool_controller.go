@@ -6,8 +6,28 @@ import (
 	"net/http"
 
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
+
+var (
+	createToolRules = map[string]string{
+		"name": "required|string",
+	}
+
+	labelRules = map[string]string{
+		"kind":  "required|string",
+		"value": "required|string",
+	}
+)
+
+type toolForm struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type labelForm struct {
+	Kind  string `json:"kind"`
+	Value string `json:"value"`
+}
 
 // ToolController ...
 type ToolController struct {
@@ -38,12 +58,16 @@ func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
-	var entity map[string]interface{}
-	json.NewDecoder(r.Body).Decode(&entity)
-	name := entity["name"].(string)
-	res, err := c.service.CreateTool(name)
+	tool := &toolForm{}
+	err := validateRequest(r, createToolRules, tool)
 	if err != nil {
-		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating tool. %s", err.Error()))
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := c.service.CreateTool(tool.Name)
+	if err != nil {
+		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating tool %s: %s", tool.Name, err.Error()))
 		return
 	}
 	output := CreateToolResponseFromTool(res)
@@ -62,11 +86,17 @@ func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http
 }
 
 func (c *ToolController) addLabelToTool(w http.ResponseWriter, r *http.Request) {
+	label := &labelForm{}
+	err := validateRequest(r, labelRules, label)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
 	var entity map[string]string
 	json.NewDecoder(r.Body).Decode(&entity)
 	id := getPathParam(r, "id")
-	label := entities.CreateLabelWithKindAndValue(entity["kind"], entity["value"])
-	res, _ := c.service.AddLabelToTool(label, id)
+	res, _ := c.service.AddLabelToTool(label.Kind, label.Value, id)
 	output := CreateToolResponseFromTool(res)
 	replyJSONResponse(w, output)
 }

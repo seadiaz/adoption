@@ -1,15 +1,25 @@
 package adapters
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
 
-var addMemberToTeamRules = map[string]string{
-	"id": "required|uuid",
+var (
+	addMemberToTeamRules = map[string]string{
+		"id": "required|uuid",
+	}
+
+	createTeamRules = map[string]string{
+		"name": "required|string",
+	}
+)
+
+type teamForm struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // TeamController ...
@@ -46,10 +56,14 @@ func (c *TeamController) getMembersFromTeam(w http.ResponseWriter, r *http.Reque
 }
 
 func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
-	var entity map[string]interface{}
-	json.NewDecoder(r.Body).Decode(&entity)
-	name := entity["name"].(string)
-	res, err := c.service.CreateTeam(name)
+	team := &teamForm{}
+	err := validateRequest(r, createTeamRules, team)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := c.service.CreateTeam(team.Name)
 	if err != nil {
 		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating team. %s", err.Error()))
 		return

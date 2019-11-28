@@ -47,7 +47,8 @@ func (s *ToolService) CreateTool(name string) (*entities.Tool, error) {
 }
 
 // AddLabelToTool ...
-func (s *ToolService) AddLabelToTool(label *entities.Label, toolID string) (*entities.Tool, error) {
+func (s *ToolService) AddLabelToTool(labelKind string, labelValue string, toolID string) (*entities.Tool, error) {
+	label := entities.CreateLabelWithKindAndValue(labelKind, labelValue)
 	tool, _ := s.repository.FindTool(toolID)
 	tool.AddLabel(label)
 	tool, err := s.repository.SaveTool(tool)
