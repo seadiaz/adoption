@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
+
+var addMemberToTeamRules = map[string]string{
+	"id": "required|uuid",
+}
 
 // TeamController ...
 type TeamController struct {
@@ -31,18 +34,15 @@ func (c *TeamController) AddRoutes(s Server) {
 
 func (c *TeamController) getAllTeams(w http.ResponseWriter, r *http.Request) {
 	res, _ := c.service.GetAllTeams()
-	w.Header().Add("Content-Type", "application/json")
 	output := CreateTeamResponseListFromTeamList(res)
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *TeamController) getMembersFromTeam(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := getPathParam(r, "id")
 	res, _ := c.service.GetMembersFromTeam(id)
-	w.Header().Add("Content-Type", "application/json")
 	output := CreatePersonResponseListFromPersonList(res)
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
@@ -55,17 +55,18 @@ func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	output := CreateTeamResponseFromTeam(res)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *TeamController) addMemberToTeam(w http.ResponseWriter, r *http.Request) {
-	var entity map[string]string
-	json.NewDecoder(r.Body).Decode(&entity)
-	vars := mux.Vars(r)
-	id := vars["id"]
-	res, _ := c.service.AddMemberToTeam(entity["id"], id)
+	person := &personForm{}
+	err := validateRequest(r, addMemberToTeamRules, person)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	id := getPathParam(r, "id")
+	res, _ := c.service.AddMemberToTeam(person.ID, id)
 	output := CreateTeamResponseFromTeam(res)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
@@ -34,9 +33,8 @@ func (c *ToolController) AddRoutes(s Server) {
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
 	res, _ := c.service.GetAllTools()
-	w.Header().Add("Content-Type", "application/json")
 	output := CreateToolResponseListFromToolList(res)
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
@@ -49,31 +47,26 @@ func (c *ToolController) createTool(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	output := CreateToolResponseFromTool(res)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *ToolController) calculateAdoptionForTool(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := getPathParam(r, "id")
 	res, err := c.adoptionService.CalculateAdoptionForTool(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusConflict)
 		return
 	}
 	output := CreateAdoptionResponseFromMap(res)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
 
 func (c *ToolController) addLabelToTool(w http.ResponseWriter, r *http.Request) {
 	var entity map[string]string
 	json.NewDecoder(r.Body).Decode(&entity)
-	vars := mux.Vars(r)
-	id := vars["id"]
+	id := getPathParam(r, "id")
 	label := entities.CreateLabelWithKindAndValue(entity["kind"], entity["value"])
 	res, _ := c.service.AddLabelToTool(label, id)
 	output := CreateToolResponseFromTool(res)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(output)
+	replyJSONResponse(w, output)
 }
