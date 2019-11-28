@@ -23,14 +23,14 @@ jobs:
         run: |
           go get -v -t -d ./...
 
-      - name: Get unit tests
+      - name: Run unit tests
         run: |
           go test -v ./src/...
 
-      - name: Get functional tests
-        run: |
-          cd bdd
-          go test
+      # - name: Run functional tests
+      #   run: |
+      #     cd bdd
+      #     go test
 
       - name: Build
         run: go build -v -o adoption src/*.go
