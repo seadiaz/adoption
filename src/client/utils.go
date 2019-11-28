@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 
@@ -26,7 +25,7 @@ func createAPIClient(key string) *apiClient {
 func readCsvFile(fileName string) [][]string {
 	csvfile, err := os.Open(fileName)
 	if err != nil {
-		log.Fatalln("couldn't open the csv file", err)
+		glog.Fatalln("couldn't open the csv file", err)
 	}
 
 	r := csv.NewReader(csvfile)
@@ -38,7 +37,7 @@ func readCsvFile(fileName string) [][]string {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			glog.Fatal(err)
 		}
 		output = append(output, record)
 	}
@@ -47,7 +46,6 @@ func readCsvFile(fileName string) [][]string {
 }
 
 func doPostRequest(body interface{}, url string, apiKey string) error {
-	glog.Info(url)
 	reqBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(reqBodyBytes).Encode(body)
 	req, _ := http.NewRequest(http.MethodPost, url, reqBodyBytes)
@@ -94,7 +92,7 @@ func doGetRequest(url string, apiKey string) ([]map[string]interface{}, error) {
 func receiveResponses(channel chan string, quantity int) {
 	counter := 0
 	for value := range channel {
-		fmt.Println(value)
+		glog.Infof(value)
 		counter++
 		if counter == quantity {
 			close(channel)

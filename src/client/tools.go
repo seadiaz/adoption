@@ -36,7 +36,7 @@ func (c *client) postTools(tools []*Tool) {
 
 func (c *client) postTool(tool *Tool, channel chan string) {
 	doPostRequest(tool, c.url+toolsPath, c.apiKey)
-	channel <- toolsPath
+	channel <- tool.Name
 }
 
 func (c *client) getTools() []*Tool {
