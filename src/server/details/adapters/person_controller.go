@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/golang/glog"
 	"github.com/gookit/validate"
 	"github.com/gorilla/mux"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
@@ -42,23 +43,32 @@ func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) {
+	data, err := validateCreatePerson(r)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+	}
+	res, _ := c.service.CreatePerson(data["name"].(string), data["email"].(string))
+	output := CreatePersonResponseFromPerson(res)
+	replyJSONResponse(w, output)
+}
+
+func validateCreatePerson(r *http.Request) (map[string]interface{}, error) {
 	data, err := validate.FromRequest(r)
 	if err != nil {
-		panic(err)
+		glog.Error(err)
+		return nil, err
 	}
 	v := data.Create()
 	v.AddRule("name", "required")
 	v.AddRule("email", "required")
-	if v.Validate() {
-		name, _ := data.Get("name")
-		email, _ := data.Get("email")
-		res, _ := c.service.CreatePerson(name.(string), email.(string))
-		output := CreatePersonResponseFromPerson(res)
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(output)
-	} else {
-		replyWithError(w, http.StatusBadRequest, v.Errors)
+	if !v.Validate() {
+		return nil, v.Errors
 	}
+	output := make(map[string]interface{})
+	output["name"], _ = data.Get("name")
+	output["email"], _ = data.Get("email")
+	return output, nil
+
 }
 
 func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Request) {

@@ -3,7 +3,6 @@ Feature: manage people
   As a implementer of certain tool
   I need to be able to add/update/remove people
 
-  @fix
   Scenario: Idempotency
     Given there is a person named Dinpetor
     When we try to create a person named Dinpetor

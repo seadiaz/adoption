@@ -150,11 +150,10 @@ func GetAllPeople() ([]interface{}, error) {
 }
 
 // AddMemberToTeam ...
-func AddMemberToTeam(personName string, teamID string) ([]interface{}, error) {
+func AddMemberToTeam(personID string, teamID string) ([]interface{}, error) {
 	path := "/teams/" + teamID + "/people"
 	body := make(map[string]interface{})
-	body["name"] = personName
-	body["email"] = personName + "@dummy.tld"
+	body["id"] = personID
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Error(err)

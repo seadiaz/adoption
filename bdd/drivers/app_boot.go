@@ -30,7 +30,7 @@ func CreateApp() *App {
 
 	toolService := usecases.CreateToolService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository)
-	teamService := usecases.CreateTeamService(teamRepository)
+	teamService := usecases.CreateTeamService(teamRepository, personRepository)
 	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
 
 	toolController := adapters.CreateToolController(toolService, adoptionService)

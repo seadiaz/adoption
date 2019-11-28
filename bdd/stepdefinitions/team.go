@@ -17,7 +17,7 @@ func (w *World) ThereIsATeamNamed(name string) error {
 func (w *World) ThePersonIsMemberOfTheTeam(personName string, teamName string) error {
 	team := w.Teams[teamName].(map[string]interface{})
 	person := w.People[personName].(map[string]interface{})
-	_, err := drivers.AddMemberToTeam(person["name"].(string), team["id"].(string))
+	_, err := drivers.AddMemberToTeam(person["id"].(string), team["id"].(string))
 	return err
 }
 
