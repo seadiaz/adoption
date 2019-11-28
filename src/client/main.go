@@ -40,6 +40,8 @@ func LoadData(params *Params) {
 		client.LoadTeams()
 	case "memberships":
 		client.LoadMemberships()
+	case "labels":
+		client.LoadLabels()
 	default:
 		glog.Fatalf("kind %s not supported", params.Kind)
 	}
