@@ -22,15 +22,14 @@ jobs:
       - name: Get dependencies
         run: |
           go get -v -t -d ./...
+        env:
+          GO111MODULE: "on"
 
       - name: Run unit tests
         run: |
           go test -v ./src/...
-
-      # - name: Run functional tests
-      #   run: |
-      #     cd bdd
-      #     go test
+        env:
+          GO111MODULE: "on"
 
       - name: Build
         run: go build -v -o adoption src/*.go
@@ -38,6 +37,7 @@ jobs:
           GOOS: linux
           GOARCH: amd64
           CGO_ENABLED: 0
+          GO111MODULE: "on"
 
       - name: Get Docker image tag name
         run: |

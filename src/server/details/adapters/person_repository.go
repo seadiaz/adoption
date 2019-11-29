@@ -54,13 +54,13 @@ func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person
 	}
 	if person == nil {
 		glog.Info("create")
-		if err := r.persistence.Create(entity.ID, entity); err != nil {
+		if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	} else {
 		glog.Infof("update %s: %s", person.Email, person.ID)
 		entity.ID = person.ID
-		if err := r.persistence.Update(person.ID, entity); err != nil {
+		if err := r.persistence.Update(person.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	}
