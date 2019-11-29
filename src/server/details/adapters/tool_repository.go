@@ -36,10 +36,10 @@ func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 
 // SaveTool ...
 func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error) {
-	if entity.ID == "" {
+	if entity.ID.String() == "" {
 		return nil, fmt.Errorf("ID is missing for tool %s", entity.Name)
 	}
-	if err := r.persistence.Create(entity.ID, entity); err != nil {
+	if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
 		return nil, err
 	}
 

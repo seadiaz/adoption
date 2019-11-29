@@ -85,7 +85,7 @@ func CreateToolResponseListFromToolList(tools []*entities.Tool) []*ToolResponse 
 // CreateToolResponseFromTool ...
 func CreateToolResponseFromTool(tool *entities.Tool) *ToolResponse {
 	return &ToolResponse{
-		ID:     tool.ID,
+		ID:     tool.ID.String(),
 		Name:   tool.Name,
 		Labels: CreateLabelResponseListFromLabelList(tool.Labels),
 	}
@@ -106,7 +106,7 @@ func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionRes
 // CreateTeamResponseFromTeam ...
 func CreateTeamResponseFromTeam(team *entities.Team) *TeamResponse {
 	return &TeamResponse{
-		ID:   team.ID,
+		ID:   team.ID.String(),
 		Name: team.Name,
 	}
 }

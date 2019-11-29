@@ -1,10 +1,8 @@
 package entities
 
-import uuid "github.com/satori/go.uuid"
-
 // Team ...
 type Team struct {
-	ID     string
+	ID     *ID
 	Name   string
 	People []*Person
 }
@@ -12,7 +10,7 @@ type Team struct {
 // CreateTeamWithName ...
 func CreateTeamWithName(name string) *Team {
 	return &Team{
-		ID:   uuid.NewV4().String(),
+		ID:   newID(),
 		Name: name,
 	}
 }

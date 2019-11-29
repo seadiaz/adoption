@@ -1,10 +1,8 @@
 package entities
 
-import uuid "github.com/satori/go.uuid"
-
 // Tool ...
 type Tool struct {
-	ID     string
+	ID     *ID
 	Name   string
 	Labels []*Label
 }
@@ -13,7 +11,7 @@ type Tool struct {
 func CreateToolWithName(name string) *Tool {
 	return &Tool{
 		Name: name,
-		ID:   uuid.NewV4().String(),
+		ID:   newID(),
 	}
 }
 

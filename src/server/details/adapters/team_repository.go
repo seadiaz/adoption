@@ -67,11 +67,11 @@ func (r *TeamRepository) FindTeam(id string) (*entities.Team, error) {
 func (r *TeamRepository) SaveTeam(entity *entities.Team) (*entities.Team, error) {
 	team, _ := r.FindTeamByName(entity.Name)
 	if team == nil {
-		if err := r.persistence.Create(entity.ID, entity); err != nil {
+		if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	} else {
-		if err := r.persistence.Update(entity.ID, entity); err != nil {
+		if err := r.persistence.Update(entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	}
