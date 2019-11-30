@@ -3,6 +3,7 @@ module github.com/seadiaz/adoption
 go 1.13
 
 require (
+	github.com/DATA-DOG/godog v0.7.13
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/gookit/validate v1.1.3
