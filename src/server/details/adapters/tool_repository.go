@@ -9,6 +9,8 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
+const persistenceTypeTool = "tools"
+
 // ToolRepository ...
 type ToolRepository struct {
 	persistence Persistence
@@ -24,7 +26,7 @@ func CreateToolRepository(persistence Persistence) *ToolRepository {
 // GetAllTools ...
 func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 	output := make([]*entities.Tool, 0, 0)
-	items := r.persistence.GetAll()
+	items, _ := r.persistence.GetAll(persistenceTypeTool)
 	for _, item := range items {
 		var entity *entities.Tool
 		mapstructure.Decode(item, &entity)
@@ -39,7 +41,7 @@ func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error)
 	if entity.ID.String() == "" {
 		return nil, fmt.Errorf("ID is missing for tool %s", entity.Name)
 	}
-	if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
+	if err := r.persistence.Create(persistenceTypeTool, entity.ID.String(), entity); err != nil {
 		return nil, err
 	}
 
@@ -48,7 +50,7 @@ func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error)
 
 // GetTool ...
 func (r *ToolRepository) GetTool(id string) (*entities.Tool, error) {
-	res, err := r.persistence.Find(id)
+	res, err := r.persistence.Find(persistenceTypeTool, id)
 	if err != nil {
 		glog.Warning(err)
 		return nil, errors.New("error getting tool")
@@ -62,7 +64,7 @@ func (r *ToolRepository) GetTool(id string) (*entities.Tool, error) {
 
 // FindTool ...
 func (r *ToolRepository) FindTool(id string) (*entities.Tool, error) {
-	res, err := r.persistence.Find(id)
+	res, err := r.persistence.Find(persistenceTypeTool, id)
 	if err != nil {
 		return nil, errors.New("error finding tool")
 	}

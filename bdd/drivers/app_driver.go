@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 
 	"github.com/golang/glog"
@@ -16,7 +17,7 @@ func CreateToolWithName(name string) (map[string]interface{}, error) {
 	body["name"] = name
 	res, err := postMessage(body, path)
 	if err != nil {
-		glog.Error(err)
+		glog.Warning(err)
 		return nil, errors.New("create tool with name failed")
 	}
 	defer res.Body.Close()
@@ -36,7 +37,8 @@ func postMessage(body map[string]interface{}, path string) (*http.Response, erro
 		return nil, errors.New("post message failed")
 	}
 	if res.StatusCode < 200 || 300 <= res.StatusCode {
-		glog.Error(res)
+		glog.Warning(res)
+		printBodyMessage(res.Body)
 		return nil, errors.New("post message status code unexpected failed")
 	}
 
@@ -80,7 +82,7 @@ func CreateTeamWithName(name string) (map[string]interface{}, error) {
 func AdoptToolByPerson(toolID string, personID string) (map[string]interface{}, error) {
 	path := "/people/" + personID + "/tools"
 	body := make(map[string]interface{})
-	body["ID"] = toolID
+	body["id"] = toolID
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Error(err)
@@ -115,6 +117,7 @@ func getMessage(path string) (*http.Response, error) {
 	}
 	if res.StatusCode < 200 || 300 <= res.StatusCode {
 		glog.Error(res)
+		printBodyMessage(res.Body)
 		return nil, errors.New("get message status code unexpected")
 	}
 
@@ -194,4 +197,10 @@ func GetMembersFromTeam(id string) ([]interface{}, error) {
 	var output []interface{}
 	json.NewDecoder(res.Body).Decode(&output)
 	return output, nil
+}
+
+func printBodyMessage(body io.Reader) {
+	var output map[string]interface{}
+	json.NewDecoder(body).Decode(&output)
+	glog.Warning(output)
 }

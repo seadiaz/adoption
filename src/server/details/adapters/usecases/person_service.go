@@ -12,26 +12,28 @@ type personRepository interface {
 
 // PersonService ...
 type PersonService struct {
-	repository personRepository
+	personRepository personRepository
+	toolRepository   toolRepository
 }
 
 // CreatePersonService ...
-func CreatePersonService(repository personRepository) *PersonService {
+func CreatePersonService(personRepository personRepository, toolRepository toolRepository) *PersonService {
 	return &PersonService{
-		repository: repository,
+		personRepository: personRepository,
+		toolRepository:   toolRepository,
 	}
 }
 
 // GetAllPeople ...
 func (s *PersonService) GetAllPeople() ([]*entities.Person, error) {
-	people, _ := s.repository.GetAllPeople()
+	people, _ := s.personRepository.GetAllPeople()
 	return people, nil
 }
 
 // CreatePerson ...
 func (s *PersonService) CreatePerson(name string, email string) (*entities.Person, error) {
 	person := entities.CreatePersonWithNameAndEmail(name, email)
-	_, err := s.repository.SavePerson(person)
+	_, err := s.personRepository.SavePerson(person)
 	if err != nil {
 		return nil, err
 	}
@@ -39,10 +41,11 @@ func (s *PersonService) CreatePerson(name string, email string) (*entities.Perso
 }
 
 // AddToolToPerson ...
-func (s *PersonService) AddToolToPerson(tool *entities.Tool, personID string) (*entities.Person, error) {
-	person, _ := s.repository.FindPerson(personID)
+func (s *PersonService) AddToolToPerson(toolID string, personID string) (*entities.Person, error) {
+	person, _ := s.personRepository.FindPerson(personID)
+	tool, _ := s.toolRepository.FindTool(toolID)
 	person.AdoptTool(tool)
-	s.repository.SavePerson(person)
+	s.personRepository.SavePerson(person)
 
 	return person, nil
 }

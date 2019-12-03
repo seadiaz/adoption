@@ -20,7 +20,7 @@ func BuildMemoryPersistence() adapters.Persistence {
 }
 
 // Create ...
-func (p *MemoryPersistence) Create(id string, obj interface{}) error {
+func (p *MemoryPersistence) Create(kind string, id string, obj interface{}) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -29,7 +29,7 @@ func (p *MemoryPersistence) Create(id string, obj interface{}) error {
 }
 
 // Update ...
-func (p *MemoryPersistence) Update(id string, obj interface{}) error {
+func (p *MemoryPersistence) Update(kind string, id string, obj interface{}) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -38,7 +38,7 @@ func (p *MemoryPersistence) Update(id string, obj interface{}) error {
 }
 
 // Delete ...
-func (p *MemoryPersistence) Delete(id string) error {
+func (p *MemoryPersistence) Delete(kind string, id string) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -48,18 +48,18 @@ func (p *MemoryPersistence) Delete(id string) error {
 }
 
 // GetAll ...
-func (p *MemoryPersistence) GetAll() []interface{} {
+func (p *MemoryPersistence) GetAll(kind string) ([]interface{}, error) {
 	list := make([]interface{}, 0, 0)
 	p.memory.Range(func(_, value interface{}) bool {
 		list = append(list, value)
 		return true
 	})
 
-	return list
+	return list, nil
 }
 
 // Find ...
-func (p *MemoryPersistence) Find(id string) (interface{}, error) {
+func (p *MemoryPersistence) Find(kind string, id string) (interface{}, error) {
 	output, _ := p.memory.Load(id)
 	return output, nil
 }

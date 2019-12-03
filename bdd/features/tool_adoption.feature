@@ -3,6 +3,7 @@ Feature: know people adoption
   As a implementer of certain tool
   I need to be able to know how many people is using the tool
 
+  @fix
   Scenario: 50% of adoption
     Given there is a tool named Uzojoje
     And there is a person named Locakag

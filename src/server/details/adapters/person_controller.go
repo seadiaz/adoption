@@ -1,17 +1,22 @@
 package adapters
 
 import (
-	"encoding/json"
 	"net/http"
 
+	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
-var createPersonRules = map[string]string{
-	"name":  "required|string",
-	"email": "required|email",
-}
+var (
+	createPersonRules = map[string]string{
+		"name":  "required|string",
+		"email": "required|email",
+	}
+
+	addToolToPersonRules = map[string]string{
+		"id": "required|uuid",
+	}
+)
 
 type personForm struct {
 	ID    string `json:"id"`
@@ -57,10 +62,17 @@ func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Request) {
-	var entity *entities.Tool
-	json.NewDecoder(r.Body).Decode(&entity)
+	tool := &toolForm{}
+	err := validateRequest(r, addToolToPersonRules, tool)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
 	id := getPathParam(r, "id")
-	res, _ := c.service.AddToolToPerson(entity, id)
+	glog.Info(tool)
+	glog.Info(id)
+	res, _ := c.service.AddToolToPerson(tool.ID, id)
 	output := CreatePersonResponseFromPerson(res)
 	replyJSONResponse(w, output)
 }

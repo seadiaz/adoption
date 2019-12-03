@@ -29,7 +29,7 @@ func Boot(params *Params) {
 	teamRepository := adapters.CreateTeamRepository(details.BuildMemoryPersistence())
 
 	toolService := usecases.CreateToolService(toolRepository)
-	personService := usecases.CreatePersonService(personRepository)
+	personService := usecases.CreatePersonService(personRepository, toolRepository)
 	teamService := usecases.CreateTeamService(teamRepository, personRepository)
 	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
 

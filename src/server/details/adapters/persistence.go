@@ -2,9 +2,9 @@ package adapters
 
 // Persistence ...
 type Persistence interface {
-	Create(id string, obj interface{}) error
-	Update(id string, obj interface{}) error
-	Delete(id string) error
-	GetAll() []interface{}
-	Find(id string) (interface{}, error)
+	Create(kind string, id string, obj interface{}) error
+	Update(kind string, id string, obj interface{}) error
+	Delete(kind string, id string) error
+	GetAll(kind string) ([]interface{}, error)
+	Find(kind string, id string) (interface{}, error)
 }

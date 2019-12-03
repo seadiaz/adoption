@@ -8,6 +8,8 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
+const persistenceTypePerson = "people"
+
 // PersonRepository ...
 type PersonRepository struct {
 	persistence Persistence
@@ -23,7 +25,7 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 // GetAllPeople ...
 func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 	var output []*entities.Person
-	items := r.persistence.GetAll()
+	items, _ := r.persistence.GetAll(persistenceTypePerson)
 	for _, item := range items {
 		var entity *entities.Person
 		mapstructure.Decode(item, &entity)
@@ -36,7 +38,7 @@ func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 // FindPerson ...
 func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
 	var output entities.Person
-	item, _ := r.persistence.Find(id)
+	item, _ := r.persistence.Find(persistenceTypePerson, id)
 	mapstructure.Decode(item, &output)
 
 	return &output, nil
@@ -53,14 +55,12 @@ func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person
 		return nil, err
 	}
 	if person == nil {
-		glog.Info("create")
-		if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
+		if err := r.persistence.Create(persistenceTypePerson, entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	} else {
-		glog.Infof("update %s: %s", person.Email, person.ID)
 		entity.ID = person.ID
-		if err := r.persistence.Update(person.ID.String(), entity); err != nil {
+		if err := r.persistence.Update(persistenceTypePerson, person.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	}

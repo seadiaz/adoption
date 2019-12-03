@@ -24,26 +24,26 @@ func BuildRedisPersistence() adapters.Persistence {
 }
 
 // Create ...
-func (p *RedisPersistence) Create(id string, obj interface{}) error {
+func (p *RedisPersistence) Create(kind string, id string, obj interface{}) error {
 	return errors.New("not implemented")
 }
 
 // Update ...
-func (p *RedisPersistence) Update(id string, obj interface{}) error {
+func (p *RedisPersistence) Update(kind string, id string, obj interface{}) error {
 	return errors.New("not implemented")
 }
 
 // Delete ...
-func (p *RedisPersistence) Delete(id string) error {
+func (p *RedisPersistence) Delete(kind string, id string) error {
 	return errors.New("not implemented")
 }
 
 // GetAll ...
-func (p *RedisPersistence) GetAll() []interface{} {
-	return make([]interface{}, 0, 0)
+func (p *RedisPersistence) GetAll(kind string) ([]interface{}, error) {
+	return make([]interface{}, 0, 0), nil
 }
 
 // Find ...
-func (p *RedisPersistence) Find(id string) (interface{}, error) {
+func (p *RedisPersistence) Find(kind string, id string) (interface{}, error) {
 	return nil, errors.New("not implemented")
 }

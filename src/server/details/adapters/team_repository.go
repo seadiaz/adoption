@@ -8,6 +8,8 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
+const persistenceTypeTeam = "teams"
+
 // TeamRepository ...
 type TeamRepository struct {
 	persistence Persistence
@@ -23,7 +25,7 @@ func CreateTeamRepository(persistence Persistence) *TeamRepository {
 // GetAllTeams ...
 func (r *TeamRepository) GetAllTeams() ([]*entities.Team, error) {
 	var output []*entities.Team
-	items := r.persistence.GetAll()
+	items, _ := r.persistence.GetAll(persistenceTypeTeam)
 	for _, item := range items {
 		var entity *entities.Team
 		mapstructure.Decode(item, &entity)
@@ -52,7 +54,7 @@ func (r *TeamRepository) FindTeamByName(name string) (*entities.Team, error) {
 
 // FindTeam ...
 func (r *TeamRepository) FindTeam(id string) (*entities.Team, error) {
-	res, err := r.persistence.Find(id)
+	res, err := r.persistence.Find(persistenceTypeTeam, id)
 	if err != nil {
 		return nil, errors.New("error finding team by name")
 	}
@@ -67,11 +69,11 @@ func (r *TeamRepository) FindTeam(id string) (*entities.Team, error) {
 func (r *TeamRepository) SaveTeam(entity *entities.Team) (*entities.Team, error) {
 	team, _ := r.FindTeamByName(entity.Name)
 	if team == nil {
-		if err := r.persistence.Create(entity.ID.String(), entity); err != nil {
+		if err := r.persistence.Create(persistenceTypeTeam, entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	} else {
-		if err := r.persistence.Update(entity.ID.String(), entity); err != nil {
+		if err := r.persistence.Update(persistenceTypeTeam, entity.ID.String(), entity); err != nil {
 			return nil, err
 		}
 	}
@@ -81,7 +83,7 @@ func (r *TeamRepository) SaveTeam(entity *entities.Team) (*entities.Team, error)
 
 // GetTeam ...
 func (r *TeamRepository) GetTeam(id string) (*entities.Team, error) {
-	res, err := r.persistence.Find(id)
+	res, err := r.persistence.Find(persistenceTypeTeam, id)
 	if err != nil {
 		glog.Warning(err)
 		return nil, errors.New("error getting team")
