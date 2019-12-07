@@ -65,6 +65,9 @@ func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([
 // Find ...
 func (p *MemoryPersistence) Find(kind string, id string, proto adapters.PersistedData) (interface{}, error) {
 	res, _ := p.memory.Load(kind + "-" + id)
+	if res == nil {
+		return nil, nil
+	}
 	entity := proto.Clone()
 	entity.UnmarshalBinary([]byte(res.(string)))
 	return entity, nil

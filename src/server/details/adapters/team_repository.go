@@ -50,7 +50,6 @@ func (t *persistedTeam) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
-// Clone ...
 func (t *persistedTeam) Clone() PersistedData {
 	return &persistedTeam{}
 }
