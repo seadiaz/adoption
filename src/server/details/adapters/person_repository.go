@@ -43,7 +43,7 @@ func createPersistedPersonListFromPersonList(list []*entities.Person) []*persist
 
 func createPersonFromPersistedPerson(pEntity *persistedPerson) *entities.Person {
 	return &entities.Person{
-		ID:    entities.RecoverID(pEntity.ID),
+		ID:    entities.BuildID(pEntity.ID),
 		Name:  pEntity.Name,
 		Email: pEntity.Email,
 		Tools: createToolListFromPersistedToolList(pEntity.Tools),

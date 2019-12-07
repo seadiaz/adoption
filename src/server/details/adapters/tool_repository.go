@@ -37,7 +37,7 @@ func createPersistedToolFromTool(entity *entities.Tool) *persistedTool {
 
 func createToolFromPersistedTool(pEntity *persistedTool) *entities.Tool {
 	return &entities.Tool{
-		ID:     entities.RecoverID(pEntity.ID),
+		ID:     entities.BuildID(pEntity.ID),
 		Name:   pEntity.Name,
 		Labels: createLabelListFromPersistedLabelList(pEntity.Labels),
 	}

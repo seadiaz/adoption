@@ -11,7 +11,7 @@ type Tool struct {
 func CreateToolWithName(name string) *Tool {
 	return &Tool{
 		Name: name,
-		ID:   newID(),
+		ID:   generateID(),
 	}
 }
 

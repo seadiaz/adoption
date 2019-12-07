@@ -31,7 +31,7 @@ func createPersistedTeamFromTeam(entity *entities.Team) *persistedTeam {
 
 func createTeamFromPersistedTeam(pEntity *persistedTeam) *entities.Team {
 	return &entities.Team{
-		ID:     entities.RecoverID(pEntity.ID),
+		ID:     entities.BuildID(pEntity.ID),
 		Name:   pEntity.Name,
 		People: createPersonListFromPersistedPersonList(pEntity.People),
 	}

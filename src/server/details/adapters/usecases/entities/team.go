@@ -10,7 +10,7 @@ type Team struct {
 // CreateTeamWithName ...
 func CreateTeamWithName(name string) *Team {
 	return &Team{
-		ID:   newID(),
+		ID:   generateID(),
 		Name: name,
 	}
 }

@@ -7,14 +7,14 @@ type ID struct {
 	value string
 }
 
-func newID() *ID {
+func generateID() *ID {
 	return &ID{
 		value: uuid.NewV4().String(),
 	}
 }
 
-// RecoverID ...
-func RecoverID(value string) *ID {
+// BuildID ...
+func BuildID(value string) *ID {
 	return &ID{
 		value: value,
 	}

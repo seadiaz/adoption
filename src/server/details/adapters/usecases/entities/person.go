@@ -11,7 +11,7 @@ type Person struct {
 // CreatePersonWithNameAndEmail ...
 func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
-		ID:    newID(),
+		ID:    generateID(),
 		Email: email,
 		Name:  name,
 		Tools: make([]*Tool, 0),
