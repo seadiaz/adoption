@@ -60,17 +60,22 @@ func createPersonListFromPersistedPersonList(pList []*persistedPerson) []*entiti
 	return output
 }
 
-func (t *persistedPerson) MarshalBinary() (data []byte, err error) {
-	return json.Marshal(t)
+func (p *persistedPerson) MarshalBinary() (data []byte, err error) {
+	return json.Marshal(p)
 }
 
-func (t *persistedPerson) UnmarshalBinary(data []byte) error {
-	if err := json.Unmarshal(data, &t); err != nil {
+func (p *persistedPerson) UnmarshalBinary(data []byte) error {
+	if err := json.Unmarshal(data, &p); err != nil {
 		glog.Error(err)
 		return err
 	}
 
 	return nil
+}
+
+// Clone ...
+func (p *persistedPerson) Clone() interface{} {
+	return &persistedPerson{}
 }
 
 // CreatePersonRepository ...

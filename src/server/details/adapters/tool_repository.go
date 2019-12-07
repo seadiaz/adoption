@@ -97,17 +97,22 @@ func createLabelListFromPersistedLabelList(list []persistedLabel) []*entities.La
 	return output
 }
 
-func (t persistedTool) MarshalBinary() (data []byte, err error) {
+func (t *persistedTool) MarshalBinary() (data []byte, err error) {
 	return json.Marshal(t)
 }
 
-func (t persistedTool) UnmarshalBinary(data []byte) error {
+func (t *persistedTool) UnmarshalBinary(data []byte) error {
 	if err := json.Unmarshal(data, &t); err != nil {
 		glog.Error(err)
 		return err
 	}
 
 	return nil
+}
+
+// Clone ...
+func (t *persistedTool) Clone() interface{} {
+	return &persistedTool{}
 }
 
 // CreateToolRepository ...

@@ -15,4 +15,5 @@ type Persistence interface {
 type PersistedData interface {
 	encoding.BinaryMarshaler
 	encoding.BinaryUnmarshaler
+	Clone() interface{}
 }

@@ -50,6 +50,11 @@ func (t *persistedTeam) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
+// Clone ...
+func (t *persistedTeam) Clone() interface{} {
+	return &persistedTeam{}
+}
+
 // CreateTeamRepository ...
 func CreateTeamRepository(persistence Persistence) *TeamRepository {
 	return &TeamRepository{
