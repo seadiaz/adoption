@@ -94,8 +94,8 @@ func (r *TeamRepository) FindTeamByName(name string) (*entities.Team, error) {
 
 // FindTeamByID ...
 func (r *TeamRepository) FindTeamByID(id string) (*entities.Team, error) {
-	pTeam := &persistedTeam{}
-	err := r.persistence.Find(persistenceTypeTeam, id, pTeam)
+	proto := &persistedTeam{}
+	pTeam, err := r.persistence.Find(persistenceTypeTeam, id, proto)
 	if err != nil {
 		return nil, errors.New("error finding team by name")
 	}
@@ -103,7 +103,7 @@ func (r *TeamRepository) FindTeamByID(id string) (*entities.Team, error) {
 		return nil, errors.New("team doesn't exists")
 	}
 
-	entity := createTeamFromPersistedTeam(pTeam)
+	entity := createTeamFromPersistedTeam(pTeam.(*persistedTeam))
 	return entity, nil
 }
 

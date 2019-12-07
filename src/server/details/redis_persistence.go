@@ -73,13 +73,14 @@ func (p *RedisPersistence) GetAll(kind string, proto adapters.PersistedData) ([]
 }
 
 // Find ...
-func (p *RedisPersistence) Find(kind string, id string, output adapters.PersistedData) error {
+func (p *RedisPersistence) Find(kind string, id string, proto adapters.PersistedData) (interface{}, error) {
 	res, err := p.client.HGet(kind, id).Result()
 	if err != nil {
 		glog.Error(err)
-		return err
+		return nil, err
 	}
 
-	output.UnmarshalBinary([]byte(res))
-	return nil
+	entity := proto.Clone()
+	entity.UnmarshalBinary([]byte(res))
+	return entity, nil
 }

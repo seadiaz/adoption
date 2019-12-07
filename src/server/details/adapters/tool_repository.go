@@ -151,8 +151,8 @@ func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error)
 
 // FindToolByID ...
 func (r *ToolRepository) FindToolByID(id string) (*entities.Tool, error) {
-	pTool := &persistedTool{}
-	err := r.persistence.Find(persistenceTypeTool, id, pTool)
+	proto := &persistedTool{}
+	pTool, err := r.persistence.Find(persistenceTypeTool, id, proto)
 	if err != nil {
 		glog.Warning(err)
 		return nil, errors.New("error getting tool")
@@ -161,6 +161,6 @@ func (r *ToolRepository) FindToolByID(id string) (*entities.Tool, error) {
 		return nil, errors.New("tool doesn't exists")
 	}
 
-	entity := createToolFromPersistedTool(pTool)
+	entity := createToolFromPersistedTool(pTool.(*persistedTool))
 	return entity, nil
 }

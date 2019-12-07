@@ -53,7 +53,7 @@ func (p *MemoryPersistence) Delete(kind string, id string) error {
 func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([]interface{}, error) {
 	list := make([]interface{}, 0, 0)
 	p.memory.Range(func(_, value interface{}) bool {
-		item := proto
+		item := proto.Clone()
 		item.UnmarshalBinary([]byte(value.(string)))
 		list = append(list, item)
 		return true
@@ -63,8 +63,9 @@ func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([
 }
 
 // Find ...
-func (p *MemoryPersistence) Find(kind string, id string, proto adapters.PersistedData) error {
+func (p *MemoryPersistence) Find(kind string, id string, proto adapters.PersistedData) (interface{}, error) {
 	res, _ := p.memory.Load(kind + "-" + id)
-	proto.UnmarshalBinary([]byte(res.(string)))
-	return nil
+	entity := proto.Clone()
+	entity.UnmarshalBinary([]byte(res.(string)))
+	return entity, nil
 }

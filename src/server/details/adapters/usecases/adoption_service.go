@@ -45,9 +45,11 @@ func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interf
 
 	adoption := entities.CreateAdoption()
 	for _, item := range people {
+		glog.Info(item)
 		adoption.IncludePerson(item)
 	}
 	for _, item := range teams {
+		glog.Info(item)
 		adoption.IncludeTeam(item)
 	}
 	output := make(map[string]interface{})

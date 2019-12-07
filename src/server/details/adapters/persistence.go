@@ -8,7 +8,7 @@ type Persistence interface {
 	Update(kind string, id string, obj PersistedData) error
 	Delete(kind string, id string) error
 	GetAll(kind string, proto PersistedData) ([]interface{}, error)
-	Find(kind string, id string, proto PersistedData) error
+	Find(kind string, id string, proto PersistedData) (interface{}, error)
 }
 
 // PersistedData ...

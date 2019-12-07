@@ -100,8 +100,8 @@ func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 
 // FindPersonByID ...
 func (r *PersonRepository) FindPersonByID(id string) (*entities.Person, error) {
-	pPerson := &persistedPerson{}
-	err := r.persistence.Find(persistenceTypePerson, id, pPerson)
+	proto := &persistedPerson{}
+	pPerson, err := r.persistence.Find(persistenceTypePerson, id, proto)
 	if err != nil {
 		return nil, errors.New("error finding person by id")
 	}
@@ -109,7 +109,7 @@ func (r *PersonRepository) FindPersonByID(id string) (*entities.Person, error) {
 		return nil, errors.New("person doesn't exists")
 	}
 
-	entity := createPersonFromPersistedPerson(pPerson)
+	entity := createPersonFromPersistedPerson(pPerson.(*persistedPerson))
 	return entity, nil
 }
 
