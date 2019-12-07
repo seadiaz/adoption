@@ -12,6 +12,16 @@ func BuildEmail(value string) *Email {
 	}
 }
 
-func (id *Email) String() string {
-	return id.value
+// IsValid ...
+func (v *Email) IsValid() bool {
+	return v.value != ""
+}
+
+// IsEqual ...
+func (v *Email) IsEqual(other *Email) bool {
+	return v.value == other.value
+}
+
+func (v *Email) String() string {
+	return v.value
 }

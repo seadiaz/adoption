@@ -3,7 +3,6 @@ package adapters
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
@@ -137,9 +136,6 @@ func (r *ToolRepository) GetAllTools() ([]*entities.Tool, error) {
 
 // SaveTool ...
 func (r *ToolRepository) SaveTool(entity *entities.Tool) (*entities.Tool, error) {
-	if entity.ID.String() == "" {
-		return nil, fmt.Errorf("ID is missing for tool %s", entity.Name)
-	}
 	pTool := createPersistedToolFromTool(entity)
 	if err := r.persistence.Create(persistenceTypeTool, entity.ID.String(), pTool); err != nil {
 		glog.Error(err)

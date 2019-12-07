@@ -67,7 +67,7 @@ func CreatePersonResponseFromPerson(person *entities.Person) *PersonResponse {
 	return &PersonResponse{
 		ID:    person.ID.String(),
 		Name:  person.Name,
-		Email: person.Email,
+		Email: person.Email.String(),
 		Tools: CreateToolResponseListFromToolList(person.Tools),
 	}
 }

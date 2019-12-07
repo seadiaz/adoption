@@ -3,7 +3,7 @@ package entities
 // Person ...
 type Person struct {
 	ID    *ID
-	Email string
+	Email *Email
 	Name  string
 	Tools []*Tool
 }
@@ -12,7 +12,7 @@ type Person struct {
 func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
 		ID:    generateID(),
-		Email: email,
+		Email: BuildEmail(email),
 		Name:  name,
 		Tools: make([]*Tool, 0),
 	}

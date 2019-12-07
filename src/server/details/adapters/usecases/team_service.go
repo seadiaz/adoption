@@ -85,7 +85,7 @@ func (s *TeamService) AddMemberToTeam(personID string, teamID string) (*entities
 func memberExists(team *entities.Team, person *entities.Person) bool {
 	for _, item := range team.People {
 		glog.Errorf("%s == %s", person.ID, item.ID)
-		if item.ID.String() == person.ID.String() {
+		if item.ID.IsEqual(person.ID) {
 			return true
 		}
 	}

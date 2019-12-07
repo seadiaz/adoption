@@ -26,7 +26,7 @@ func createPersistedPersonFromPerson(entity *entities.Person) *persistedPerson {
 	return &persistedPerson{
 		ID:    entity.ID.String(),
 		Name:  entity.Name,
-		Email: entity.Email,
+		Email: entity.Email.String(),
 		Tools: createPersistedToolListFromToolList(entity.Tools),
 	}
 }
@@ -45,7 +45,7 @@ func createPersonFromPersistedPerson(pEntity *persistedPerson) *entities.Person 
 	return &entities.Person{
 		ID:    entities.BuildID(pEntity.ID),
 		Name:  pEntity.Name,
-		Email: pEntity.Email,
+		Email: entities.BuildEmail(pEntity.Email),
 		Tools: createToolListFromPersistedToolList(pEntity.Tools),
 	}
 }
@@ -115,7 +115,7 @@ func (r *PersonRepository) FindPersonByID(id string) (*entities.Person, error) {
 
 // SavePerson ...
 func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person, error) {
-	if entity.Email == "" {
+	if !entity.Email.IsValid() {
 		return nil, errors.New("person should have an email")
 	}
 	person, err := r.findPersonByEmail(entity.Email)
@@ -139,7 +139,7 @@ func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person
 	return person, nil
 }
 
-func (r *PersonRepository) findPersonByEmail(email string) (*entities.Person, error) {
+func (r *PersonRepository) findPersonByEmail(email *entities.Email) (*entities.Person, error) {
 	people, err := r.GetAllPeople()
 	if err != nil {
 		glog.Error(err)
@@ -147,7 +147,7 @@ func (r *PersonRepository) findPersonByEmail(email string) (*entities.Person, er
 	}
 
 	for _, item := range people {
-		if item.Email == email {
+		if item.Email.IsEqual(email) {
 			return item, nil
 		}
 	}

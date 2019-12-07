@@ -20,6 +20,11 @@ func BuildID(value string) *ID {
 	}
 }
 
-func (id *ID) String() string {
-	return id.value
+// IsEqual ...
+func (v *ID) IsEqual(other *ID) bool {
+	return v.value == other.value
+}
+
+func (v *ID) String() string {
+	return v.value
 }

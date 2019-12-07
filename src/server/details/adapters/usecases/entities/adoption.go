@@ -29,9 +29,9 @@ func (a *Adoption) IncludeTeam(team *Team) error {
 	return nil
 }
 
-func (a *Adoption) findPersonByEmail(email string) *Person {
+func (a *Adoption) findPersonByEmail(email *Email) *Person {
 	for _, item := range a.People {
-		if item.Email == email {
+		if item.Email.IsEqual(email) {
 			return item
 		}
 	}
