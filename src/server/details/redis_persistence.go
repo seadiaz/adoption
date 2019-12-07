@@ -1,8 +1,6 @@
 package details
 
 import (
-	"errors"
-
 	"github.com/go-redis/redis/v7"
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters"
@@ -47,12 +45,22 @@ func (p *RedisPersistence) Create(kind string, id string, obj adapters.Persisted
 
 // Update ...
 func (p *RedisPersistence) Update(kind string, id string, obj adapters.PersistedData) error {
-	return errors.New("not implemented")
+	if _, err := p.client.HSet(kind, id, obj).Result(); err != nil {
+		glog.Error(err)
+		return err
+	}
+
+	return nil
 }
 
 // Delete ...
 func (p *RedisPersistence) Delete(kind string, id string) error {
-	return errors.New("not implemented")
+	if _, err := p.client.HDel(kind, id).Result(); err != nil {
+		glog.Error(err)
+		return err
+	}
+
+	return nil
 }
 
 // GetAll ...
