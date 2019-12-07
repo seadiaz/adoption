@@ -3,7 +3,6 @@ package adapters
 import (
 	"net/http"
 
-	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 )
 
@@ -70,8 +69,6 @@ func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Reques
 	}
 
 	id := getPathParam(r, "id")
-	glog.Info(tool)
-	glog.Info(id)
 	res, _ := c.service.AddToolToPerson(tool.ID, id)
 	output := CreatePersonResponseFromPerson(res)
 	replyJSONResponse(w, output)

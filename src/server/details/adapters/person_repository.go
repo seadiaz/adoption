@@ -91,7 +91,6 @@ func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 	proto := &persistedPerson{}
 	items, _ := r.persistence.GetAll(persistenceTypePerson, proto)
 	for _, item := range items {
-		glog.Info(item)
 		entity := createPersonFromPersistedPerson(item.(*persistedPerson))
 		output = append(output, entity)
 	}

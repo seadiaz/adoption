@@ -4,7 +4,6 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters"
 )
 
@@ -57,8 +56,6 @@ func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([
 		item := proto
 		item.UnmarshalBinary([]byte(value.(string)))
 		list = append(list, item)
-		glog.Info(item)
-		glog.Info(list[0])
 		return true
 	})
 
