@@ -1,5 +1,7 @@
 package entities
 
+import "github.com/golang/glog"
+
 // Person ...
 type Person struct {
 	ID    *ID
@@ -20,6 +22,8 @@ func CreatePersonWithNameAndEmail(name string, email string) *Person {
 
 // AdoptTool ...
 func (p *Person) AdoptTool(tool *Tool) error {
+	glog.Info(p)
+	glog.Info(tool)
 	p.Tools = append(p.Tools, tool)
 	return nil
 }

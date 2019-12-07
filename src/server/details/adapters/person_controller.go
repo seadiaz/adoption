@@ -69,7 +69,12 @@ func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Reques
 	}
 
 	id := getPathParam(r, "id")
-	res, _ := c.service.AddToolToPerson(tool.ID, id)
+	res, err := c.service.AddToolToPerson(tool.ID, id)
+	if err != nil {
+		replyWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
 	output := CreatePersonResponseFromPerson(res)
 	replyJSONResponse(w, output)
 }

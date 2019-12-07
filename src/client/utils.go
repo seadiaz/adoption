@@ -60,6 +60,7 @@ func doPostRequest(body interface{}, url string, apiKey string) error {
 	}
 	if res.StatusCode != 200 {
 		glog.Errorf("request not succeed: %d", res.StatusCode)
+		printBodyMessage(res.Body)
 		return fmt.Errorf("do post request fail with status: %s", res.Status)
 	}
 	defer res.Body.Close()
@@ -98,4 +99,10 @@ func receiveResponses(channel chan string, quantity int) {
 			close(channel)
 		}
 	}
+}
+
+func printBodyMessage(body io.Reader) {
+	var output map[string]interface{}
+	json.NewDecoder(body).Decode(&output)
+	glog.Warning(output)
 }

@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"fmt"
+	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
@@ -42,7 +44,12 @@ func (s *PersonService) CreatePerson(name string, email string) (*entities.Perso
 
 // AddToolToPerson ...
 func (s *PersonService) AddToolToPerson(toolID string, personID string) (*entities.Person, error) {
+	glog.Info(personID)
 	person, _ := s.personRepository.FindPersonByID(personID)
+	glog.Info(person)
+	if person == nil {
+		return nil, fmt.Errorf("person with id %s not found", personID)
+	}
 	tool, _ := s.toolRepository.FindToolByID(toolID)
 	person.AdoptTool(tool)
 	s.personRepository.SavePerson(person)
