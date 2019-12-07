@@ -1,7 +1,6 @@
 package details
 
 import (
-	"encoding"
 	"errors"
 
 	"github.com/go-redis/redis/v7"
@@ -37,7 +36,7 @@ func ping(client *redis.Client) {
 }
 
 // Create ...
-func (p *RedisPersistence) Create(kind string, id string, obj encoding.BinaryMarshaler) error {
+func (p *RedisPersistence) Create(kind string, id string, obj adapters.PersistedData) error {
 	if _, err := p.client.HSet(kind, id, obj).Result(); err != nil {
 		glog.Error(err)
 		return err
@@ -47,7 +46,7 @@ func (p *RedisPersistence) Create(kind string, id string, obj encoding.BinaryMar
 }
 
 // Update ...
-func (p *RedisPersistence) Update(kind string, id string, obj encoding.BinaryMarshaler) error {
+func (p *RedisPersistence) Update(kind string, id string, obj adapters.PersistedData) error {
 	return errors.New("not implemented")
 }
 
@@ -57,7 +56,7 @@ func (p *RedisPersistence) Delete(kind string, id string) error {
 }
 
 // GetAll ...
-func (p *RedisPersistence) GetAll(kind string, proto encoding.BinaryUnmarshaler) ([]interface{}, error) {
+func (p *RedisPersistence) GetAll(kind string, proto adapters.PersistedData) ([]interface{}, error) {
 	res, err := p.client.HGetAll(kind).Result()
 	if err != nil {
 		glog.Error(err)
@@ -67,13 +66,14 @@ func (p *RedisPersistence) GetAll(kind string, proto encoding.BinaryUnmarshaler)
 	for _, item := range res {
 		entity := proto
 		entity.UnmarshalBinary([]byte(item))
-		glog.Info(item, entity)
+		glog.Info(entity)
+		list = append(list, entity)
 	}
 	return list, nil
 }
 
 // Find ...
-func (p *RedisPersistence) Find(kind string, id string, output encoding.BinaryUnmarshaler) error {
+func (p *RedisPersistence) Find(kind string, id string, output adapters.PersistedData) error {
 	res, err := p.client.HGet(kind, id).Result()
 	if err != nil {
 		glog.Error(err)

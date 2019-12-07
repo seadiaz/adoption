@@ -1,7 +1,6 @@
 package details
 
 import (
-	"encoding"
 	"errors"
 	"sync"
 
@@ -22,7 +21,7 @@ func BuildMemoryPersistence() adapters.Persistence {
 }
 
 // Create ...
-func (p *MemoryPersistence) Create(kind string, id string, obj encoding.BinaryMarshaler) error {
+func (p *MemoryPersistence) Create(kind string, id string, obj adapters.PersistedData) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -32,7 +31,7 @@ func (p *MemoryPersistence) Create(kind string, id string, obj encoding.BinaryMa
 }
 
 // Update ...
-func (p *MemoryPersistence) Update(kind string, id string, obj encoding.BinaryMarshaler) error {
+func (p *MemoryPersistence) Update(kind string, id string, obj adapters.PersistedData) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
@@ -52,7 +51,7 @@ func (p *MemoryPersistence) Delete(kind string, id string) error {
 }
 
 // GetAll ...
-func (p *MemoryPersistence) GetAll(kind string, proto encoding.BinaryUnmarshaler) ([]interface{}, error) {
+func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([]interface{}, error) {
 	list := make([]interface{}, 0, 0)
 	p.memory.Range(func(_, value interface{}) bool {
 		item := proto
@@ -67,7 +66,7 @@ func (p *MemoryPersistence) GetAll(kind string, proto encoding.BinaryUnmarshaler
 }
 
 // Find ...
-func (p *MemoryPersistence) Find(kind string, id string, proto encoding.BinaryUnmarshaler) error {
+func (p *MemoryPersistence) Find(kind string, id string, proto adapters.PersistedData) error {
 	res, _ := p.memory.Load(kind + "-" + id)
 	proto.UnmarshalBinary([]byte(res.(string)))
 	return nil
