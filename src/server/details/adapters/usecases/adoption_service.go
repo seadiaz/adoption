@@ -25,7 +25,7 @@ func CreateAdoptionService(toolRepository toolRepository, personRepository perso
 
 // CalculateAdoptionForTool ...
 func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interface{}, error) {
-	tool, err := s.toolRepository.GetTool(id)
+	tool, err := s.toolRepository.FindToolByID(id)
 	if err != nil {
 		glog.Warning(err)
 		return nil, errors.New("calculate adoption for tool failed. " + err.Error())

@@ -3,7 +3,7 @@ Feature: know people adoption
   As a implementer of certain tool
   I need to be able to know how many people is using the tool
 
-  @fix
+  @tool_adoption
   Scenario: 50% of adoption
     Given there is a tool named Uzojoje
     And there is a person named Locakag
@@ -11,6 +11,7 @@ Feature: know people adoption
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 50 percent
 
+  @tool_adoption
   Scenario: 75% of adoption
     Given there is a tool named Uzojoje
     And there is a person named Locakag
@@ -20,11 +21,13 @@ Feature: know people adoption
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 75 percent
 
+  @tool_adoption
   Scenario: Nobody have adopted
     Given there is a tool named Uzojoje
     When we ask for the level of adoption of the tool Uzojoje
     Then the adoption level of the tool Uzojoje should be 0 percent
 
+  @tool_adoption
   Scenario: Retrieve adopter list
     Given there is a tool named Uzojoje
     And there is a person named Fujobme which have adopted tool Uzojoje
@@ -36,6 +39,7 @@ Feature: know people adoption
     And the list of adopters of the tool Uzojoje should contain to Jullakiko
     And the list of adopters of the tool Uzojoje should not contain to Kavdanah
 
+  @tool_adoption
   Scenario: Retrieve absentees list
     Given there is a tool named Uzojoje
     And there is a person named Fujobme
@@ -47,6 +51,7 @@ Feature: know people adoption
     And the list of absentees of the tool Uzojoje should contain to Jullakiko
     And the list of absentees of the tool Uzojoje should not contain to Kavdanah
 
+  @tool_adoption
   Scenario: Retrieve team adopter list
     Given there is a tool named Uzojoje
     And there is a person named Fujobme which have adopted tool Uzojoje
@@ -59,6 +64,7 @@ Feature: know people adoption
     Then the list of team adopters of the tool Uzojoje should contain to Mozpakkek
     And the list of team adopters of the tool Uzojoje should contain to Hunolbu
 
+  @tool_adoption
   Scenario: Retrieve team absentees list
     Given there is a tool named Uzojoje
     And there is a person named Fujobme
@@ -71,6 +77,7 @@ Feature: know people adoption
     Then the list of team absentees of the tool Uzojoje should contain to Mozpakkek
     And the list of team absentees of the tool Uzojoje should contain to Hunolbu
 
+  @tool_adoption
   Scenario: Retrieve team adoption
     Given there is a tool named Uzojoje
     And there is a person named Fujobme which have adopted tool Uzojoje

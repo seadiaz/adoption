@@ -1,10 +1,10 @@
 package adapters
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/golang/glog"
-	"github.com/mitchellh/mapstructure"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
@@ -13,6 +13,64 @@ const persistenceTypePerson = "people"
 // PersonRepository ...
 type PersonRepository struct {
 	persistence Persistence
+}
+
+type persistedPerson struct {
+	ID    string
+	Name  string
+	Email string
+	Tools []*persistedTool
+}
+
+func createPersistedPersonFromPerson(entity *entities.Person) *persistedPerson {
+	return &persistedPerson{
+		ID:    entity.ID.String(),
+		Name:  entity.Name,
+		Email: entity.Email,
+		Tools: createPersistedToolListFromToolList(entity.Tools),
+	}
+}
+
+func createPersistedPersonListFromPersonList(list []*entities.Person) []*persistedPerson {
+	output := make([]*persistedPerson, 0, 0)
+	for _, item := range list {
+		entity := createPersistedPersonFromPerson(item)
+		output = append(output, entity)
+	}
+
+	return output
+}
+
+func createPersonFromPersistedPerson(pEntity *persistedPerson) *entities.Person {
+	return &entities.Person{
+		ID:    entities.RecoverID(pEntity.ID),
+		Name:  pEntity.Name,
+		Email: pEntity.Email,
+		Tools: createToolListFromPersistedToolList(pEntity.Tools),
+	}
+}
+
+func createPersonListFromPersistedPersonList(pList []*persistedPerson) []*entities.Person {
+	output := make([]*entities.Person, 0, 0)
+	for _, item := range pList {
+		entity := createPersonFromPersistedPerson(item)
+		output = append(output, entity)
+	}
+
+	return output
+}
+
+func (t *persistedPerson) MarshalBinary() (data []byte, err error) {
+	return json.Marshal(t)
+}
+
+func (t *persistedPerson) UnmarshalBinary(data []byte) error {
+	if err := json.Unmarshal(data, &t); err != nil {
+		glog.Error(err)
+		return err
+	}
+
+	return nil
 }
 
 // CreatePersonRepository ...
@@ -25,23 +83,30 @@ func CreatePersonRepository(persistence Persistence) *PersonRepository {
 // GetAllPeople ...
 func (r *PersonRepository) GetAllPeople() ([]*entities.Person, error) {
 	var output []*entities.Person
-	items, _ := r.persistence.GetAll(persistenceTypePerson)
+	proto := &persistedPerson{}
+	items, _ := r.persistence.GetAll(persistenceTypePerson, proto)
 	for _, item := range items {
-		var entity *entities.Person
-		mapstructure.Decode(item, &entity)
+		glog.Info(item)
+		entity := createPersonFromPersistedPerson(item.(*persistedPerson))
 		output = append(output, entity)
 	}
 
 	return output, nil
 }
 
-// FindPerson ...
-func (r *PersonRepository) FindPerson(id string) (*entities.Person, error) {
-	var output entities.Person
-	item, _ := r.persistence.Find(persistenceTypePerson, id)
-	mapstructure.Decode(item, &output)
+// FindPersonByID ...
+func (r *PersonRepository) FindPersonByID(id string) (*entities.Person, error) {
+	pPerson := &persistedPerson{}
+	err := r.persistence.Find(persistenceTypePerson, id, pPerson)
+	if err != nil {
+		return nil, errors.New("error finding person by id")
+	}
+	if pPerson == nil {
+		return nil, errors.New("person doesn't exists")
+	}
 
-	return &output, nil
+	entity := createPersonFromPersistedPerson(pPerson)
+	return entity, nil
 }
 
 // SavePerson ...
@@ -55,12 +120,14 @@ func (r *PersonRepository) SavePerson(entity *entities.Person) (*entities.Person
 		return nil, err
 	}
 	if person == nil {
-		if err := r.persistence.Create(persistenceTypePerson, entity.ID.String(), entity); err != nil {
+		pPerson := createPersistedPersonFromPerson(entity)
+		if err := r.persistence.Create(persistenceTypePerson, entity.ID.String(), pPerson); err != nil {
 			return nil, err
 		}
 	} else {
 		entity.ID = person.ID
-		if err := r.persistence.Update(persistenceTypePerson, person.ID.String(), entity); err != nil {
+		pPerson := createPersistedPersonFromPerson(entity)
+		if err := r.persistence.Update(persistenceTypePerson, entity.ID.String(), pPerson); err != nil {
 			return nil, err
 		}
 	}

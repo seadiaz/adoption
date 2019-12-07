@@ -1,6 +1,10 @@
 package client
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/golang/glog"
+)
 
 // Membership ...
 type Membership struct {
@@ -55,6 +59,7 @@ func (c *client) postMemberships(memberships []*Membership) {
 }
 
 func (c *client) postMembership(membership *Membership, channel chan string) {
+	glog.Info(membership.Person)
 	body := &Person{ID: membership.Person.ID}
 	err := doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
 	if err != nil {

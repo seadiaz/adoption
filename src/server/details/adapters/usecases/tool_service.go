@@ -10,8 +10,7 @@ import (
 type toolRepository interface {
 	GetAllTools() ([]*entities.Tool, error)
 	SaveTool(entity *entities.Tool) (*entities.Tool, error)
-	GetTool(id string) (*entities.Tool, error)
-	FindTool(id string) (*entities.Tool, error)
+	FindToolByID(id string) (*entities.Tool, error)
 }
 
 // ToolService ...
@@ -46,10 +45,16 @@ func (s *ToolService) CreateTool(name string) (*entities.Tool, error) {
 	return tool, nil
 }
 
+// FindTool ...
+func (s *ToolService) FindTool(id string) (*entities.Tool, error) {
+	tool, _ := s.repository.FindToolByID(id)
+	return tool, nil
+}
+
 // AddLabelToTool ...
 func (s *ToolService) AddLabelToTool(labelKind string, labelValue string, toolID string) (*entities.Tool, error) {
 	label := entities.CreateLabelWithKindAndValue(labelKind, labelValue)
-	tool, _ := s.repository.FindTool(toolID)
+	tool, _ := s.repository.FindToolByID(toolID)
 	tool.AddLabel(label)
 	tool, err := s.repository.SaveTool(tool)
 	if err != nil {

@@ -1,5 +1,7 @@
 package client
 
+import "github.com/golang/glog"
+
 const peoplePath = "/people"
 
 // Person ...
@@ -56,6 +58,7 @@ func (c *client) getPeople() []*Person {
 
 func findPersonByEmail(people []*Person, email string) *Person {
 	for _, item := range people {
+		glog.Infof("%s == %s %b", item.Email, email, item.Email == email)
 		if item.Email == email {
 			return item
 		}

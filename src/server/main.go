@@ -13,7 +13,8 @@ import (
 
 // Params ...
 type Params struct {
-	Port string
+	Port    string
+	Storage string
 }
 
 // Boot ...
@@ -24,9 +25,15 @@ func Boot(params *Params) {
 	httpServer := &http.Server{Addr: ":" + params.Port, Handler: cors.Default().Handler(router)}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
-	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
-	personRepository := adapters.CreatePersonRepository(details.BuildMemoryPersistence())
-	teamRepository := adapters.CreateTeamRepository(details.BuildMemoryPersistence())
+	persistence := details.BuildMemoryPersistence()
+	if params.Storage == "redis" {
+		glog.Info("using redis for storage")
+		persistence = details.BuildRedisPersistence()
+	}
+
+	toolRepository := adapters.CreateToolRepository(persistence)
+	personRepository := adapters.CreatePersonRepository(persistence)
+	teamRepository := adapters.CreateTeamRepository(persistence)
 
 	toolService := usecases.CreateToolService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository, toolRepository)

@@ -47,6 +47,7 @@ func CreateToolController(service *usecases.ToolService, adoptionService *usecas
 func (c *ToolController) AddRoutes(s Server) {
 	s.Router.HandleFunc("/tools", c.getAllTools).Methods("GET")
 	s.Router.HandleFunc("/tools", c.createTool).Methods("POST")
+	s.Router.HandleFunc("/tools/{id}", c.getToolByID).Methods("GET")
 	s.Router.HandleFunc("/tools/{id}/adoption", c.calculateAdoptionForTool).Methods("GET")
 	s.Router.HandleFunc("/tools/{id}/labels", c.addLabelToTool).Methods("POST")
 }
@@ -54,6 +55,13 @@ func (c *ToolController) AddRoutes(s Server) {
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
 	res, _ := c.service.GetAllTools()
 	output := CreateToolResponseListFromToolList(res)
+	replyJSONResponse(w, output)
+}
+
+func (c *ToolController) getToolByID(w http.ResponseWriter, r *http.Request) {
+	id := getPathParam(r, "id")
+	res, _ := c.service.FindTool(id)
+	output := CreateToolResponseFromTool(res)
 	replyJSONResponse(w, output)
 }
 

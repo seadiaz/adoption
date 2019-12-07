@@ -3,6 +3,7 @@ Feature: labels support
   As a visualizer of the levels of adoption
   I need to be able to filter tools by different criteria
 
+  @labels
   Scenario: Assign labels
     Given there is a tool named Jenkata
     And the tool Jenkata is marked with team label as Ruabov

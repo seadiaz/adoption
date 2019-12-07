@@ -1,9 +1,11 @@
 package details
 
 import (
+	"encoding"
 	"errors"
 	"sync"
 
+	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters"
 )
 
@@ -20,20 +22,22 @@ func BuildMemoryPersistence() adapters.Persistence {
 }
 
 // Create ...
-func (p *MemoryPersistence) Create(kind string, id string, obj interface{}) error {
+func (p *MemoryPersistence) Create(kind string, id string, obj encoding.BinaryMarshaler) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
-	p.memory.Store(id, obj)
+	res, _ := obj.MarshalBinary()
+	p.memory.Store(kind+"-"+id, string(res))
 	return nil
 }
 
 // Update ...
-func (p *MemoryPersistence) Update(kind string, id string, obj interface{}) error {
+func (p *MemoryPersistence) Update(kind string, id string, obj encoding.BinaryMarshaler) error {
 	if id == "" {
 		return errors.New("you must provide an id")
 	}
-	p.memory.Store(id, obj)
+	res, _ := obj.MarshalBinary()
+	p.memory.Store(kind+"-"+id, string(res))
 	return nil
 }
 
@@ -43,15 +47,19 @@ func (p *MemoryPersistence) Delete(kind string, id string) error {
 		return errors.New("you must provide an id")
 	}
 
-	p.memory.Delete(id)
+	p.memory.Delete(kind + "-" + id)
 	return nil
 }
 
 // GetAll ...
-func (p *MemoryPersistence) GetAll(kind string) ([]interface{}, error) {
+func (p *MemoryPersistence) GetAll(kind string, proto encoding.BinaryUnmarshaler) ([]interface{}, error) {
 	list := make([]interface{}, 0, 0)
 	p.memory.Range(func(_, value interface{}) bool {
-		list = append(list, value)
+		item := proto
+		item.UnmarshalBinary([]byte(value.(string)))
+		list = append(list, item)
+		glog.Info(item)
+		glog.Info(list[0])
 		return true
 	})
 
@@ -59,7 +67,8 @@ func (p *MemoryPersistence) GetAll(kind string) ([]interface{}, error) {
 }
 
 // Find ...
-func (p *MemoryPersistence) Find(kind string, id string) (interface{}, error) {
-	output, _ := p.memory.Load(id)
-	return output, nil
+func (p *MemoryPersistence) Find(kind string, id string, proto encoding.BinaryUnmarshaler) error {
+	res, _ := p.memory.Load(kind + "-" + id)
+	proto.UnmarshalBinary([]byte(res.(string)))
+	return nil
 }

@@ -62,7 +62,8 @@ func doLoadData(cmd *cobra.Command, args []string) {
 
 func doBootServer(cmd *cobra.Command, args []string) {
 	params := &server.Params{
-		Port: cmd.Flag("port").Value.String(),
+		Port:    cmd.Flag("port").Value.String(),
+		Storage: cmd.Flag("storage").Value.String(),
 	}
 	server.Boot(params)
 }
@@ -74,6 +75,7 @@ func init() {
 	loadCmd.MarkFlagRequired("file")
 
 	serverCmd.Flags().IntP("port", "p", 3000, "port the server will bind")
+	serverCmd.Flags().StringP("storage", "s", "memory", "storage type where data going to be persisted")
 
 	rootCmd.AddCommand(loadCmd)
 	rootCmd.AddCommand(serverCmd)

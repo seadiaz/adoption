@@ -11,8 +11,7 @@ type teamRepository interface {
 	GetAllTeams() ([]*entities.Team, error)
 	SaveTeam(entity *entities.Team) (*entities.Team, error)
 	FindTeamByName(name string) (*entities.Team, error)
-	FindTeam(id string) (*entities.Team, error)
-	GetTeam(id string) (*entities.Team, error)
+	FindTeamByID(id string) (*entities.Team, error)
 }
 
 // TeamService ...
@@ -38,7 +37,7 @@ func (s *TeamService) GetAllTeams() ([]*entities.Team, error) {
 
 // GetMembersFromTeam ...
 func (s *TeamService) GetMembersFromTeam(id string) ([]*entities.Person, error) {
-	team, err := s.repository.FindTeam(id)
+	team, err := s.repository.FindTeamByID(id)
 	if err != nil {
 		glog.Error(err)
 		return nil, err
@@ -66,10 +65,10 @@ func (s *TeamService) CreateTeam(name string) (*entities.Team, error) {
 
 // AddMemberToTeam ...
 func (s *TeamService) AddMemberToTeam(personID string, teamID string) (*entities.Team, error) {
-	team, _ := s.repository.FindTeam(teamID)
-	person, _ := s.personRepository.FindPerson(personID)
+	team, _ := s.repository.FindTeamByID(teamID)
+	person, _ := s.personRepository.FindPersonByID(personID)
 	if memberExists(team, person) {
-		glog.Infof("person %s is already a member of %s", person.Name, team.Name)
+		glog.Warningf("person %s is already a member of %s", person.Name, team.Name)
 		return team, nil
 	}
 
@@ -85,7 +84,8 @@ func (s *TeamService) AddMemberToTeam(personID string, teamID string) (*entities
 
 func memberExists(team *entities.Team, person *entities.Person) bool {
 	for _, item := range team.People {
-		if item.ID == person.ID {
+		glog.Errorf("%s == %s", person.ID, item.ID)
+		if item.ID.String() == person.ID.String() {
 			return true
 		}
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 type personRepository interface {
-	FindPerson(id string) (*entities.Person, error)
+	FindPersonByID(id string) (*entities.Person, error)
 	SavePerson(entity *entities.Person) (*entities.Person, error)
 	GetAllPeople() ([]*entities.Person, error)
 }
@@ -42,8 +42,8 @@ func (s *PersonService) CreatePerson(name string, email string) (*entities.Perso
 
 // AddToolToPerson ...
 func (s *PersonService) AddToolToPerson(toolID string, personID string) (*entities.Person, error) {
-	person, _ := s.personRepository.FindPerson(personID)
-	tool, _ := s.toolRepository.FindTool(toolID)
+	person, _ := s.personRepository.FindPersonByID(personID)
+	tool, _ := s.toolRepository.FindToolByID(toolID)
 	person.AdoptTool(tool)
 	s.personRepository.SavePerson(person)
 

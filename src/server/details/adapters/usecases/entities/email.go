@@ -2,9 +2,9 @@ package entities
 
 // Email ...
 type Email struct {
-	Value string
+	value string
 }
 
 func (id *Email) String() string {
-	return id.Value
+	return id.value
 }

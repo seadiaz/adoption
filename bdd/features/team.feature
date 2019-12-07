@@ -3,6 +3,7 @@ Feature: group people in teams
   As a implementer of certain tool
   I need to be able to add/remove people to/from teams
 
+  @teams
   Scenario: Creating team
     Given there is a team named Dinpetor
     And there is a person named Uppukmid
@@ -17,6 +18,7 @@ Feature: group people in teams
     And the list of the members should contains to Puwtuvwo
     And the list of the members should contains to Donagi
 
+  @teams
   Scenario: Membership idempotency
     Given there is a team named Dinpetor
     And there is a person named Uppukmid
