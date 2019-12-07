@@ -64,7 +64,7 @@ func (p *RedisPersistence) GetAll(kind string, proto adapters.PersistedData) ([]
 	}
 	list := make([]interface{}, 0, 0)
 	for _, item := range res {
-		entity := proto
+		entity := proto.Clone()
 		entity.UnmarshalBinary([]byte(item))
 		glog.Info(entity)
 		list = append(list, entity)

@@ -74,7 +74,7 @@ func (p *persistedPerson) UnmarshalBinary(data []byte) error {
 }
 
 // Clone ...
-func (p *persistedPerson) Clone() interface{} {
+func (p *persistedPerson) Clone() PersistedData {
 	return &persistedPerson{}
 }
 

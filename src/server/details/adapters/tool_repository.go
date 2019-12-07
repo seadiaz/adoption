@@ -111,7 +111,7 @@ func (t *persistedTool) UnmarshalBinary(data []byte) error {
 }
 
 // Clone ...
-func (t *persistedTool) Clone() interface{} {
+func (t *persistedTool) Clone() PersistedData {
 	return &persistedTool{}
 }
 

@@ -51,7 +51,7 @@ func (t *persistedTeam) UnmarshalBinary(data []byte) error {
 }
 
 // Clone ...
-func (t *persistedTeam) Clone() interface{} {
+func (t *persistedTeam) Clone() PersistedData {
 	return &persistedTeam{}
 }
 
