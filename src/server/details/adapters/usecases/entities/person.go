@@ -27,7 +27,7 @@ func (p *Person) AdoptTool(tool *Tool) error {
 // HasAdoptedTool ...
 func (p *Person) HasAdoptedTool(tool *Tool) bool {
 	for _, item := range p.Tools {
-		if item.ID == tool.ID {
+		if item.ID.value == tool.ID.value {
 			return true
 		}
 	}
