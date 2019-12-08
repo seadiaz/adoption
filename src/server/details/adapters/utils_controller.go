@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"regexp"
 
 	"github.com/golang/glog"
 	"github.com/gookit/validate"
@@ -42,4 +43,20 @@ func validateRequest(r *http.Request, rules map[string]string, output interface{
 func getPathParam(r *http.Request, name string) string {
 	vars := mux.Vars(r)
 	return vars[name]
+}
+
+func getQueryParam(r *http.Request, name string) string {
+	val := r.URL.Query().Get(name)
+	return val
+}
+
+func getQueryParamMapKeyValue(r *http.Request, name string) (string, string) {
+	queryVal := r.URL.Query().Get(name)
+	pattern := regexp.MustCompile(`^(\w+):(\w+)$`)
+	kv := pattern.FindStringSubmatch(queryVal)
+	if len(kv) < 3 {
+		return "", ""
+	}
+
+	return kv[1], kv[2]
 }

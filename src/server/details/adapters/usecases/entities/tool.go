@@ -36,3 +36,14 @@ func (t *Tool) RemoveLabel(label *Label) {
 		}
 	}
 }
+
+// HasLabelKindEqualToValue ...
+func (t *Tool) HasLabelKindEqualToValue(kind, value string) bool {
+	for _, item := range t.Labels {
+		if item.Kind == kind && item.Value == value {
+			return true
+		}
+	}
+
+	return false
+}

@@ -31,6 +31,19 @@ func (s *ToolService) GetAllTools() ([]*entities.Tool, error) {
 	return tools, nil
 }
 
+// FindToolsFilterByLabelKindAndValue ...
+func (s *ToolService) FindToolsFilterByLabelKindAndValue(labelKind, labelValue string) ([]*entities.Tool, error) {
+	tools, _ := s.repository.GetAllTools()
+	output := make([]*entities.Tool, 0, 0)
+	for _, item := range tools {
+		if item.HasLabelKindEqualToValue(labelKind, labelValue) {
+			output = append(output, item)
+		}
+	}
+
+	return output, nil
+}
+
 // CreateTool ...
 func (s *ToolService) CreateTool(name string) (*entities.Tool, error) {
 	tools, _ := s.repository.GetAllTools()

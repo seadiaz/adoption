@@ -31,6 +31,13 @@ func (w *World) WeAskForTheListOfManagedTools() error {
 	return err
 }
 
+// WeAskForTheListOfManagedToolsFilterByLabelTeamEquals ...
+func (w *World) WeAskForTheListOfManagedToolsFilterByLabelTeamEquals(labelKind string, labelValue string) error {
+	res, err := drivers.GetAllToolsFilterByLabel(labelKind, labelValue)
+	w.ToolList = res
+	return err
+}
+
 // TheListOfTheToolShouldHaveTheLengthOf ...
 func (w *World) TheListOfTheToolShouldHaveTheLengthOf(length int) error {
 	actual := len(w.ToolList)
@@ -39,6 +46,18 @@ func (w *World) TheListOfTheToolShouldHaveTheLengthOf(length int) error {
 	}
 
 	return nil
+}
+
+// TheListOfTheToolShouldContainsTo ...
+func (w *World) TheListOfTheToolShouldContainsTo(name string) error {
+	list := w.ToolList
+	for _, item := range list {
+		if item.(map[string]interface{})["name"] == name {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("tool %s not found", name)
 }
 
 // WeAskForTheTool ...

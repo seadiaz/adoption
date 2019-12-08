@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"net"
+	"strconv"
 
 	"github.com/seadiaz/adoption/src/client"
 	"github.com/seadiaz/adoption/src/server"
@@ -61,9 +63,12 @@ func doLoadData(cmd *cobra.Command, args []string) {
 }
 
 func doBootServer(cmd *cobra.Command, args []string) {
+	redisPort, _ := strconv.Atoi(cmd.Flag("redis-port").Value.String())
 	params := &server.Params{
-		Port:    cmd.Flag("port").Value.String(),
-		Storage: cmd.Flag("storage").Value.String(),
+		Port:      cmd.Flag("port").Value.String(),
+		Storage:   cmd.Flag("storage").Value.String(),
+		RedisPort: redisPort,
+		RedisHost: cmd.Flag("redis-host").Value.String(),
 	}
 	server.Boot(params)
 }
@@ -76,6 +81,8 @@ func init() {
 
 	serverCmd.Flags().IntP("port", "p", 3000, "port the server will bind")
 	serverCmd.Flags().StringP("storage", "s", "memory", "storage type where data going to be persisted")
+	serverCmd.Flags().Int("redis-port", 6379, "redis port for using with redis storage")
+	serverCmd.Flags().IP("redis-host", net.IPv4(127, 0, 0, 1), "redis host for using with redis storage")
 
 	rootCmd.AddCommand(loadCmd)
 	rootCmd.AddCommand(serverCmd)

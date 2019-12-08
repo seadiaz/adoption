@@ -52,24 +52,22 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of team adopters of the tool (\w+) should contain to (\w+)$`, world.TheListOfTeamAdoptersOfTheToolShouldContainTo)
 	s.Step(`^the list of team absentees of the tool (\w+) should contain to (\w+)$`, world.TheListOfTeamAbsenteesOfTheToolShouldContainTo)
 	s.Step(`^the list of the tool should have the length of (\d+)$`, world.TheListOfTheToolShouldHaveTheLengthOf)
-
 	s.Step(`^there is a person named (\w+)$`, world.ThereIsAPersonNamed)
 	s.Step(`^we try to create a person named (\w+)$`, world.WeTryToCreateAPersonNamed)
 	s.Step(`^we ask for the list of people$`, world.WeAskForTheListOfPeople)
 	s.Step(`^the list of the people should have the length of (\d+)$`, world.TheListOfThePeopleShouldHaveTheLengthOf)
-
 	s.Step(`^there is a team named (\w+)$`, world.ThereIsATeamNamed)
 	s.Step(`^the person (\w+) is member of the team (\w+)$`, world.ThePersonIsMemberOfTheTeam)
 	s.Step(`^we ask for the members of team (\w+)$`, world.WeAskForTheMembersOfTeam)
 	s.Step(`^the list of the members should have the length of (\d+)$`, world.TheListOfTheMembersShouldHaveTheLengthOf)
 	s.Step(`^the list of the members should contains to (\w+)$`, world.TheListOfTheMembersShouldContainsTo)
-
 	s.Step(`^the team adoption level of the tool (\w+) should be (\d+) percent$`, world.TheTeamAdoptionLevelOfTheToolShouldBePercent)
-
 	s.Step(`^the tool (\w+) is marked with (\w+) label as (\w+)$`, world.TheToolIsMarkedWithLabelAs)
 	s.Step(`^we ask for the tool (\w+)$`, world.WeAskForTheTool)
 	s.Step(`^the list of the labels should have the length of (\d+)$`, world.TheListOfTheLabelsShouldHaveTheLengthOf)
 	s.Step(`^the list of the labels should contains to (\w+)=(\w+)$`, world.TheListOfTheLabelsShouldContainsTo)
+	s.Step(`^we ask for the list of managed tools filter by label (\w+) equals (\w+)$`, world.WeAskForTheListOfManagedToolsFilterByLabelTeamEquals)
+	s.Step(`^the list of the tool should contains to (\w+)$`, world.TheListOfTheToolShouldContainsTo)
 
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {

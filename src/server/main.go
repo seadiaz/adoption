@@ -13,8 +13,10 @@ import (
 
 // Params ...
 type Params struct {
-	Port    string
-	Storage string
+	Port      string
+	Storage   string
+	RedisPort int
+	RedisHost string
 }
 
 // Boot ...
@@ -28,7 +30,7 @@ func Boot(params *Params) {
 	persistence := details.BuildMemoryPersistence()
 	if params.Storage == "redis" {
 		glog.Info("using redis for storage")
-		persistence = details.BuildRedisPersistence()
+		persistence = details.BuildRedisPersistence(params.RedisHost, params.RedisPort)
 	}
 
 	toolRepository := adapters.CreateToolRepository(persistence)

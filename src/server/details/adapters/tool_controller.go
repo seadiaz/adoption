@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
+	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
 var (
@@ -53,7 +54,14 @@ func (c *ToolController) AddRoutes(s Server) {
 }
 
 func (c *ToolController) getAllTools(w http.ResponseWriter, r *http.Request) {
-	res, _ := c.service.GetAllTools()
+	kind, value := getQueryParamMapKeyValue(r, "labels")
+	var res []*entities.Tool
+	if kind != "" {
+		res, _ = c.service.FindToolsFilterByLabelKindAndValue(kind, value)
+	} else {
+		res, _ = c.service.GetAllTools()
+	}
+
 	output := CreateToolResponseListFromToolList(res)
 	replyJSONResponse(w, output)
 }

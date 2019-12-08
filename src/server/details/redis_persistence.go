@@ -4,6 +4,7 @@ import (
 	"github.com/go-redis/redis/v7"
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters"
+	"strconv"
 )
 
 // RedisPersistence is a redis implementantion of persistence
@@ -12,9 +13,9 @@ type RedisPersistence struct {
 }
 
 // BuildRedisPersistence ...
-func BuildRedisPersistence() adapters.Persistence {
+func BuildRedisPersistence(host string, port int) adapters.Persistence {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     host + ":" + strconv.Itoa(port),
 		Password: "",
 		DB:       0,
 	})
