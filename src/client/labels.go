@@ -2,8 +2,6 @@ package client
 
 import (
 	"fmt"
-
-	"github.com/golang/glog"
 )
 
 var labelsPath = "/labels"
@@ -58,7 +56,6 @@ func (c *client) postLabels(labels []*label) {
 }
 
 func (c *client) postLabel(label *label, channel chan string) {
-	glog.Info(label.Adoptable)
 	body := label
 	err := doPostRequest(body, c.url+adoptablesPath+"/"+label.Adoptable.ID+labelsPath, c.apiKey)
 	if err != nil {
