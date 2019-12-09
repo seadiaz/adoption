@@ -8,7 +8,7 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
-const persistenceTypeAdoptable = "tools"
+const persistenceTypeAdoptable = "adoptables"
 
 // AdoptableRepository ...
 type AdoptableRepository struct {
@@ -151,10 +151,10 @@ func (r *AdoptableRepository) FindAdoptableByID(id string) (*entities.Adoptable,
 	pAdoptable, err := r.persistence.Find(persistenceTypeAdoptable, id, proto)
 	if err != nil {
 		glog.Warning(err)
-		return nil, errors.New("error getting tool")
+		return nil, errors.New("error getting adoptable")
 	}
 	if pAdoptable == nil {
-		return nil, errors.New("tool doesn't exists")
+		return nil, errors.New("adoptable doesn't exists")
 	}
 
 	entity := createAdoptableFromPersistedAdoptable(pAdoptable.(*persistedAdoptable))

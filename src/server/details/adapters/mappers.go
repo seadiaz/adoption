@@ -19,7 +19,7 @@ type PersonResponse struct {
 	ID         string               `json:"id"`
 	Email      string               `json:"email"`
 	Name       string               `json:"name"`
-	Adoptables []*AdoptableResponse `json:"tools"`
+	Adoptables []*AdoptableResponse `json:"adoptables"`
 }
 
 // AdoptableResponse ...
@@ -73,9 +73,9 @@ func CreatePersonResponseFromPerson(person *entities.Person) *PersonResponse {
 }
 
 // CreateAdoptableResponseListFromAdoptableList ...
-func CreateAdoptableResponseListFromAdoptableList(tools []*entities.Adoptable) []*AdoptableResponse {
+func CreateAdoptableResponseListFromAdoptableList(adoptables []*entities.Adoptable) []*AdoptableResponse {
 	output := make([]*AdoptableResponse, 0, 0)
-	for _, item := range tools {
+	for _, item := range adoptables {
 		output = append(output, CreateAdoptableResponseFromAdoptable(item))
 	}
 
@@ -83,11 +83,11 @@ func CreateAdoptableResponseListFromAdoptableList(tools []*entities.Adoptable) [
 }
 
 // CreateAdoptableResponseFromAdoptable ...
-func CreateAdoptableResponseFromAdoptable(tool *entities.Adoptable) *AdoptableResponse {
+func CreateAdoptableResponseFromAdoptable(adoptable *entities.Adoptable) *AdoptableResponse {
 	return &AdoptableResponse{
-		ID:     tool.ID.String(),
-		Name:   tool.Name,
-		Labels: CreateLabelResponseListFromLabelList(tool.Labels),
+		ID:     adoptable.ID.String(),
+		Name:   adoptable.Name,
+		Labels: CreateLabelResponseListFromLabelList(adoptable.Labels),
 	}
 }
 

@@ -21,17 +21,17 @@ func CreatePersonWithNameAndEmail(name string, email string) *Person {
 }
 
 // AdoptAdoptable ...
-func (p *Person) AdoptAdoptable(tool *Adoptable) error {
+func (p *Person) AdoptAdoptable(adoptable *Adoptable) error {
 	glog.Info(p)
-	glog.Info(tool)
-	p.Adoptables = append(p.Adoptables, tool)
+	glog.Info(adoptable)
+	p.Adoptables = append(p.Adoptables, adoptable)
 	return nil
 }
 
 // HasAdoptedAdoptable ...
-func (p *Person) HasAdoptedAdoptable(tool *Adoptable) bool {
+func (p *Person) HasAdoptedAdoptable(adoptable *Adoptable) bool {
 	for _, item := range p.Adoptables {
-		if item.ID.value == tool.ID.value {
+		if item.ID.value == adoptable.ID.value {
 			return true
 		}
 	}

@@ -12,13 +12,13 @@ import (
 
 // CreateAdoptableWithName ...
 func CreateAdoptableWithName(name string) (map[string]interface{}, error) {
-	path := "/tools"
+	path := "/adoptables"
 	body := make(map[string]interface{})
 	body["name"] = name
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Warning(err)
-		return nil, errors.New("create tool with name failed")
+		return nil, errors.New("create adoptable with name failed")
 	}
 	defer res.Body.Close()
 	var output map[string]interface{}
@@ -79,14 +79,14 @@ func CreateTeamWithName(name string) (map[string]interface{}, error) {
 }
 
 // AdoptAdoptableByPerson ...
-func AdoptAdoptableByPerson(toolID string, personID string) (map[string]interface{}, error) {
-	path := "/people/" + personID + "/tools"
+func AdoptAdoptableByPerson(adoptableID string, personID string) (map[string]interface{}, error) {
+	path := "/people/" + personID + "/adoptables"
 	body := make(map[string]interface{})
-	body["id"] = toolID
+	body["id"] = adoptableID
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Error(err)
-		return nil, errors.New("adopt tool by person failed")
+		return nil, errors.New("adopt adoptable by person failed")
 	}
 	defer res.Body.Close()
 	var output map[string]interface{}
@@ -95,12 +95,12 @@ func AdoptAdoptableByPerson(toolID string, personID string) (map[string]interfac
 }
 
 // CalculateAdoptionForAdoptable ...
-func CalculateAdoptionForAdoptable(toolID string) (map[string]interface{}, error) {
-	path := "/tools/" + toolID + "/adoption"
+func CalculateAdoptionForAdoptable(adoptableID string) (map[string]interface{}, error) {
+	path := "/adoptables/" + adoptableID + "/adoption"
 	res, err := getMessage(path)
 	if err != nil {
 		glog.Error(err)
-		return nil, errors.New("calculate adoption for tool failed")
+		return nil, errors.New("calculate adoption for adoptable failed")
 	}
 	defer res.Body.Close()
 	var output map[string]interface{}
@@ -126,11 +126,11 @@ func getMessage(path string) (*http.Response, error) {
 
 // GetAllAdoptables ...
 func GetAllAdoptables() ([]interface{}, error) {
-	path := "/tools"
+	path := "/adoptables"
 	res, err := getMessage(path)
 	if err != nil {
 		glog.Error(err)
-		return nil, errors.New("get all tools failed")
+		return nil, errors.New("get all adoptables failed")
 	}
 	defer res.Body.Close()
 	var output []interface{}
@@ -140,11 +140,11 @@ func GetAllAdoptables() ([]interface{}, error) {
 
 // GetAllAdoptablesFilterByLabel ...
 func GetAllAdoptablesFilterByLabel(kind string, value string) ([]interface{}, error) {
-	path := "/tools?labels=" + kind + ":" + value
+	path := "/adoptables?labels=" + kind + ":" + value
 	res, err := getMessage(path)
 	if err != nil {
 		glog.Error(err)
-		return nil, errors.New("get all tools failed")
+		return nil, errors.New("get all adoptables failed")
 	}
 	defer res.Body.Close()
 	var output []interface{}
@@ -183,15 +183,15 @@ func AddMemberToTeam(personID string, teamID string) ([]interface{}, error) {
 }
 
 // AddLabelToAdoptable ...
-func AddLabelToAdoptable(labelKind string, labelValue string, toolID string) ([]interface{}, error) {
-	path := "/tools/" + toolID + "/labels"
+func AddLabelToAdoptable(labelKind string, labelValue string, adoptableID string) ([]interface{}, error) {
+	path := "/adoptables/" + adoptableID + "/labels"
 	body := make(map[string]interface{})
 	body["kind"] = labelKind
 	body["value"] = labelValue
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Error(err)
-		return nil, errors.New("add label to tool failed")
+		return nil, errors.New("add label to adoptable failed")
 	}
 	defer res.Body.Close()
 	var output []interface{}

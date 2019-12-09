@@ -7,7 +7,7 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
-type toolRepository interface {
+type adoptableRepository interface {
 	GetAllAdoptables() ([]*entities.Adoptable, error)
 	SaveAdoptable(entity *entities.Adoptable) (*entities.Adoptable, error)
 	FindAdoptableByID(id string) (*entities.Adoptable, error)
@@ -15,11 +15,11 @@ type toolRepository interface {
 
 // AdoptableService ...
 type AdoptableService struct {
-	repository toolRepository
+	repository adoptableRepository
 }
 
 // CreateAdoptableService ...
-func CreateAdoptableService(repository toolRepository) *AdoptableService {
+func CreateAdoptableService(repository adoptableRepository) *AdoptableService {
 	return &AdoptableService{
 		repository: repository,
 	}
@@ -27,15 +27,15 @@ func CreateAdoptableService(repository toolRepository) *AdoptableService {
 
 // GetAllAdoptables ...
 func (s *AdoptableService) GetAllAdoptables() ([]*entities.Adoptable, error) {
-	tools, _ := s.repository.GetAllAdoptables()
-	return tools, nil
+	adoptables, _ := s.repository.GetAllAdoptables()
+	return adoptables, nil
 }
 
 // FindAdoptablesFilterByLabelKindAndValue ...
 func (s *AdoptableService) FindAdoptablesFilterByLabelKindAndValue(labelKind, labelValue string) ([]*entities.Adoptable, error) {
-	tools, _ := s.repository.GetAllAdoptables()
+	adoptables, _ := s.repository.GetAllAdoptables()
 	output := make([]*entities.Adoptable, 0, 0)
-	for _, item := range tools {
+	for _, item := range adoptables {
 		if item.HasLabelKindEqualToValue(labelKind, labelValue) {
 			output = append(output, item)
 		}
@@ -46,34 +46,34 @@ func (s *AdoptableService) FindAdoptablesFilterByLabelKindAndValue(labelKind, la
 
 // CreateAdoptable ...
 func (s *AdoptableService) CreateAdoptable(name string) (*entities.Adoptable, error) {
-	tools, _ := s.repository.GetAllAdoptables()
-	for _, item := range tools {
+	adoptables, _ := s.repository.GetAllAdoptables()
+	for _, item := range adoptables {
 		if item.Name == name {
-			return nil, fmt.Errorf("tool with name %s already exists", name)
+			return nil, fmt.Errorf("adoptable with name %s already exists", name)
 		}
 	}
 
-	tool := entities.CreateAdoptableWithName(name)
-	tool, _ = s.repository.SaveAdoptable(tool)
-	return tool, nil
+	adoptable := entities.CreateAdoptableWithName(name)
+	adoptable, _ = s.repository.SaveAdoptable(adoptable)
+	return adoptable, nil
 }
 
 // FindAdoptable ...
 func (s *AdoptableService) FindAdoptable(id string) (*entities.Adoptable, error) {
-	tool, _ := s.repository.FindAdoptableByID(id)
-	return tool, nil
+	adoptable, _ := s.repository.FindAdoptableByID(id)
+	return adoptable, nil
 }
 
 // AddLabelToAdoptable ...
-func (s *AdoptableService) AddLabelToAdoptable(labelKind string, labelValue string, toolID string) (*entities.Adoptable, error) {
+func (s *AdoptableService) AddLabelToAdoptable(labelKind string, labelValue string, adoptableID string) (*entities.Adoptable, error) {
 	label := entities.CreateLabelWithKindAndValue(labelKind, labelValue)
-	tool, _ := s.repository.FindAdoptableByID(toolID)
-	tool.AddLabel(label)
-	tool, err := s.repository.SaveAdoptable(tool)
+	adoptable, _ := s.repository.FindAdoptableByID(adoptableID)
+	adoptable.AddLabel(label)
+	adoptable, err := s.repository.SaveAdoptable(adoptable)
 	if err != nil {
 		glog.Error(err)
 		return nil, err
 	}
 
-	return tool, nil
+	return adoptable, nil
 }

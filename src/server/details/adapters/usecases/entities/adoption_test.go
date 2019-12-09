@@ -8,9 +8,9 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
-func createDummyPersonWithNameAndEmailAndAdoptable(personName string, personEmail string, tool *entities.Adoptable) *entities.Person {
+func createDummyPersonWithNameAndEmailAndAdoptable(personName string, personEmail string, adoptable *entities.Adoptable) *entities.Person {
 	person := entities.CreatePersonWithNameAndEmail(personName, personEmail)
-	person.AdoptAdoptable(tool)
+	person.AdoptAdoptable(adoptable)
 	return person
 }
 
@@ -38,10 +38,10 @@ var _ = Describe("adoption", func() {
 		Expect(adoption.People[1].Name).To(Equal("Dummy 2"))
 	})
 
-	It("should get 0 adoption when nobody adopt the tool", func() {
+	It("should get 0 adoption when nobody adopt the adoptable", func() {
 		adoption := entities.CreateAdoption()
-		tool := createDummyAdoptableWithName("Adoptable 1")
-		person := createDummyPersonWithNameAndEmailAndAdoptable("Stanley Sherman", defaultEmail, tool)
+		adoptable := createDummyAdoptableWithName("Adoptable 1")
+		person := createDummyPersonWithNameAndEmailAndAdoptable("Stanley Sherman", defaultEmail, adoptable)
 		adoption.IncludePerson(person)
 		expectedAdoptableName := "Adoptable 2"
 		expectedAdoptable := entities.CreateAdoptableWithName(expectedAdoptableName)
@@ -51,20 +51,20 @@ var _ = Describe("adoption", func() {
 		Expect(0).To(Equal(actual))
 	})
 
-	It("should get 25 adoption when 1 of 4 people adopt the tool", func() {
+	It("should get 25 adoption when 1 of 4 people adopt the adoptable", func() {
 		adoption := entities.CreateAdoption()
-		tool1 := createDummyAdoptableWithName("Adoptable 1")
-		tool2 := createDummyAdoptableWithName("Adoptable 2")
-		person1 := createDummyPersonWithNameAndEmailAndAdoptable("Stanley Sherman", defaultEmail, tool1)
+		adoptable1 := createDummyAdoptableWithName("Adoptable 1")
+		adoptable2 := createDummyAdoptableWithName("Adoptable 2")
+		person1 := createDummyPersonWithNameAndEmailAndAdoptable("Stanley Sherman", defaultEmail, adoptable1)
 		adoption.IncludePerson(person1)
-		person2 := createDummyPersonWithNameAndEmailAndAdoptable("Marie Holloway", defaultEmail, tool2)
+		person2 := createDummyPersonWithNameAndEmailAndAdoptable("Marie Holloway", defaultEmail, adoptable2)
 		adoption.IncludePerson(person2)
-		person3 := createDummyPersonWithNameAndEmailAndAdoptable("Fanny Watson", defaultEmail, tool2)
+		person3 := createDummyPersonWithNameAndEmailAndAdoptable("Fanny Watson", defaultEmail, adoptable2)
 		adoption.IncludePerson(person3)
-		person4 := createDummyPersonWithNameAndEmailAndAdoptable("Winifred McKinney", defaultEmail, tool2)
+		person4 := createDummyPersonWithNameAndEmailAndAdoptable("Winifred McKinney", defaultEmail, adoptable2)
 		adoption.IncludePerson(person4)
 
-		expectedAdoptable := tool1
+		expectedAdoptable := adoptable1
 
 		actual := adoption.CalculateForAdoptable(expectedAdoptable)
 

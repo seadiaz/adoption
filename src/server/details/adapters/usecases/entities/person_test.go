@@ -24,14 +24,14 @@ var _ = Describe("person", func() {
 		Expect(actual.Adoptables).To(HaveLen(0))
 	})
 
-	It("should create adopt 2 tools", func() {
+	It("should create adopt 2 adoptables", func() {
 		name := "Myra Wise"
 		person := entities.CreatePersonWithNameAndEmail(name, defaultEmail)
 
 		for i := 1; i <= 2; i++ {
-			toolName := fmt.Sprintf("Dummy %d", i)
-			tool := entities.CreateAdoptableWithName(toolName)
-			person.AdoptAdoptable(tool)
+			adoptableName := fmt.Sprintf("Dummy %d", i)
+			adoptable := entities.CreateAdoptableWithName(adoptableName)
+			person.AdoptAdoptable(adoptable)
 		}
 
 		Expect(person.Adoptables).To(HaveLen(2))

@@ -14,15 +14,15 @@ type personRepository interface {
 
 // PersonService ...
 type PersonService struct {
-	personRepository personRepository
-	toolRepository   toolRepository
+	personRepository    personRepository
+	adoptableRepository adoptableRepository
 }
 
 // CreatePersonService ...
-func CreatePersonService(personRepository personRepository, toolRepository toolRepository) *PersonService {
+func CreatePersonService(personRepository personRepository, adoptableRepository adoptableRepository) *PersonService {
 	return &PersonService{
-		personRepository: personRepository,
-		toolRepository:   toolRepository,
+		personRepository:    personRepository,
+		adoptableRepository: adoptableRepository,
 	}
 }
 
@@ -43,15 +43,15 @@ func (s *PersonService) CreatePerson(name string, email string) (*entities.Perso
 }
 
 // AddAdoptableToPerson ...
-func (s *PersonService) AddAdoptableToPerson(toolID string, personID string) (*entities.Person, error) {
+func (s *PersonService) AddAdoptableToPerson(adoptableID string, personID string) (*entities.Person, error) {
 	glog.Info(personID)
 	person, _ := s.personRepository.FindPersonByID(personID)
 	glog.Info(person)
 	if person == nil {
 		return nil, fmt.Errorf("person with id %s not found", personID)
 	}
-	tool, _ := s.toolRepository.FindAdoptableByID(toolID)
-	person.AdoptAdoptable(tool)
+	adoptable, _ := s.adoptableRepository.FindAdoptableByID(adoptableID)
+	person.AdoptAdoptable(adoptable)
 	s.personRepository.SavePerson(person)
 
 	return person, nil

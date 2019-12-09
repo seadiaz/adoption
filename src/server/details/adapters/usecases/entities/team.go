@@ -32,9 +32,9 @@ func (t *Team) RemovePerson(person *Person) {
 }
 
 // HasTeamAdoptedAdoptable ...
-func (t *Team) HasTeamAdoptedAdoptable(tool *Adoptable) bool {
+func (t *Team) HasTeamAdoptedAdoptable(adoptable *Adoptable) bool {
 	for _, item := range t.People {
-		if item.HasAdoptedAdoptable(tool) {
+		if item.HasAdoptedAdoptable(adoptable) {
 			return true
 		}
 	}

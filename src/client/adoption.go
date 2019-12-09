@@ -2,19 +2,19 @@ package client
 
 // Adoption ...
 type Adoption struct {
-	PersonEmail string
-	ToolName    string
-	Tool        *Tool
-	Person      *Person
+	PersonEmail   string
+	AdoptableName string
+	Adoptable     *Adoptable
+	Person        *Person
 }
 
 // LoadAdoptions ...
 func (c *client) LoadAdoptions() {
 	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToAdoptions(rawData)
-	tools := c.getTools()
+	adoptables := c.getAdoptables()
 	people := c.getPeople()
-	parsedData = fulfillAdoptionToolIDFromTools(parsedData, tools, people)
+	parsedData = fulfillAdoptionAdoptableIDFromAdoptables(parsedData, adoptables, people)
 	c.postAdoptions(parsedData)
 }
 
@@ -22,20 +22,20 @@ func mapArrayToAdoptions(array [][]string) []*Adoption {
 	output := make([]*Adoption, 0, 0)
 	for _, item := range array {
 		output = append(output, &Adoption{
-			PersonEmail: item[0],
-			ToolName:    item[1],
+			PersonEmail:   item[0],
+			AdoptableName: item[1],
 		})
 	}
 	return output
 }
 
-func fulfillAdoptionToolIDFromTools(adoptions []*Adoption, tools []*Tool, people []*Person) []*Adoption {
+func fulfillAdoptionAdoptableIDFromAdoptables(adoptions []*Adoption, adoptables []*Adoptable, people []*Person) []*Adoption {
 	output := make([]*Adoption, 0, 0)
 	for _, item := range adoptions {
-		tool := findToolByName(tools, item.ToolName)
+		adoptable := findAdoptableByName(adoptables, item.AdoptableName)
 		person := findPersonByEmail(people, item.PersonEmail)
-		if tool != nil {
-			item.Tool = tool
+		if adoptable != nil {
+			item.Adoptable = adoptable
 			item.Person = person
 		}
 		output = append(output, item)
@@ -53,6 +53,6 @@ func (c *client) postAdoptions(adoptions []*Adoption) {
 }
 
 func (c *client) postAdoption(adoption *Adoption, channel chan string) {
-	doPostRequest(adoption.Tool, c.url+peoplePath+"/"+adoption.Person.ID+toolsPath, c.apiKey)
-	channel <- adoption.PersonEmail + " " + adoption.ToolName
+	doPostRequest(adoption.Adoptable, c.url+peoplePath+"/"+adoption.Person.ID+adoptablesPath, c.apiKey)
+	channel <- adoption.PersonEmail + " " + adoption.AdoptableName
 }

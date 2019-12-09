@@ -9,18 +9,18 @@ import (
 var labelsPath = "/labels"
 
 type label struct {
-	ToolName string
-	Tool     *Tool
-	Kind     string `json:"kind"`
-	Value    string `json:"value"`
+	AdoptableName string
+	Adoptable     *Adoptable
+	Kind          string `json:"kind"`
+	Value         string `json:"value"`
 }
 
 // LoadLabels ...
 func (c *client) LoadLabels() {
 	rawData := readCsvFile(c.filename)
 	parsedData := mapArrayToLabels(rawData)
-	tools := c.getTools()
-	parsedData = fulfillLabelToolFromToolName(parsedData, tools)
+	Adoptables := c.getAdoptables()
+	parsedData = fulfillLabelAdoptableFromAdoptableName(parsedData, Adoptables)
 	c.postLabels(parsedData)
 }
 
@@ -28,20 +28,20 @@ func mapArrayToLabels(array [][]string) []*label {
 	output := make([]*label, 0, 0)
 	for _, item := range array {
 		output = append(output, &label{
-			ToolName: item[0],
-			Kind:     item[1],
-			Value:    item[2],
+			AdoptableName: item[0],
+			Kind:          item[1],
+			Value:         item[2],
 		})
 	}
 	return output
 }
 
-func fulfillLabelToolFromToolName(labels []*label, tools []*Tool) []*label {
+func fulfillLabelAdoptableFromAdoptableName(labels []*label, Adoptables []*Adoptable) []*label {
 	output := make([]*label, 0, 0)
 	for _, item := range labels {
-		tool := findToolByName(tools, item.ToolName)
-		if tool != nil {
-			item.Tool = tool
+		Adoptable := findAdoptableByName(Adoptables, item.AdoptableName)
+		if Adoptable != nil {
+			item.Adoptable = Adoptable
 			output = append(output, item)
 		}
 	}
@@ -58,12 +58,12 @@ func (c *client) postLabels(labels []*label) {
 }
 
 func (c *client) postLabel(label *label, channel chan string) {
-	glog.Info(label.Tool)
+	glog.Info(label.Adoptable)
 	body := label
-	err := doPostRequest(body, c.url+toolsPath+"/"+label.Tool.ID+labelsPath, c.apiKey)
+	err := doPostRequest(body, c.url+adoptablesPath+"/"+label.Adoptable.ID+labelsPath, c.apiKey)
 	if err != nil {
-		channel <- fmt.Sprintf("fail adding label %s=%s to %s: %s", label.Kind, label.Value, label.Tool.Name, err.Error())
+		channel <- fmt.Sprintf("fail adding label %s=%s to %s: %s", label.Kind, label.Value, label.Adoptable.Name, err.Error())
 	} else {
-		channel <- fmt.Sprintf("%s=%s added to %s", label.Kind, label.Value, label.Tool.Name)
+		channel <- fmt.Sprintf("%s=%s added to %s", label.Kind, label.Value, label.Adoptable.Name)
 	}
 }

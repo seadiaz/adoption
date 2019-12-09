@@ -40,7 +40,7 @@ func (a *Adoption) findPersonByEmail(email *Email) *Person {
 }
 
 // CalculateForAdoptable ...
-func (a *Adoption) CalculateForAdoptable(tool *Adoptable) int {
+func (a *Adoption) CalculateForAdoptable(adoptable *Adoptable) int {
 	total := len(a.People)
 	if total == 0 {
 		return 0
@@ -48,7 +48,7 @@ func (a *Adoption) CalculateForAdoptable(tool *Adoptable) int {
 
 	counter := 0
 	for _, person := range a.People {
-		if person.HasAdoptedAdoptable(tool) {
+		if person.HasAdoptedAdoptable(adoptable) {
 			counter++
 		}
 	}
@@ -57,7 +57,7 @@ func (a *Adoption) CalculateForAdoptable(tool *Adoptable) int {
 }
 
 // CalculateTeamForAdoptable ...
-func (a *Adoption) CalculateTeamForAdoptable(tool *Adoptable) int {
+func (a *Adoption) CalculateTeamForAdoptable(adoptable *Adoptable) int {
 	total := len(a.Teams)
 	if total == 0 {
 		return 0
@@ -65,7 +65,7 @@ func (a *Adoption) CalculateTeamForAdoptable(tool *Adoptable) int {
 
 	counter := 0
 	for _, team := range a.Teams {
-		if team.HasTeamAdoptedAdoptable(tool) {
+		if team.HasTeamAdoptedAdoptable(adoptable) {
 			counter++
 		}
 	}
@@ -74,14 +74,14 @@ func (a *Adoption) CalculateTeamForAdoptable(tool *Adoptable) int {
 }
 
 // FilterAdoptersForAdoptable ...
-func (a *Adoption) FilterAdoptersForAdoptable(tool *Adoptable) []*Person {
+func (a *Adoption) FilterAdoptersForAdoptable(adoptable *Adoptable) []*Person {
 	output := make([]*Person, 0, 0)
 	if len(a.People) == 0 {
 		return output
 	}
 
 	for _, person := range a.People {
-		if person.HasAdoptedAdoptable(tool) {
+		if person.HasAdoptedAdoptable(adoptable) {
 			output = append(output, person)
 		}
 	}
@@ -89,14 +89,14 @@ func (a *Adoption) FilterAdoptersForAdoptable(tool *Adoptable) []*Person {
 }
 
 // FilterAbsenteesForAdoptable ...
-func (a *Adoption) FilterAbsenteesForAdoptable(tool *Adoptable) []*Person {
+func (a *Adoption) FilterAbsenteesForAdoptable(adoptable *Adoptable) []*Person {
 	output := make([]*Person, 0, 0)
 	if len(a.People) == 0 {
 		return output
 	}
 
 	for _, item := range a.People {
-		if !item.HasAdoptedAdoptable(tool) {
+		if !item.HasAdoptedAdoptable(adoptable) {
 			output = append(output, item)
 		}
 	}
@@ -104,14 +104,14 @@ func (a *Adoption) FilterAbsenteesForAdoptable(tool *Adoptable) []*Person {
 }
 
 // FilterTeamAdoptersForAdoptable ...
-func (a *Adoption) FilterTeamAdoptersForAdoptable(tool *Adoptable) []*Team {
+func (a *Adoption) FilterTeamAdoptersForAdoptable(adoptable *Adoptable) []*Team {
 	output := make([]*Team, 0, 0)
 	if len(a.Teams) == 0 {
 		return output
 	}
 
 	for _, item := range a.Teams {
-		if item.HasTeamAdoptedAdoptable(tool) {
+		if item.HasTeamAdoptedAdoptable(adoptable) {
 			output = append(output, item)
 		}
 	}
@@ -119,14 +119,14 @@ func (a *Adoption) FilterTeamAdoptersForAdoptable(tool *Adoptable) []*Team {
 }
 
 // FilterTeamAbsenteesForAdoptable ...
-func (a *Adoption) FilterTeamAbsenteesForAdoptable(tool *Adoptable) []*Team {
+func (a *Adoption) FilterTeamAbsenteesForAdoptable(adoptable *Adoptable) []*Team {
 	output := make([]*Team, 0, 0)
 	if len(a.Teams) == 0 {
 		return output
 	}
 
 	for _, item := range a.Teams {
-		if !item.HasTeamAdoptedAdoptable(tool) {
+		if !item.HasTeamAdoptedAdoptable(adoptable) {
 			output = append(output, item)
 		}
 	}

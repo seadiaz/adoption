@@ -39,7 +39,7 @@ func CreatePersonController(service *usecases.PersonService) PersonController {
 func (c *PersonController) AddRoutes(s Server) {
 	s.Router.HandleFunc("/people", c.getAllPeople).Methods("GET")
 	s.Router.HandleFunc("/people", c.createPerson).Methods("POST")
-	s.Router.HandleFunc("/people/{id}/tools", c.addAdoptableToPerson).Methods("POST")
+	s.Router.HandleFunc("/people/{id}/adoptables", c.addAdoptableToPerson).Methods("POST")
 }
 
 func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) {
@@ -61,15 +61,15 @@ func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *PersonController) addAdoptableToPerson(w http.ResponseWriter, r *http.Request) {
-	tool := &toolForm{}
-	err := validateRequest(r, addAdoptableToPersonRules, tool)
+	adoptable := &adoptableForm{}
+	err := validateRequest(r, addAdoptableToPersonRules, adoptable)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
 		return
 	}
 
 	id := getPathParam(r, "id")
-	res, err := c.service.AddAdoptableToPerson(tool.ID, id)
+	res, err := c.service.AddAdoptableToPerson(adoptable.ID, id)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
 		return

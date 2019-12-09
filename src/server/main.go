@@ -33,22 +33,22 @@ func Boot(params *Params) {
 		persistence = details.BuildRedisPersistence(params.RedisHost, params.RedisPort)
 	}
 
-	toolRepository := adapters.CreateAdoptableRepository(persistence)
+	adoptableRepository := adapters.CreateAdoptableRepository(persistence)
 	personRepository := adapters.CreatePersonRepository(persistence)
 	teamRepository := adapters.CreateTeamRepository(persistence)
 
-	toolService := usecases.CreateAdoptableService(toolRepository)
-	personService := usecases.CreatePersonService(personRepository, toolRepository)
+	adoptableService := usecases.CreateAdoptableService(adoptableRepository)
+	personService := usecases.CreatePersonService(personRepository, adoptableRepository)
 	teamService := usecases.CreateTeamService(teamRepository, personRepository)
-	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
+	adoptionService := usecases.CreateAdoptionService(adoptableRepository, personRepository, teamRepository)
 
 	healthController := adapters.CreateHealthController()
-	toolController := adapters.CreateAdoptableController(toolService, adoptionService)
+	adoptableController := adapters.CreateAdoptableController(adoptableService, adoptionService)
 	personController := adapters.CreatePersonController(personService)
 	teamController := adapters.CreateTeamController(teamService)
 
 	healthController.AddRoutes(server)
-	toolController.AddRoutes(server)
+	adoptableController.AddRoutes(server)
 	personController.AddRoutes(server)
 	teamController.AddRoutes(server)
 

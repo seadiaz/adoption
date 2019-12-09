@@ -1,49 +1,49 @@
 package client
 
-const toolsPath = "/tools"
+const adoptablesPath = "/adoptables"
 
-// Tool ...
-type Tool struct {
+// Adoptable ...
+type Adoptable struct {
 	ID   string `json:"id,omitempty"`
 	Name string `json:"name"`
 }
 
-// LoadTools ...
-func (c *client) LoadTools() {
+// LoadAdoptables ...
+func (c *client) LoadAdoptables() {
 	rawData := readCsvFile(c.filename)
-	parsedData := mapArrayToTools(rawData)
-	c.postTools(parsedData)
+	parsedData := mapArrayToAdoptables(rawData)
+	c.postAdoptables(parsedData)
 }
 
-func mapArrayToTools(array [][]string) []*Tool {
-	output := make([]*Tool, 0, 0)
+func mapArrayToAdoptables(array [][]string) []*Adoptable {
+	output := make([]*Adoptable, 0, 0)
 	for _, item := range array {
-		output = append(output, &Tool{
+		output = append(output, &Adoptable{
 			Name: item[0],
 		})
 	}
 	return output
 }
 
-func (c *client) postTools(tools []*Tool) {
+func (c *client) postAdoptables(adoptables []*Adoptable) {
 	channel := make(chan string)
-	for _, item := range tools {
-		go c.postTool(item, channel)
+	for _, item := range adoptables {
+		go c.postAdoptable(item, channel)
 	}
 
-	receiveResponses(channel, len(tools))
+	receiveResponses(channel, len(adoptables))
 }
 
-func (c *client) postTool(tool *Tool, channel chan string) {
-	doPostRequest(tool, c.url+toolsPath, c.apiKey)
-	channel <- tool.Name
+func (c *client) postAdoptable(adoptable *Adoptable, channel chan string) {
+	doPostRequest(adoptable, c.url+adoptablesPath, c.apiKey)
+	channel <- adoptable.Name
 }
 
-func (c *client) getTools() []*Tool {
-	res, _ := doGetRequest(c.url+toolsPath, c.apiKey)
-	output := make([]*Tool, 0, 0)
+func (c *client) getAdoptables() []*Adoptable {
+	res, _ := doGetRequest(c.url+adoptablesPath, c.apiKey)
+	output := make([]*Adoptable, 0, 0)
 	for _, item := range res {
-		output = append(output, &Tool{
+		output = append(output, &Adoptable{
 			ID:   item["id"].(string),
 			Name: item["name"].(string),
 		})
@@ -51,8 +51,8 @@ func (c *client) getTools() []*Tool {
 	return output
 }
 
-func findToolByName(tools []*Tool, name string) *Tool {
-	for _, item := range tools {
+func findAdoptableByName(adoptables []*Adoptable, name string) *Adoptable {
+	for _, item := range adoptables {
 		if item.Name == name {
 			return item
 		}

@@ -14,7 +14,7 @@ var _ = Describe("adoptable", func() {
 		Expect(actual.Labels).To(HaveLen(0))
 	})
 
-	It("should add a label to the tool", func() {
+	It("should add a label to the adoptable", func() {
 		actual := entities.CreateAdoptableWithName("Dummy Name")
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 
@@ -25,7 +25,7 @@ var _ = Describe("adoptable", func() {
 		Expect(actual.Labels[0].Value).To(Equal("my-tag"))
 	})
 
-	It("should replace a label to the tool", func() {
+	It("should replace a label to the adoptable", func() {
 		actual := entities.CreateAdoptableWithName("Dummy Name")
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 		label2 := entities.CreateLabelWithKindAndValue("tag", "my-new-tag")
@@ -38,7 +38,7 @@ var _ = Describe("adoptable", func() {
 		Expect(actual.Labels[0].Value).To(Equal("my-new-tag"))
 	})
 
-	It("should remove a label to the tool", func() {
+	It("should remove a label to the adoptable", func() {
 		actual := entities.CreateAdoptableWithName("Dummy Name")
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 		actual.AddLabel(label)

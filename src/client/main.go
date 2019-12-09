@@ -30,8 +30,8 @@ func createClient(url string, filename string, apiKey string) *client {
 func LoadData(params *Params) {
 	client := createClient(params.URL, params.Filename, params.APIKey)
 	switch params.Kind {
-	case "tools":
-		client.LoadTools()
+	case "adoptables":
+		client.LoadAdoptables()
 	case "people":
 		client.LoadPeople()
 	case "adoptions":

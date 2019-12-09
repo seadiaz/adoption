@@ -20,7 +20,7 @@ var (
 	}
 )
 
-type toolForm struct {
+type adoptableForm struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
@@ -46,11 +46,11 @@ func CreateAdoptableController(service *usecases.AdoptableService, adoptionServi
 
 // AddRoutes ...
 func (c *AdoptableController) AddRoutes(s Server) {
-	s.Router.HandleFunc("/tools", c.getAllAdoptables).Methods("GET")
-	s.Router.HandleFunc("/tools", c.createAdoptable).Methods("POST")
-	s.Router.HandleFunc("/tools/{id}", c.getAdoptableByID).Methods("GET")
-	s.Router.HandleFunc("/tools/{id}/adoption", c.calculateAdoptionForAdoptable).Methods("GET")
-	s.Router.HandleFunc("/tools/{id}/labels", c.addLabelToAdoptable).Methods("POST")
+	s.Router.HandleFunc("/adoptables", c.getAllAdoptables).Methods("GET")
+	s.Router.HandleFunc("/adoptables", c.createAdoptable).Methods("POST")
+	s.Router.HandleFunc("/adoptables/{id}", c.getAdoptableByID).Methods("GET")
+	s.Router.HandleFunc("/adoptables/{id}/adoption", c.calculateAdoptionForAdoptable).Methods("GET")
+	s.Router.HandleFunc("/adoptables/{id}/labels", c.addLabelToAdoptable).Methods("POST")
 }
 
 func (c *AdoptableController) getAllAdoptables(w http.ResponseWriter, r *http.Request) {
@@ -74,16 +74,16 @@ func (c *AdoptableController) getAdoptableByID(w http.ResponseWriter, r *http.Re
 }
 
 func (c *AdoptableController) createAdoptable(w http.ResponseWriter, r *http.Request) {
-	tool := &toolForm{}
-	err := validateRequest(r, createAdoptableRules, tool)
+	adoptable := &adoptableForm{}
+	err := validateRequest(r, createAdoptableRules, adoptable)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := c.service.CreateAdoptable(tool.Name)
+	res, err := c.service.CreateAdoptable(adoptable.Name)
 	if err != nil {
-		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating tool %s: %s", tool.Name, err.Error()))
+		replyWithError(w, http.StatusConflict, fmt.Errorf("error creating adoptable %s: %s", adoptable.Name, err.Error()))
 		return
 	}
 	output := CreateAdoptableResponseFromAdoptable(res)
