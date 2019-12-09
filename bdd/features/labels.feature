@@ -5,10 +5,10 @@ Feature: labels support
 
   @labels
   Scenario: Assign labels
-    Given there is a tool named Jenkata
-    And the tool Jenkata is marked with team label as Ruabov
-    And the tool Jenkata is marked with division label as Afeubaji
-    When we ask for the tool Jenkata
+    Given there is a adoptable named Jenkata
+    And the adoptable Jenkata is marked with team label as Ruabov
+    And the adoptable Jenkata is marked with division label as Afeubaji
+    When we ask for the adoptable Jenkata
     Then the list of the labels should have the length of 2
     And the list of the labels should contains to team=Ruabov
     And the list of the labels should contains to division=Afeubaji
