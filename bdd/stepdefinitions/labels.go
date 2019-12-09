@@ -6,10 +6,10 @@ import (
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
-// TheToolIsMarkedWithLabelAs ...
-func (w *World) TheToolIsMarkedWithLabelAs(toolName string, labelKind string, labelValue string) error {
-	tool := w.Tools[toolName].(map[string]interface{})
-	_, err := drivers.AddLabelToTool(labelKind, labelValue, tool["id"].(string))
+// TheAdoptableIsMarkedWithLabelAs ...
+func (w *World) TheAdoptableIsMarkedWithLabelAs(adoptableName string, labelKind string, labelValue string) error {
+	adoptable := w.Adoptables[adoptableName].(map[string]interface{})
+	_, err := drivers.AddLabelToAdoptable(labelKind, labelValue, adoptable["id"].(string))
 	return err
 }
 

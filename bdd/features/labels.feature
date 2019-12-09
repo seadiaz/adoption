@@ -1,7 +1,7 @@
 Feature: labels support
-  In order to filter only the tools on which I'm interested in
+  In order to filter only the adoptables on which I'm interested in
   As a visualizer of the levels of adoption
-  I need to be able to filter tools by different criteria
+  I need to be able to filter adoptables by different criteria
 
   @labels
   Scenario: Assign labels

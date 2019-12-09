@@ -6,18 +6,18 @@ import (
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
-// WeAskForTheLevelOfAdoptionOfTheTool ...
-func (w *World) WeAskForTheLevelOfAdoptionOfTheTool(toolName string) error {
-	tool := w.Tools[toolName].(map[string]interface{})
-	toolID := tool["id"].(string)
-	res, err := drivers.CalculateAdoptionForTool(toolID)
-	w.Adoptions[toolName] = res
+// WeAskForTheLevelOfAdoptionOfTheAdoptable ...
+func (w *World) WeAskForTheLevelOfAdoptionOfTheAdoptable(adoptableName string) error {
+	adoptable := w.Adoptables[adoptableName].(map[string]interface{})
+	adoptableID := adoptable["id"].(string)
+	res, err := drivers.CalculateAdoptionForAdoptable(adoptableID)
+	w.Adoptions[adoptableName] = res
 	return err
 }
 
-// TheAdoptionLevelOfTheToolShouldBePercent ...
-func (w *World) TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheAdoptionLevelOfTheAdoptableShouldBePercent ...
+func (w *World) TheAdoptionLevelOfTheAdoptableShouldBePercent(adoptableName string, percent float64) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	actual := adoption["adoption"].(float64)
 	if actual != percent {
 		return fmt.Errorf("expected percent %f is different than %f", percent, actual)
@@ -26,9 +26,9 @@ func (w *World) TheAdoptionLevelOfTheToolShouldBePercent(toolName string, percen
 	return nil
 }
 
-// TheTeamAdoptionLevelOfTheToolShouldBePercent ...
-func (w *World) TheTeamAdoptionLevelOfTheToolShouldBePercent(toolName string, percent float64) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheTeamAdoptionLevelOfTheAdoptableShouldBePercent ...
+func (w *World) TheTeamAdoptionLevelOfTheAdoptableShouldBePercent(adoptableName string, percent float64) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	actual := adoption["team_adoption"].(float64)
 	if actual != percent {
 		return fmt.Errorf("expected percent %f is different than %f", percent, actual)
@@ -37,9 +37,9 @@ func (w *World) TheTeamAdoptionLevelOfTheToolShouldBePercent(toolName string, pe
 	return nil
 }
 
-// TheListOfAdoptersOfTheToolShouldContainTo ...
-func (w *World) TheListOfAdoptersOfTheToolShouldContainTo(toolName string, personName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfAdoptersOfTheAdoptableShouldContainTo ...
+func (w *World) TheListOfAdoptersOfTheAdoptableShouldContainTo(adoptableName string, personName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	adopters := adoption["adopters"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == personName {
@@ -50,9 +50,9 @@ func (w *World) TheListOfAdoptersOfTheToolShouldContainTo(toolName string, perso
 	return fmt.Errorf("person %s not found", personName)
 }
 
-// TheListOfAdoptersOfTheToolShouldNotContainTo ...
-func (w *World) TheListOfAdoptersOfTheToolShouldNotContainTo(toolName string, personName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfAdoptersOfTheAdoptableShouldNotContainTo ...
+func (w *World) TheListOfAdoptersOfTheAdoptableShouldNotContainTo(adoptableName string, personName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	adopters := adoption["adopters"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == personName {
@@ -63,9 +63,9 @@ func (w *World) TheListOfAdoptersOfTheToolShouldNotContainTo(toolName string, pe
 	return nil
 }
 
-// TheListOfAbsenteesOfTheToolShouldContainTo ...
-func (w *World) TheListOfAbsenteesOfTheToolShouldContainTo(toolName string, personName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfAbsenteesOfTheAdoptableShouldContainTo ...
+func (w *World) TheListOfAbsenteesOfTheAdoptableShouldContainTo(adoptableName string, personName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	absentees := adoption["absentees"].([]interface{})
 	for _, item := range absentees {
 		if item.(map[string]interface{})["name"] == personName {
@@ -76,9 +76,9 @@ func (w *World) TheListOfAbsenteesOfTheToolShouldContainTo(toolName string, pers
 	return fmt.Errorf("person %s not found", personName)
 }
 
-// TheListOfAbsenteesOfTheToolShouldNotContainTo ...
-func (w *World) TheListOfAbsenteesOfTheToolShouldNotContainTo(toolName string, personName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfAbsenteesOfTheAdoptableShouldNotContainTo ...
+func (w *World) TheListOfAbsenteesOfTheAdoptableShouldNotContainTo(adoptableName string, personName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	absentees := adoption["absentees"].([]interface{})
 	for _, item := range absentees {
 		if item.(map[string]interface{})["name"] == personName {
@@ -89,9 +89,9 @@ func (w *World) TheListOfAbsenteesOfTheToolShouldNotContainTo(toolName string, p
 	return nil
 }
 
-// TheListOfTeamAdoptersOfTheToolShouldContainTo ...
-func (w *World) TheListOfTeamAdoptersOfTheToolShouldContainTo(toolName string, teamName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfTeamAdoptersOfTheAdoptableShouldContainTo ...
+func (w *World) TheListOfTeamAdoptersOfTheAdoptableShouldContainTo(adoptableName string, teamName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	adopters := adoption["team_adopters"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == teamName {
@@ -102,9 +102,9 @@ func (w *World) TheListOfTeamAdoptersOfTheToolShouldContainTo(toolName string, t
 	return fmt.Errorf("team %s not found", teamName)
 }
 
-// TheListOfTeamAbsenteesOfTheToolShouldContainTo ...
-func (w *World) TheListOfTeamAbsenteesOfTheToolShouldContainTo(toolName string, teamName string) error {
-	adoption := w.Adoptions[toolName].(map[string]interface{})
+// TheListOfTeamAbsenteesOfTheAdoptableShouldContainTo ...
+func (w *World) TheListOfTeamAbsenteesOfTheAdoptableShouldContainTo(adoptableName string, teamName string) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
 	adopters := adoption["team_absentees"].([]interface{})
 	for _, item := range adopters {
 		if item.(map[string]interface{})["name"] == teamName {

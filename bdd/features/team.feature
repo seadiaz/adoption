@@ -1,6 +1,6 @@
 Feature: group people in teams
   In order to visualize the adoption in a grouped way
-  As a implementer of certain tool
+  As a implementer of certain adoptable
   I need to be able to add/remove people to/from teams
 
   @teams

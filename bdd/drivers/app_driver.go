@@ -10,8 +10,8 @@ import (
 	"github.com/golang/glog"
 )
 
-// CreateToolWithName ...
-func CreateToolWithName(name string) (map[string]interface{}, error) {
+// CreateAdoptableWithName ...
+func CreateAdoptableWithName(name string) (map[string]interface{}, error) {
 	path := "/tools"
 	body := make(map[string]interface{})
 	body["name"] = name
@@ -78,8 +78,8 @@ func CreateTeamWithName(name string) (map[string]interface{}, error) {
 	return output, nil
 }
 
-// AdoptToolByPerson ...
-func AdoptToolByPerson(toolID string, personID string) (map[string]interface{}, error) {
+// AdoptAdoptableByPerson ...
+func AdoptAdoptableByPerson(toolID string, personID string) (map[string]interface{}, error) {
 	path := "/people/" + personID + "/tools"
 	body := make(map[string]interface{})
 	body["id"] = toolID
@@ -94,8 +94,8 @@ func AdoptToolByPerson(toolID string, personID string) (map[string]interface{}, 
 	return output, nil
 }
 
-// CalculateAdoptionForTool ...
-func CalculateAdoptionForTool(toolID string) (map[string]interface{}, error) {
+// CalculateAdoptionForAdoptable ...
+func CalculateAdoptionForAdoptable(toolID string) (map[string]interface{}, error) {
 	path := "/tools/" + toolID + "/adoption"
 	res, err := getMessage(path)
 	if err != nil {
@@ -124,8 +124,8 @@ func getMessage(path string) (*http.Response, error) {
 	return res, nil
 }
 
-// GetAllTools ...
-func GetAllTools() ([]interface{}, error) {
+// GetAllAdoptables ...
+func GetAllAdoptables() ([]interface{}, error) {
 	path := "/tools"
 	res, err := getMessage(path)
 	if err != nil {
@@ -138,8 +138,8 @@ func GetAllTools() ([]interface{}, error) {
 	return output, nil
 }
 
-// GetAllToolsFilterByLabel ...
-func GetAllToolsFilterByLabel(kind string, value string) ([]interface{}, error) {
+// GetAllAdoptablesFilterByLabel ...
+func GetAllAdoptablesFilterByLabel(kind string, value string) ([]interface{}, error) {
 	path := "/tools?labels=" + kind + ":" + value
 	res, err := getMessage(path)
 	if err != nil {
@@ -182,8 +182,8 @@ func AddMemberToTeam(personID string, teamID string) ([]interface{}, error) {
 	return output, nil
 }
 
-// AddLabelToTool ...
-func AddLabelToTool(labelKind string, labelValue string, toolID string) ([]interface{}, error) {
+// AddLabelToAdoptable ...
+func AddLabelToAdoptable(labelKind string, labelValue string, toolID string) ([]interface{}, error) {
 	path := "/tools/" + toolID + "/labels"
 	body := make(map[string]interface{})
 	body["kind"] = labelKind

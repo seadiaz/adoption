@@ -7,16 +7,16 @@ import (
 	"github.com/seadiaz/adoption/bdd/drivers"
 )
 
-// ThereIsAPersonNamedWhichHaveAdoptedTool ...
-func (w *World) ThereIsAPersonNamedWhichHaveAdoptedTool(personName string, toolName string) error {
+// ThereIsAPersonNamedWhichHaveAdoptedAdoptable ...
+func (w *World) ThereIsAPersonNamedWhichHaveAdoptedAdoptable(personName string, adoptableName string) error {
 	res, err := drivers.CreatePersonWithName(personName)
 	if err != nil {
 		return err
 	}
 	w.People[personName] = res
 
-	tool := w.Tools[toolName].(map[string]interface{})
-	_, err = drivers.AdoptToolByPerson(tool["id"].(string), res["id"].(string))
+	adoptable := w.Adoptables[adoptableName].(map[string]interface{})
+	_, err = drivers.AdoptAdoptableByPerson(adoptable["id"].(string), res["id"].(string))
 	return err
 }
 

@@ -1,6 +1,6 @@
 Feature: manage people
   In order to incorporate new people to follow up them
-  As a implementer of certain tool
+  As a implementer of certain adoptable
   I need to be able to add/update/remove people
 
   @people
