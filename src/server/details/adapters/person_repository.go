@@ -16,18 +16,18 @@ type PersonRepository struct {
 }
 
 type persistedPerson struct {
-	ID    string
-	Name  string
-	Email string
-	Tools []*persistedTool
+	ID         string
+	Name       string
+	Email      string
+	Adoptables []*persistedAdoptable
 }
 
 func createPersistedPersonFromPerson(entity *entities.Person) *persistedPerson {
 	return &persistedPerson{
-		ID:    entity.ID.String(),
-		Name:  entity.Name,
-		Email: entity.Email.String(),
-		Tools: createPersistedToolListFromToolList(entity.Tools),
+		ID:         entity.ID.String(),
+		Name:       entity.Name,
+		Email:      entity.Email.String(),
+		Adoptables: createPersistedAdoptableListFromAdoptableList(entity.Adoptables),
 	}
 }
 
@@ -43,10 +43,10 @@ func createPersistedPersonListFromPersonList(list []*entities.Person) []*persist
 
 func createPersonFromPersistedPerson(pEntity *persistedPerson) *entities.Person {
 	return &entities.Person{
-		ID:    entities.BuildID(pEntity.ID),
-		Name:  pEntity.Name,
-		Email: entities.BuildEmail(pEntity.Email),
-		Tools: createToolListFromPersistedToolList(pEntity.Tools),
+		ID:         entities.BuildID(pEntity.ID),
+		Name:       pEntity.Name,
+		Email:      entities.BuildEmail(pEntity.Email),
+		Adoptables: createAdoptableListFromPersistedAdoptableList(pEntity.Adoptables),
 	}
 }
 

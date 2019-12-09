@@ -4,33 +4,33 @@ import "github.com/golang/glog"
 
 // Person ...
 type Person struct {
-	ID    *ID
-	Email *Email
-	Name  string
-	Tools []*Tool
+	ID         *ID
+	Email      *Email
+	Name       string
+	Adoptables []*Adoptable
 }
 
 // CreatePersonWithNameAndEmail ...
 func CreatePersonWithNameAndEmail(name string, email string) *Person {
 	return &Person{
-		ID:    generateID(),
-		Email: BuildEmail(email),
-		Name:  name,
-		Tools: make([]*Tool, 0),
+		ID:         generateID(),
+		Email:      BuildEmail(email),
+		Name:       name,
+		Adoptables: make([]*Adoptable, 0),
 	}
 }
 
-// AdoptTool ...
-func (p *Person) AdoptTool(tool *Tool) error {
+// AdoptAdoptable ...
+func (p *Person) AdoptAdoptable(tool *Adoptable) error {
 	glog.Info(p)
 	glog.Info(tool)
-	p.Tools = append(p.Tools, tool)
+	p.Adoptables = append(p.Adoptables, tool)
 	return nil
 }
 
-// HasAdoptedTool ...
-func (p *Person) HasAdoptedTool(tool *Tool) bool {
-	for _, item := range p.Tools {
+// HasAdoptedAdoptable ...
+func (p *Person) HasAdoptedAdoptable(tool *Adoptable) bool {
+	for _, item := range p.Adoptables {
 		if item.ID.value == tool.ID.value {
 			return true
 		}

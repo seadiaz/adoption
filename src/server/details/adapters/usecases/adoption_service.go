@@ -23,9 +23,9 @@ func CreateAdoptionService(toolRepository toolRepository, personRepository perso
 	}
 }
 
-// CalculateAdoptionForTool ...
-func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interface{}, error) {
-	tool, err := s.toolRepository.FindToolByID(id)
+// CalculateAdoptionForAdoptable ...
+func (s *AdoptoinService) CalculateAdoptionForAdoptable(id string) (map[string]interface{}, error) {
+	tool, err := s.toolRepository.FindAdoptableByID(id)
 	if err != nil {
 		glog.Warning(err)
 		return nil, errors.New("calculate adoption for tool failed. " + err.Error())
@@ -51,12 +51,12 @@ func (s *AdoptoinService) CalculateAdoptionForTool(id string) (map[string]interf
 		adoption.IncludeTeam(item)
 	}
 	output := make(map[string]interface{})
-	output["adoption"] = adoption.CalculateForTool(tool)
-	output["adopters"] = adoption.FilterAdoptersForTool(tool)
-	output["absentees"] = adoption.FilterAbsenteesForTool(tool)
-	output["team_adoption"] = adoption.CalculateTeamForTool(tool)
-	output["team_adopters"] = adoption.FilterTeamAdoptersForTool(tool)
-	output["team_absentees"] = adoption.FilterTeamAbsenteesForTool(tool)
+	output["adoption"] = adoption.CalculateForAdoptable(tool)
+	output["adopters"] = adoption.FilterAdoptersForAdoptable(tool)
+	output["absentees"] = adoption.FilterAbsenteesForAdoptable(tool)
+	output["team_adoption"] = adoption.CalculateTeamForAdoptable(tool)
+	output["team_adopters"] = adoption.FilterTeamAdoptersForAdoptable(tool)
+	output["team_absentees"] = adoption.FilterTeamAbsenteesForAdoptable(tool)
 
 	return output, nil
 }

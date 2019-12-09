@@ -12,7 +12,7 @@ var (
 		"email": "required|email",
 	}
 
-	addToolToPersonRules = map[string]string{
+	addAdoptableToPersonRules = map[string]string{
 		"id": "required|uuid",
 	}
 )
@@ -39,7 +39,7 @@ func CreatePersonController(service *usecases.PersonService) PersonController {
 func (c *PersonController) AddRoutes(s Server) {
 	s.Router.HandleFunc("/people", c.getAllPeople).Methods("GET")
 	s.Router.HandleFunc("/people", c.createPerson).Methods("POST")
-	s.Router.HandleFunc("/people/{id}/tools", c.addToolToPerson).Methods("POST")
+	s.Router.HandleFunc("/people/{id}/tools", c.addAdoptableToPerson).Methods("POST")
 }
 
 func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) {
@@ -60,16 +60,16 @@ func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) 
 	replyJSONResponse(w, output)
 }
 
-func (c *PersonController) addToolToPerson(w http.ResponseWriter, r *http.Request) {
+func (c *PersonController) addAdoptableToPerson(w http.ResponseWriter, r *http.Request) {
 	tool := &toolForm{}
-	err := validateRequest(r, addToolToPersonRules, tool)
+	err := validateRequest(r, addAdoptableToPersonRules, tool)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
 		return
 	}
 
 	id := getPathParam(r, "id")
-	res, err := c.service.AddToolToPerson(tool.ID, id)
+	res, err := c.service.AddAdoptableToPerson(tool.ID, id)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
 		return

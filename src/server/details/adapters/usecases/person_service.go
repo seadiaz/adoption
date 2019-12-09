@@ -42,16 +42,16 @@ func (s *PersonService) CreatePerson(name string, email string) (*entities.Perso
 	return person, nil
 }
 
-// AddToolToPerson ...
-func (s *PersonService) AddToolToPerson(toolID string, personID string) (*entities.Person, error) {
+// AddAdoptableToPerson ...
+func (s *PersonService) AddAdoptableToPerson(toolID string, personID string) (*entities.Person, error) {
 	glog.Info(personID)
 	person, _ := s.personRepository.FindPersonByID(personID)
 	glog.Info(person)
 	if person == nil {
 		return nil, fmt.Errorf("person with id %s not found", personID)
 	}
-	tool, _ := s.toolRepository.FindToolByID(toolID)
-	person.AdoptTool(tool)
+	tool, _ := s.toolRepository.FindAdoptableByID(toolID)
+	person.AdoptAdoptable(tool)
 	s.personRepository.SavePerson(person)
 
 	return person, nil

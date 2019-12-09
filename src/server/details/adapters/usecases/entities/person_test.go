@@ -8,8 +8,8 @@ import (
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
 
-func createDummyToolWithName(name string) *entities.Tool {
-	return entities.CreateToolWithName(name)
+func createDummyAdoptableWithName(name string) *entities.Adoptable {
+	return entities.CreateAdoptableWithName(name)
 }
 
 var _ = Describe("person", func() {
@@ -21,7 +21,7 @@ var _ = Describe("person", func() {
 		actual := entities.CreatePersonWithNameAndEmail(name, defaultEmail)
 
 		Expect(actual).ToNot(BeNil())
-		Expect(actual.Tools).To(HaveLen(0))
+		Expect(actual.Adoptables).To(HaveLen(0))
 	})
 
 	It("should create adopt 2 tools", func() {
@@ -30,12 +30,12 @@ var _ = Describe("person", func() {
 
 		for i := 1; i <= 2; i++ {
 			toolName := fmt.Sprintf("Dummy %d", i)
-			tool := entities.CreateToolWithName(toolName)
-			person.AdoptTool(tool)
+			tool := entities.CreateAdoptableWithName(toolName)
+			person.AdoptAdoptable(tool)
 		}
 
-		Expect(person.Tools).To(HaveLen(2))
-		Expect(person.Tools[0].Name).To(Equal("Dummy 1"))
-		Expect(person.Tools[1].Name).To(Equal("Dummy 2"))
+		Expect(person.Adoptables).To(HaveLen(2))
+		Expect(person.Adoptables[0].Name).To(Equal("Dummy 1"))
+		Expect(person.Adoptables[1].Name).To(Equal("Dummy 2"))
 	})
 })

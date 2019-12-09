@@ -24,16 +24,16 @@ func CreateApp() *App {
 	httpServer := &http.Server{Addr: ":" + port, Handler: router}
 	server := adapters.CreateServer(httpServer, routerWrapper)
 
-	toolRepository := adapters.CreateToolRepository(details.BuildMemoryPersistence())
+	toolRepository := adapters.CreateAdoptableRepository(details.BuildMemoryPersistence())
 	personRepository := adapters.CreatePersonRepository(details.BuildMemoryPersistence())
 	teamRepository := adapters.CreateTeamRepository(details.BuildMemoryPersistence())
 
-	toolService := usecases.CreateToolService(toolRepository)
+	toolService := usecases.CreateAdoptableService(toolRepository)
 	personService := usecases.CreatePersonService(personRepository, toolRepository)
 	teamService := usecases.CreateTeamService(teamRepository, personRepository)
 	adoptionService := usecases.CreateAdoptionService(toolRepository, personRepository, teamRepository)
 
-	toolController := adapters.CreateToolController(toolService, adoptionService)
+	toolController := adapters.CreateAdoptableController(toolService, adoptionService)
 	personController := adapters.CreatePersonController(personService)
 	teamController := adapters.CreateTeamController(teamService)
 

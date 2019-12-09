@@ -16,14 +16,14 @@ type AdoptionResponse struct {
 
 // PersonResponse ...
 type PersonResponse struct {
-	ID    string          `json:"id"`
-	Email string          `json:"email"`
-	Name  string          `json:"name"`
-	Tools []*ToolResponse `json:"tools"`
+	ID         string               `json:"id"`
+	Email      string               `json:"email"`
+	Name       string               `json:"name"`
+	Adoptables []*AdoptableResponse `json:"tools"`
 }
 
-// ToolResponse ...
-type ToolResponse struct {
+// AdoptableResponse ...
+type AdoptableResponse struct {
 	ID     string           `json:"id"`
 	Name   string           `json:"name,omitempty"`
 	Labels []*LabelResponse `json:"labels,omitempty"`
@@ -65,26 +65,26 @@ func CreatePersonResponseListFromPersonList(persons []*entities.Person) []*Perso
 // CreatePersonResponseFromPerson ...
 func CreatePersonResponseFromPerson(person *entities.Person) *PersonResponse {
 	return &PersonResponse{
-		ID:    person.ID.String(),
-		Name:  person.Name,
-		Email: person.Email.String(),
-		Tools: CreateToolResponseListFromToolList(person.Tools),
+		ID:         person.ID.String(),
+		Name:       person.Name,
+		Email:      person.Email.String(),
+		Adoptables: CreateAdoptableResponseListFromAdoptableList(person.Adoptables),
 	}
 }
 
-// CreateToolResponseListFromToolList ...
-func CreateToolResponseListFromToolList(tools []*entities.Tool) []*ToolResponse {
-	output := make([]*ToolResponse, 0, 0)
+// CreateAdoptableResponseListFromAdoptableList ...
+func CreateAdoptableResponseListFromAdoptableList(tools []*entities.Adoptable) []*AdoptableResponse {
+	output := make([]*AdoptableResponse, 0, 0)
 	for _, item := range tools {
-		output = append(output, CreateToolResponseFromTool(item))
+		output = append(output, CreateAdoptableResponseFromAdoptable(item))
 	}
 
 	return output
 }
 
-// CreateToolResponseFromTool ...
-func CreateToolResponseFromTool(tool *entities.Tool) *ToolResponse {
-	return &ToolResponse{
+// CreateAdoptableResponseFromAdoptable ...
+func CreateAdoptableResponseFromAdoptable(tool *entities.Adoptable) *AdoptableResponse {
+	return &AdoptableResponse{
 		ID:     tool.ID.String(),
 		Name:   tool.Name,
 		Labels: CreateLabelResponseListFromLabelList(tool.Labels),
