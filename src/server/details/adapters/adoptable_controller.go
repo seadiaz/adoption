@@ -45,12 +45,12 @@ func CreateAdoptableController(service usecases.AdoptableService, adoptionServic
 }
 
 // AddRoutes ...
-func (c *AdoptableController) AddRoutes(s Server) {
-	s.Router.HandleFunc("/adoptables", c.getAllAdoptables).Methods("GET")
-	s.Router.HandleFunc("/adoptables", c.createAdoptable).Methods("POST")
-	s.Router.HandleFunc("/adoptables/{id}", c.getAdoptableByID).Methods("GET")
-	s.Router.HandleFunc("/adoptables/{id}/adoption", c.calculateAdoptionForAdoptable).Methods("GET")
-	s.Router.HandleFunc("/adoptables/{id}/labels", c.addLabelToAdoptable).Methods("POST")
+func (c *AdoptableController) AddRoutes(r Router) {
+	r.HandleFunc("/adoptables", c.getAllAdoptables).Methods("GET")
+	r.HandleFunc("/adoptables", c.createAdoptable).Methods("POST")
+	r.HandleFunc("/adoptables/{id}", c.getAdoptableByID).Methods("GET")
+	r.HandleFunc("/adoptables/{id}/adoption", c.calculateAdoptionForAdoptable).Methods("GET")
+	r.HandleFunc("/adoptables/{id}/labels", c.addLabelToAdoptable).Methods("POST")
 }
 
 func (c *AdoptableController) getAllAdoptables(w http.ResponseWriter, r *http.Request) {

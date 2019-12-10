@@ -37,7 +37,7 @@ func CreateApp() *App {
 	personController := adapters.CreatePersonController(personService)
 	teamController := adapters.CreateTeamController(teamService)
 
-	adoptableController.AddRoutes(server)
+	adoptableController.AddRoutes(server.Router)
 	personController.AddRoutes(server)
 	teamController.AddRoutes(server)
 

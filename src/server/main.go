@@ -48,7 +48,7 @@ func Boot(params *Params) {
 	teamController := adapters.CreateTeamController(teamService)
 
 	healthController.AddRoutes(server)
-	adoptableController.AddRoutes(server)
+	adoptableController.AddRoutes(server.Router)
 	personController.AddRoutes(server)
 	teamController.AddRoutes(server)
 
