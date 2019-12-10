@@ -14,25 +14,34 @@ type adoptableRepository interface {
 }
 
 // AdoptableService ...
-type AdoptableService struct {
+type AdoptableService interface {
+	GetAllAdoptables() ([]*entities.Adoptable, error)
+	FindAdoptablesFilterByLabelKindAndValue(labelKind, labelValue string) ([]*entities.Adoptable, error)
+	CreateAdoptable(name string) (*entities.Adoptable, error)
+	FindAdoptable(id string) (*entities.Adoptable, error)
+	AddLabelToAdoptable(labelKind string, labelValue string, adoptableID string) (*entities.Adoptable, error)
+}
+
+// AdoptableServiceExpert ...
+type AdoptableServiceExpert struct {
 	repository adoptableRepository
 }
 
 // CreateAdoptableService ...
-func CreateAdoptableService(repository adoptableRepository) *AdoptableService {
-	return &AdoptableService{
+func CreateAdoptableService(repository adoptableRepository) *AdoptableServiceExpert {
+	return &AdoptableServiceExpert{
 		repository: repository,
 	}
 }
 
 // GetAllAdoptables ...
-func (s *AdoptableService) GetAllAdoptables() ([]*entities.Adoptable, error) {
+func (s *AdoptableServiceExpert) GetAllAdoptables() ([]*entities.Adoptable, error) {
 	adoptables, _ := s.repository.GetAllAdoptables()
 	return adoptables, nil
 }
 
 // FindAdoptablesFilterByLabelKindAndValue ...
-func (s *AdoptableService) FindAdoptablesFilterByLabelKindAndValue(labelKind, labelValue string) ([]*entities.Adoptable, error) {
+func (s *AdoptableServiceExpert) FindAdoptablesFilterByLabelKindAndValue(labelKind, labelValue string) ([]*entities.Adoptable, error) {
 	adoptables, _ := s.repository.GetAllAdoptables()
 	output := make([]*entities.Adoptable, 0, 0)
 	for _, item := range adoptables {
@@ -45,7 +54,7 @@ func (s *AdoptableService) FindAdoptablesFilterByLabelKindAndValue(labelKind, la
 }
 
 // CreateAdoptable ...
-func (s *AdoptableService) CreateAdoptable(name string) (*entities.Adoptable, error) {
+func (s *AdoptableServiceExpert) CreateAdoptable(name string) (*entities.Adoptable, error) {
 	adoptables, _ := s.repository.GetAllAdoptables()
 	for _, item := range adoptables {
 		if item.Name == name {
@@ -59,13 +68,13 @@ func (s *AdoptableService) CreateAdoptable(name string) (*entities.Adoptable, er
 }
 
 // FindAdoptable ...
-func (s *AdoptableService) FindAdoptable(id string) (*entities.Adoptable, error) {
+func (s *AdoptableServiceExpert) FindAdoptable(id string) (*entities.Adoptable, error) {
 	adoptable, _ := s.repository.FindAdoptableByID(id)
 	return adoptable, nil
 }
 
 // AddLabelToAdoptable ...
-func (s *AdoptableService) AddLabelToAdoptable(labelKind string, labelValue string, adoptableID string) (*entities.Adoptable, error) {
+func (s *AdoptableServiceExpert) AddLabelToAdoptable(labelKind string, labelValue string, adoptableID string) (*entities.Adoptable, error) {
 	label := entities.CreateLabelWithKindAndValue(labelKind, labelValue)
 	adoptable, _ := s.repository.FindAdoptableByID(adoptableID)
 	adoptable.AddLabel(label)

@@ -8,15 +8,20 @@ import (
 )
 
 // AdoptoinService ...
-type AdoptoinService struct {
+type AdoptoinService interface {
+	CalculateAdoptionForAdoptable(id string) (map[string]interface{}, error)
+}
+
+// AdoptoinServiceExpert ...
+type AdoptoinServiceExpert struct {
 	adoptableRepository adoptableRepository
 	personRepository    personRepository
 	teamRepository      teamRepository
 }
 
 // CreateAdoptionService ...
-func CreateAdoptionService(adoptableRepository adoptableRepository, personRepository personRepository, teamRepository teamRepository) *AdoptoinService {
-	return &AdoptoinService{
+func CreateAdoptionService(adoptableRepository adoptableRepository, personRepository personRepository, teamRepository teamRepository) *AdoptoinServiceExpert {
+	return &AdoptoinServiceExpert{
 		adoptableRepository: adoptableRepository,
 		personRepository:    personRepository,
 		teamRepository:      teamRepository,
@@ -24,7 +29,7 @@ func CreateAdoptionService(adoptableRepository adoptableRepository, personReposi
 }
 
 // CalculateAdoptionForAdoptable ...
-func (s *AdoptoinService) CalculateAdoptionForAdoptable(id string) (map[string]interface{}, error) {
+func (s *AdoptoinServiceExpert) CalculateAdoptionForAdoptable(id string) (map[string]interface{}, error) {
 	adoptable, err := s.adoptableRepository.FindAdoptableByID(id)
 	if err != nil {
 		glog.Warning(err)

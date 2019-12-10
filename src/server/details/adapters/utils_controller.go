@@ -52,7 +52,7 @@ func getQueryParam(r *http.Request, name string) string {
 
 func getQueryParamMapKeyValue(r *http.Request, name string) (string, string) {
 	queryVal := r.URL.Query().Get(name)
-	pattern := regexp.MustCompile(`^(\w+):(\w+)$`)
+	pattern := regexp.MustCompile(`(\w+[\w \-_.]+):(\w+[\w \-_.]+)`)
 	kv := pattern.FindStringSubmatch(queryVal)
 	if len(kv) < 3 {
 		return "", ""

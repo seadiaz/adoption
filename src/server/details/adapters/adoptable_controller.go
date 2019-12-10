@@ -32,13 +32,13 @@ type labelForm struct {
 
 // AdoptableController ...
 type AdoptableController struct {
-	service         *usecases.AdoptableService
-	adoptionService *usecases.AdoptoinService
+	service         usecases.AdoptableService
+	adoptionService usecases.AdoptoinService
 }
 
 // CreateAdoptableController ...
-func CreateAdoptableController(service *usecases.AdoptableService, adoptionService *usecases.AdoptoinService) AdoptableController {
-	return AdoptableController{
+func CreateAdoptableController(service usecases.AdoptableService, adoptionService usecases.AdoptoinService) *AdoptableController {
+	return &AdoptableController{
 		service:         service,
 		adoptionService: adoptionService,
 	}
