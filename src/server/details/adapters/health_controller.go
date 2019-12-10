@@ -15,8 +15,8 @@ func CreateHealthController() *HealthController {
 }
 
 // AddRoutes ...
-func (c *HealthController) AddRoutes(s Server) {
-	s.Router.HandleFunc("/health", c.getStatus).Methods("GET")
+func (c *HealthController) AddRoutes(r Router) {
+	r.HandleFunc("/health", c.getStatus).Methods("GET")
 }
 
 func (c *HealthController) getStatus(w http.ResponseWriter, r *http.Request) {

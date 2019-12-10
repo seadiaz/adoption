@@ -36,10 +36,10 @@ func CreatePersonController(service *usecases.PersonService) PersonController {
 }
 
 // AddRoutes ...
-func (c *PersonController) AddRoutes(s Server) {
-	s.Router.HandleFunc("/people", c.getAllPeople).Methods("GET")
-	s.Router.HandleFunc("/people", c.createPerson).Methods("POST")
-	s.Router.HandleFunc("/people/{id}/adoptables", c.addAdoptableToPerson).Methods("POST")
+func (c *PersonController) AddRoutes(r Router) {
+	r.HandleFunc("/people", c.getAllPeople).Methods("GET")
+	r.HandleFunc("/people", c.createPerson).Methods("POST")
+	r.HandleFunc("/people/{id}/adoptables", c.addAdoptableToPerson).Methods("POST")
 }
 
 func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) {

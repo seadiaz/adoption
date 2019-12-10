@@ -38,8 +38,8 @@ func CreateApp() *App {
 	teamController := adapters.CreateTeamController(teamService)
 
 	adoptableController.AddRoutes(server.Router)
-	personController.AddRoutes(server)
-	teamController.AddRoutes(server)
+	personController.AddRoutes(server.Router)
+	teamController.AddRoutes(server.Router)
 
 	return &App{
 		server: server,

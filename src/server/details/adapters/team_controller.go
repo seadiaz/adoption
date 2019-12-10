@@ -35,11 +35,11 @@ func CreateTeamController(service *usecases.TeamService) *TeamController {
 }
 
 // AddRoutes ...
-func (c *TeamController) AddRoutes(s Server) {
-	s.Router.HandleFunc("/teams", c.getAllTeams).Methods("GET")
-	s.Router.HandleFunc("/teams", c.createTeam).Methods("POST")
-	s.Router.HandleFunc("/teams/{id}/people", c.addMemberToTeam).Methods("POST")
-	s.Router.HandleFunc("/teams/{id}/people", c.getMembersFromTeam).Methods("GET")
+func (c *TeamController) AddRoutes(r Router) {
+	r.HandleFunc("/teams", c.getAllTeams).Methods("GET")
+	r.HandleFunc("/teams", c.createTeam).Methods("POST")
+	r.HandleFunc("/teams/{id}/people", c.addMemberToTeam).Methods("POST")
+	r.HandleFunc("/teams/{id}/people", c.getMembersFromTeam).Methods("GET")
 }
 
 func (c *TeamController) getAllTeams(w http.ResponseWriter, r *http.Request) {
