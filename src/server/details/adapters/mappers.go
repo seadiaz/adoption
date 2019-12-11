@@ -7,11 +7,18 @@ import (
 // AdoptionResponse ...
 type AdoptionResponse struct {
 	Adoption      int               `json:"adoption"`
-	Adopters      []*PersonResponse `json:"adopters"`
-	Absentees     []*PersonResponse `json:"absentees"`
+	Level         int               `json:"level"`
+	Adopters      []*AdoptionDetail `json:"adopters"`
+	Absentees     []*AdoptionDetail `json:"absentees"`
 	TeamAdoption  int               `json:"team_adoption"`
-	TeamAdopters  []*TeamResponse   `json:"team_adopters"`
-	TeamAbsentees []*TeamResponse   `json:"team_absentees"`
+	TeamAdopters  []*AdoptionDetail `json:"team_adopters"`
+	TeamAbsentees []*AdoptionDetail `json:"team_absentees"`
+}
+
+// AdoptionDetail ...
+type AdoptionDetail struct {
+	Name  string `json:"name"`
+	Level int    `json:"level"`
 }
 
 // PersonResponse ...
@@ -50,6 +57,24 @@ type HealthResponse struct {
 // ErrorResponse ...
 type ErrorResponse struct {
 	Message string `json:"message,omitempty"`
+}
+
+// CreateAdoptionDetailResponseListFromPersonList ...
+func CreateAdoptionDetailResponseListFromPersonList(persons []*entities.Person) []*AdoptionDetail {
+	output := make([]*AdoptionDetail, 0, 0)
+	for _, item := range persons {
+		output = append(output, CreateAdoptionDetailResponseFromPerson(item))
+	}
+
+	return output
+}
+
+// CreateAdoptionDetailResponseFromPerson ...
+func CreateAdoptionDetailResponseFromPerson(person *entities.Person) *AdoptionDetail {
+	return &AdoptionDetail{
+		Name:  person.Name,
+		Level: 0,
+	}
 }
 
 // CreatePersonResponseListFromPersonList ...
@@ -95,11 +120,12 @@ func CreateAdoptableResponseFromAdoptable(adoptable *entities.Adoptable) *Adopta
 func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionResponse {
 	return &AdoptionResponse{
 		Adoption:      adoption["adoption"].(int),
-		Adopters:      CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
-		Absentees:     CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
+		Level:         adoption["adoption"].(int),
+		Adopters:      CreateAdoptionDetailResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
+		Absentees:     CreateAdoptionDetailResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
 		TeamAdoption:  adoption["team_adoption"].(int),
-		TeamAdopters:  CreateTeamResponseListFromTeamList(adoption["team_adopters"].([]*entities.Team)),
-		TeamAbsentees: CreateTeamResponseListFromTeamList(adoption["team_absentees"].([]*entities.Team)),
+		TeamAdopters:  CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_adopters"].([]*entities.AdoptionTeamDetail)),
+		TeamAbsentees: CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_absentees"].([]*entities.AdoptionTeamDetail)),
 	}
 }
 
@@ -108,6 +134,14 @@ func CreateTeamResponseFromTeam(team *entities.Team) *TeamResponse {
 	return &TeamResponse{
 		ID:   team.ID.String(),
 		Name: team.Name,
+	}
+}
+
+// CreateAdoptionDetailResponseFromAdoptionDetailTeam ...
+func CreateAdoptionDetailResponseFromAdoptionDetailTeam(teamDetail *entities.AdoptionTeamDetail) *AdoptionDetail {
+	return &AdoptionDetail{
+		Name:  teamDetail.Team.Name,
+		Level: teamDetail.Level,
 	}
 }
 
@@ -126,6 +160,16 @@ func CreateHealthResponseMap(m map[string]string) *HealthResponse {
 	output := &HealthResponse{
 		Status:  m["status"],
 		Message: m["message"],
+	}
+
+	return output
+}
+
+// CreateAdoptionDetailResponseListFromAdoptionTeamDetailList ...
+func CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(teamDetails []*entities.AdoptionTeamDetail) []*AdoptionDetail {
+	output := make([]*AdoptionDetail, 0, 0)
+	for _, item := range teamDetails {
+		output = append(output, CreateAdoptionDetailResponseFromAdoptionDetailTeam(item))
 	}
 
 	return output

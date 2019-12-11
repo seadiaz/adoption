@@ -1,10 +1,18 @@
 package entities
 
+import "github.com/thoas/go-funk"
+
 // Adoption ...
 type Adoption struct {
-	People    []*Person
-	Teams     []*Team
-	Adoptable Adoptable
+	People      []*Person
+	TeamDetails []*AdoptionTeamDetail
+	Adoptable   Adoptable
+}
+
+// AdoptionTeamDetail ...
+type AdoptionTeamDetail struct {
+	Team  *Team
+	Level int
 }
 
 // CreateAdoption ...
@@ -25,7 +33,7 @@ func (a *Adoption) IncludeTeam(team *Team) error {
 	for i, item := range team.People {
 		team.People[i] = a.findPersonByEmail(item.Email)
 	}
-	a.Teams = append(a.Teams, team)
+	a.TeamDetails = append(a.TeamDetails, &AdoptionTeamDetail{Team: team, Level: 0})
 	return nil
 }
 
@@ -39,8 +47,8 @@ func (a *Adoption) findPersonByEmail(email *Email) *Person {
 	return nil
 }
 
-// CalculateForAdoptable ...
-func (a *Adoption) CalculateForAdoptable(adoptable *Adoptable) int {
+// CalculateOverPeopleForAdoptable ...
+func (a *Adoption) CalculateOverPeopleForAdoptable(adoptable *Adoptable) int {
 	total := len(a.People)
 	if total == 0 {
 		return 0
@@ -56,16 +64,16 @@ func (a *Adoption) CalculateForAdoptable(adoptable *Adoptable) int {
 	return 100 * counter / total
 }
 
-// CalculateTeamForAdoptable ...
-func (a *Adoption) CalculateTeamForAdoptable(adoptable *Adoptable) int {
-	total := len(a.Teams)
+// CalculateOverTeamForAdoptable ...
+func (a *Adoption) CalculateOverTeamForAdoptable(adoptable *Adoptable) int {
+	total := len(a.TeamDetails)
 	if total == 0 {
 		return 0
 	}
 
 	counter := 0
-	for _, team := range a.Teams {
-		if team.HasTeamAdoptedAdoptable(adoptable) {
+	for _, team := range a.TeamDetails {
+		if team.Team.HasTeamAdoptedAdoptable(adoptable) {
 			counter++
 		}
 	}
@@ -73,8 +81,8 @@ func (a *Adoption) CalculateTeamForAdoptable(adoptable *Adoptable) int {
 	return 100 * counter / total
 }
 
-// FilterAdoptersForAdoptable ...
-func (a *Adoption) FilterAdoptersForAdoptable(adoptable *Adoptable) []*Person {
+// FilterPeopleAdoptersForAdoptable ...
+func (a *Adoption) FilterPeopleAdoptersForAdoptable(adoptable *Adoptable) []*Person {
 	output := make([]*Person, 0, 0)
 	if len(a.People) == 0 {
 		return output
@@ -88,8 +96,8 @@ func (a *Adoption) FilterAdoptersForAdoptable(adoptable *Adoptable) []*Person {
 	return output
 }
 
-// FilterAbsenteesForAdoptable ...
-func (a *Adoption) FilterAbsenteesForAdoptable(adoptable *Adoptable) []*Person {
+// FilterPeopleAbsenteesForAdoptable ...
+func (a *Adoption) FilterPeopleAbsenteesForAdoptable(adoptable *Adoptable) []*Person {
 	output := make([]*Person, 0, 0)
 	if len(a.People) == 0 {
 		return output
@@ -104,29 +112,40 @@ func (a *Adoption) FilterAbsenteesForAdoptable(adoptable *Adoptable) []*Person {
 }
 
 // FilterTeamAdoptersForAdoptable ...
-func (a *Adoption) FilterTeamAdoptersForAdoptable(adoptable *Adoptable) []*Team {
-	output := make([]*Team, 0, 0)
-	if len(a.Teams) == 0 {
+func (a *Adoption) FilterTeamAdoptersForAdoptable(adoptable *Adoptable) []*AdoptionTeamDetail {
+	output := make([]*AdoptionTeamDetail, 0, 0)
+	if len(a.TeamDetails) == 0 {
 		return output
 	}
 
-	for _, item := range a.Teams {
-		if item.HasTeamAdoptedAdoptable(adoptable) {
+	for _, item := range a.TeamDetails {
+		if item.Team.HasTeamAdoptedAdoptable(adoptable) {
+			item.Level = a.calculateOverPeopleForTeamAndAdoptable(item.Team, adoptable)
 			output = append(output, item)
 		}
 	}
 	return output
 }
 
+func (a *Adoption) calculateOverPeopleForTeamAndAdoptable(team *Team, adoptable *Adoptable) int {
+	adoption := CreateAdoption()
+	for _, item := range team.People {
+		completePerson := funk.Find(a.People, func(p *Person) bool { return p.ID == item.ID })
+		adoption.IncludePerson(completePerson.(*Person))
+	}
+
+	return adoption.CalculateOverPeopleForAdoptable(adoptable)
+}
+
 // FilterTeamAbsenteesForAdoptable ...
-func (a *Adoption) FilterTeamAbsenteesForAdoptable(adoptable *Adoptable) []*Team {
-	output := make([]*Team, 0, 0)
-	if len(a.Teams) == 0 {
+func (a *Adoption) FilterTeamAbsenteesForAdoptable(adoptable *Adoptable) []*AdoptionTeamDetail {
+	output := make([]*AdoptionTeamDetail, 0, 0)
+	if len(a.TeamDetails) == 0 {
 		return output
 	}
 
-	for _, item := range a.Teams {
-		if !item.HasTeamAdoptedAdoptable(adoptable) {
+	for _, item := range a.TeamDetails {
+		if !item.Team.HasTeamAdoptedAdoptable(adoptable) {
 			output = append(output, item)
 		}
 	}

@@ -46,7 +46,7 @@ var _ = Describe("adoption", func() {
 		expectedAdoptableName := "Adoptable 2"
 		expectedAdoptable := entities.CreateAdoptableWithName(expectedAdoptableName)
 
-		actual := adoption.CalculateForAdoptable(expectedAdoptable)
+		actual := adoption.CalculateOverPeopleForAdoptable(expectedAdoptable)
 
 		Expect(0).To(Equal(actual))
 	})
@@ -66,7 +66,7 @@ var _ = Describe("adoption", func() {
 
 		expectedAdoptable := adoptable1
 
-		actual := adoption.CalculateForAdoptable(expectedAdoptable)
+		actual := adoption.CalculateOverPeopleForAdoptable(expectedAdoptable)
 
 		Expect(25).To(Equal(actual))
 	})

@@ -68,6 +68,7 @@ func featureContext(s *godog.Suite) {
 	s.Step(`^the list of the labels should contains to (\w+)=(\w+)$`, world.TheListOfTheLabelsShouldContainsTo)
 	s.Step(`^we ask for the list of managed adoptables filter by label (\w+) equals (\w+)$`, world.WeAskForTheListOfManagedAdoptablesFilterByLabelTeamEquals)
 	s.Step(`^the list of the adoptable should contains to (\w+)$`, world.TheListOfTheAdoptableShouldContainsTo)
+	s.Step(`^the team adoption level for the team (\w+) of the adoptable (\w+) should be (\d+) percent$`, world.TheTeamAdoptionLevelForTheTeamOfTheAdoptableShouldBePercent)
 
 	var app *drivers.App
 	s.BeforeScenario(func(interface{}) {

@@ -15,4 +15,5 @@ require (
 	github.com/rs/cors v1.7.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v0.0.5
+	github.com/thoas/go-funk v0.5.0
 )

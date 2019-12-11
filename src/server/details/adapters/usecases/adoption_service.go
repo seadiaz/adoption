@@ -56,10 +56,10 @@ func (s *AdoptoinServiceExpert) CalculateAdoptionForAdoptable(id string) (map[st
 		adoption.IncludeTeam(item)
 	}
 	output := make(map[string]interface{})
-	output["adoption"] = adoption.CalculateForAdoptable(adoptable)
-	output["adopters"] = adoption.FilterAdoptersForAdoptable(adoptable)
-	output["absentees"] = adoption.FilterAbsenteesForAdoptable(adoptable)
-	output["team_adoption"] = adoption.CalculateTeamForAdoptable(adoptable)
+	output["adoption"] = adoption.CalculateOverPeopleForAdoptable(adoptable)
+	output["adopters"] = adoption.FilterPeopleAdoptersForAdoptable(adoptable)
+	output["absentees"] = adoption.FilterPeopleAbsenteesForAdoptable(adoptable)
+	output["team_adoption"] = adoption.CalculateOverTeamForAdoptable(adoptable)
 	output["team_adopters"] = adoption.FilterTeamAdoptersForAdoptable(adoptable)
 	output["team_absentees"] = adoption.FilterTeamAbsenteesForAdoptable(adoptable)
 

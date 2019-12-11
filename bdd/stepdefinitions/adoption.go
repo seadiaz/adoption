@@ -114,3 +114,33 @@ func (w *World) TheListOfTeamAbsenteesOfTheAdoptableShouldContainTo(adoptableNam
 
 	return fmt.Errorf("team %s not found", teamName)
 }
+
+// TheTeamAdoptionLevelForTheTeamOfTheAdoptableShouldBePercent ...
+func (w *World) TheTeamAdoptionLevelForTheTeamOfTheAdoptableShouldBePercent(teamName, adoptableName string, percent float64) error {
+	adoption := w.Adoptions[adoptableName].(map[string]interface{})
+	adopters := adoption["team_adopters"].([]interface{})
+	absentees := adoption["team_absentees"].([]interface{})
+	var actual float64 = -1
+	for _, item := range adopters {
+		if item.(map[string]interface{})["name"] == teamName {
+			actual = item.(map[string]interface{})["level"].(float64)
+			break
+		}
+	}
+	for _, item := range absentees {
+		if item.(map[string]interface{})["name"] == teamName {
+			actual = item.(map[string]interface{})["level"].(float64)
+			break
+		}
+	}
+
+	if actual == -1 {
+		return fmt.Errorf("team %s not found", teamName)
+	}
+
+	if actual == percent {
+		return nil
+	}
+
+	return fmt.Errorf("expected percent %f is different than %f", percent, actual)
+}
