@@ -92,3 +92,21 @@ func (p *RedisPersistence) Find(kind string, id string, proto adapters.Persisted
 	entity.UnmarshalBinary([]byte(res))
 	return entity, nil
 }
+
+// RedisTransaction ...
+type RedisTransaction struct{}
+
+// BeginTransaction ...
+func (p *RedisPersistence) BeginTransaction() adapters.Transaction {
+	return &RedisTransaction{}
+}
+
+// Commit ...
+func (t *RedisTransaction) Commit() error {
+	return nil
+}
+
+// Rollback ...
+func (t *RedisTransaction) Rollback() error {
+	return nil
+}

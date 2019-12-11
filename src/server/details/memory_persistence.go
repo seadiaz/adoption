@@ -72,3 +72,21 @@ func (p *MemoryPersistence) Find(kind string, id string, proto adapters.Persiste
 	entity.UnmarshalBinary([]byte(res.(string)))
 	return entity, nil
 }
+
+// MemoryTransaction ...
+type MemoryTransaction struct{}
+
+// BeginTransaction ...
+func (p *MemoryPersistence) BeginTransaction() adapters.Transaction {
+	return &MemoryTransaction{}
+}
+
+// Commit ...
+func (t *MemoryTransaction) Commit() error {
+	return nil
+}
+
+// Rollback ...
+func (t *MemoryTransaction) Rollback() error {
+	return nil
+}
