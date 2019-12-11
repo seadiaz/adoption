@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
 	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
 )
@@ -98,7 +97,6 @@ func (c *AdoptableController) calculateAdoptionForAdoptable(w http.ResponseWrite
 		http.Error(w, err.Error(), http.StatusConflict)
 		return
 	}
-	glog.Error(res["team_absentees"])
 	output := CreateAdoptionResponseFromMap(res)
 	replyJSONResponse(w, output)
 }
