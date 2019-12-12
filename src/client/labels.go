@@ -1,8 +1,6 @@
 package client
 
-import (
-	"fmt"
-)
+import "github.com/golang/glog"
 
 var labelsPath = "/labels"
 
@@ -47,20 +45,17 @@ func fulfillLabelAdoptableFromAdoptableName(labels []*label, Adoptables []*Adopt
 }
 
 func (c *client) postLabels(labels []*label) {
-	channel := make(chan string)
 	for _, item := range labels {
-		go c.postLabel(item, channel)
+		c.postLabel(item)
 	}
-
-	receiveResponses(channel, len(labels))
 }
 
-func (c *client) postLabel(label *label, channel chan string) {
+func (c *client) postLabel(label *label) {
 	body := label
 	err := doPostRequest(body, c.url+adoptablesPath+"/"+label.Adoptable.ID+labelsPath, c.apiKey)
 	if err != nil {
-		channel <- fmt.Sprintf("fail adding label %s=%s to %s: %s", label.Kind, label.Value, label.Adoptable.Name, err.Error())
+		glog.Errorf("fail adding label %s=%s to %s: %s", label.Kind, label.Value, label.Adoptable.Name, err.Error())
 	} else {
-		channel <- fmt.Sprintf("%s=%s added to %s", label.Kind, label.Value, label.Adoptable.Name)
+		glog.Infof("%s=%s added to %s", label.Kind, label.Value, label.Adoptable.Name)
 	}
 }

@@ -1,5 +1,7 @@
 package client
 
+import "github.com/golang/glog"
+
 // Adoption ...
 type Adoption struct {
 	PersonEmail   string
@@ -44,15 +46,16 @@ func fulfillAdoptionAdoptableIDFromAdoptables(adoptions []*Adoption, adoptables 
 }
 
 func (c *client) postAdoptions(adoptions []*Adoption) {
-	channel := make(chan string)
 	for _, item := range adoptions {
-		go c.postAdoption(item, channel)
+		c.postAdoption(item)
 	}
-
-	receiveResponses(channel, len(adoptions))
 }
 
-func (c *client) postAdoption(adoption *Adoption, channel chan string) {
-	doPostRequest(adoption.Adoptable, c.url+peoplePath+"/"+adoption.Person.ID+adoptablesPath, c.apiKey)
-	channel <- adoption.PersonEmail + " " + adoption.AdoptableName
+func (c *client) postAdoption(adoption *Adoption) {
+	err := doPostRequest(adoption.Adoptable, c.url+peoplePath+"/"+adoption.Person.ID+adoptablesPath, c.apiKey)
+	if err != nil {
+		glog.Errorf("fail adding adoption %s by %s: %s", adoption.AdoptableName, adoption.PersonEmail, err.Error())
+	} else {
+		glog.Infof("adoptable %s adopted by %s", adoption.AdoptableName, adoption.PersonEmail)
+	}
 }

@@ -1,8 +1,6 @@
 package client
 
-import (
-	"fmt"
-)
+import "github.com/golang/glog"
 
 // Membership ...
 type Membership struct {
@@ -48,20 +46,17 @@ func fulfillMembershipTeamFromTeamName(Memberships []*Membership, teams []*Team,
 }
 
 func (c *client) postMemberships(memberships []*Membership) {
-	channel := make(chan string)
 	for _, item := range memberships {
-		go c.postMembership(item, channel)
+		go c.postMembership(item)
 	}
-
-	receiveResponses(channel, len(memberships))
 }
 
-func (c *client) postMembership(membership *Membership, channel chan string) {
+func (c *client) postMembership(membership *Membership) {
 	body := &Person{ID: membership.Person.ID}
 	err := doPostRequest(body, c.url+teamsPath+"/"+membership.Team.ID+peoplePath, c.apiKey)
 	if err != nil {
-		channel <- fmt.Sprintf("fail adding %s to %s: %s", membership.PersonEmail, membership.TeamName, err.Error())
+		glog.Errorf("fail adding %s to %s: %s", membership.PersonEmail, membership.TeamName, err.Error())
 	} else {
-		channel <- fmt.Sprintf("%s added to %s", membership.PersonEmail, membership.TeamName)
+		glog.Infof("%s added to %s", membership.PersonEmail, membership.TeamName)
 	}
 }
