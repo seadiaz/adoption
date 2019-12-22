@@ -6,13 +6,15 @@ import (
 
 // AdoptionResponse ...
 type AdoptionResponse struct {
-	Adoption      int               `json:"adoption"`
-	Level         int               `json:"level"`
-	Adopters      []*PersonResponse `json:"adopters"`
-	Absentees     []*PersonResponse `json:"absentees"`
-	TeamAdoption  int               `json:"team_adoption"`
-	TeamAdopters  []*AdoptionDetail `json:"team_adopters"`
-	TeamAbsentees []*AdoptionDetail `json:"team_absentees"`
+	Adoptable        *AdoptableResponse `json:"adoptable"`
+	Adoption         int                `json:"adoption"`
+	Level            int                `json:"level"`
+	Adopters         []*PersonResponse  `json:"adopters"`
+	Absentees        []*PersonResponse  `json:"absentees"`
+	TeamAdoption     int                `json:"team_adoption"`
+	TeamOverallLevel int                `json:"team_overall_level"`
+	TeamAdopters     []*AdoptionDetail  `json:"team_adopters"`
+	TeamAbsentees    []*AdoptionDetail  `json:"team_absentees"`
 }
 
 // AdoptionDetail ...
@@ -101,13 +103,15 @@ func CreateAdoptableResponseFromAdoptable(adoptable *entities.Adoptable) *Adopta
 // CreateAdoptionResponseFromMap ...
 func CreateAdoptionResponseFromMap(adoption map[string]interface{}) *AdoptionResponse {
 	return &AdoptionResponse{
-		Adoption:      adoption["adoption"].(int),
-		Level:         adoption["adoption"].(int),
-		Adopters:      CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
-		Absentees:     CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
-		TeamAdoption:  adoption["team_adoption"].(int),
-		TeamAdopters:  CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_adopters"].([]*entities.AdoptionTeamDetail)),
-		TeamAbsentees: CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_absentees"].([]*entities.AdoptionTeamDetail)),
+		Adoptable:        CreateAdoptableResponseFromAdoptable(adoption["adoptable"].(*entities.Adoptable)),
+		Adoption:         adoption["level"].(int),
+		Level:            adoption["level"].(int),
+		Adopters:         CreatePersonResponseListFromPersonList(adoption["adopters"].([]*entities.Person)),
+		Absentees:        CreatePersonResponseListFromPersonList(adoption["absentees"].([]*entities.Person)),
+		TeamAdoption:     adoption["team_overall_level"].(int),
+		TeamOverallLevel: adoption["team_overall_level"].(int),
+		TeamAdopters:     CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_adopters"].([]*entities.AdoptionTeamDetail)),
+		TeamAbsentees:    CreateAdoptionDetailResponseListFromAdoptionTeamDetailList(adoption["team_absentees"].([]*entities.AdoptionTeamDetail)),
 	}
 }
 
