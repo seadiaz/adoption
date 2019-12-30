@@ -14,3 +14,9 @@ is been used by different people.
 ```sh
 go build src/adoption.go
 ```
+
+## Run the server
+
+```sh
+./adoption server
+```

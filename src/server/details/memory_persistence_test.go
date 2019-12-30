@@ -102,4 +102,18 @@ var _ = Describe("get all", func() {
 
 		Expect(results).To(Equal(expected))
 	})
+
+	It("should return only same kind", func() {
+		persistence := details.BuildMemoryPersistence()
+		id := "7879d950-e511-4798-a074-a951d9eddbb8"
+		value := &dummyPersistedData{id}
+		persistence.Create(persistenceTypeDummy, id, value)
+		persistence.Create("different-type", id, value)
+		expected := make([]interface{}, 1)
+		expected[0] = value
+
+		results, _ := persistence.GetAll(persistenceTypeDummy, value)
+
+		Expect(results).To(Equal(expected))
+	})
 })

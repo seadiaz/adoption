@@ -47,7 +47,7 @@ func fulfillMembershipTeamFromTeamName(Memberships []*Membership, teams []*Team,
 
 func (c *client) postMemberships(memberships []*Membership) {
 	for _, item := range memberships {
-		go c.postMembership(item)
+		c.postMembership(item)
 	}
 }
 

@@ -42,7 +42,7 @@ var _ = Describe("adoptable", func() {
 		actual := entities.CreateAdoptableWithName("Dummy Name")
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 		actual.AddLabel(label)
-		
+
 		actual.RemoveLabel(label)
 
 		Expect(actual.Labels).To(HaveLen(0))

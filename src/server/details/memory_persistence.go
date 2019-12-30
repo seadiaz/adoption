@@ -2,6 +2,7 @@ package details
 
 import (
 	"errors"
+	"strings"
 	"sync"
 
 	"github.com/seadiaz/adoption/src/server/details/adapters"
@@ -52,10 +53,12 @@ func (p *MemoryPersistence) Delete(kind string, id string) error {
 // GetAll ...
 func (p *MemoryPersistence) GetAll(kind string, proto adapters.PersistedData) ([]interface{}, error) {
 	list := make([]interface{}, 0, 0)
-	p.memory.Range(func(_, value interface{}) bool {
-		item := proto.Clone()
-		item.UnmarshalBinary([]byte(value.(string)))
-		list = append(list, item)
+	p.memory.Range(func(key, value interface{}) bool {
+		if strings.Contains(key.(string), kind) {
+			item := proto.Clone()
+			item.UnmarshalBinary([]byte(value.(string)))
+			list = append(list, item)
+		}
 		return true
 	})
 
