@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases"
+	"github.com/seadiaz/adoption/server/details/adapters/usecases"
 )
 
 var (

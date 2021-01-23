@@ -1,14 +1,14 @@
 package adapters_test
 
 import (
-	"testing"
 	"net/http"
+	"testing"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/seadiaz/adoption/src/server/details/adapters"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
+	"github.com/seadiaz/adoption/server/details/adapters"
+	"github.com/seadiaz/adoption/server/details/adapters/usecases/entities"
 )
 
 func TestAllAdoptableController(t *testing.T) {
@@ -17,7 +17,6 @@ func TestAllAdoptableController(t *testing.T) {
 }
 
 type fakeAdoptableService struct {
-
 }
 
 // GetAllAdoptables ...
@@ -46,7 +45,6 @@ func (s *fakeAdoptableService) AddLabelToAdoptable(labelKind string, labelValue 
 }
 
 type fakeAdoptionService struct {
-
 }
 
 // CalculateAdoptionForAdoptable ...
@@ -55,7 +53,6 @@ func (s *fakeAdoptionService) CalculateAdoptionForAdoptable(id string) (map[stri
 }
 
 type fakeRouter struct {
-
 }
 
 func (r *fakeRouter) HandleFunc(path string, f func(http.ResponseWriter, *http.Request)) adapters.Route {
@@ -63,7 +60,6 @@ func (r *fakeRouter) HandleFunc(path string, f func(http.ResponseWriter, *http.R
 }
 
 type fakeRoute struct {
-
 }
 
 func (r *fakeRoute) Methods(methods ...string) adapters.Route {

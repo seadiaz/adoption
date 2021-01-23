@@ -2,8 +2,9 @@ package usecases
 
 import (
 	"fmt"
+
 	"github.com/golang/glog"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
+	"github.com/seadiaz/adoption/server/details/adapters/usecases/entities"
 )
 
 type personRepository interface {

@@ -3,7 +3,7 @@ package entities_test
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
+	"github.com/seadiaz/adoption/server/details/adapters/usecases/entities"
 )
 
 var _ = Describe("team", func() {

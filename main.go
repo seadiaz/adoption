@@ -5,8 +5,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/seadiaz/adoption/src/client"
-	"github.com/seadiaz/adoption/src/server"
+	"github.com/seadiaz/adoption/client"
+	"github.com/seadiaz/adoption/server"
 	"github.com/spf13/cobra"
 )
 

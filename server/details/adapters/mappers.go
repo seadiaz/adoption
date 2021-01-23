@@ -1,7 +1,7 @@
 package adapters
 
 import (
-	"github.com/seadiaz/adoption/src/server/details/adapters/usecases/entities"
+	"github.com/seadiaz/adoption/server/details/adapters/usecases/entities"
 )
 
 // AdoptionResponse ...

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/seadiaz/adoption/src/server/details/adapters"
+	"github.com/seadiaz/adoption/server/details/adapters"
 )
 
 // MemoryPersistence is a memory implementantion of persistence

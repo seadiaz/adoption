@@ -6,8 +6,8 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/seadiaz/adoption/src/server/details"
-	"github.com/seadiaz/adoption/src/server/details/adapters"
+	"github.com/seadiaz/adoption/server/details"
+	"github.com/seadiaz/adoption/server/details/adapters"
 )
 
 const persistenceTypeDummy = "people"

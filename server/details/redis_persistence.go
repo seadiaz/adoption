@@ -1,10 +1,11 @@
 package details
 
 import (
+	"strconv"
+
 	"github.com/go-redis/redis/v7"
 	"github.com/golang/glog"
-	"github.com/seadiaz/adoption/src/server/details/adapters"
-	"strconv"
+	"github.com/seadiaz/adoption/server/details/adapters"
 )
 
 // RedisPersistence is a redis implementantion of persistence
