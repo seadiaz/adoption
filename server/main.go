@@ -31,6 +31,9 @@ func Boot(params *Params) {
 	if params.Storage == "redis" {
 		glog.Info("using redis for storage")
 		persistence = details.BuildRedisPersistence(params.RedisHost, params.RedisPort)
+	} else if params.Storage == "badger" {
+		glog.Info("using badger for storage")
+		persistence = details.BuildBadgerPersistence()
 	}
 
 	adoptableRepository := adapters.CreateAdoptableRepository(persistence)
