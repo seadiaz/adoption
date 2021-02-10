@@ -5,7 +5,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/seadiaz/adoption/client"
+	"github.com/seadiaz/adoption/client/display"
+	"github.com/seadiaz/adoption/client/load"
 	"github.com/seadiaz/adoption/server"
 	"github.com/spf13/cobra"
 )
@@ -36,7 +37,15 @@ var (
 		Short: "load csv data into adoption server",
 		Long:  "load csv data into adoption server",
 		Args:  cobra.ExactArgs(1),
-		Run:   doLoadData,
+		Run:   dispatchLoadCommand,
+	}
+
+	displayCmd = &cobra.Command{
+		Use:   "display <kind>",
+		Short: "display the information stored in the server",
+		Long:  "display the information stored in the server",
+		Args:  cobra.ExactArgs(1),
+		Run:   dispatchDisplayCommand,
 	}
 
 	serverCmd = &cobra.Command{
@@ -52,14 +61,31 @@ func mainCLI() {
 	rootCmd.Execute()
 }
 
-func doLoadData(cmd *cobra.Command, args []string) {
-	params := &client.Params{
+func dispatchLoadCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := load.CreateCommandHandler(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &load.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
-		URL:      cmd.Flag("url").Value.String(),
-		APIKey:   cmd.Flag("api-key").Value.String(),
 		Kind:     args[0],
 	}
-	client.LoadData(params)
+
+	commandDispatcher.Execute(params)
+}
+
+func dispatchDisplayCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := display.CreateCommandHandler(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &display.CommandHandlerParams{
+		Kind: args[0],
+	}
+
+	commandDispatcher.Execute(params)
 }
 
 func doBootServer(cmd *cobra.Command, args []string) {
@@ -79,11 +105,15 @@ func init() {
 	loadCmd.Flags().StringP("file", "f", "", "Load data from `FILE` (required)")
 	loadCmd.MarkFlagRequired("file")
 
+	displayCmd.Flags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
+	displayCmd.Flags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
+
 	serverCmd.Flags().IntP("port", "p", 3000, "port the server will bind")
 	serverCmd.Flags().StringP("storage", "s", "memory", "storage type where data going to be persisted")
 	serverCmd.Flags().Int("redis-port", 6379, "redis port for using with redis storage")
 	serverCmd.Flags().IP("redis-host", net.IPv4(127, 0, 0, 1), "redis host for using with redis storage")
 
 	rootCmd.AddCommand(loadCmd)
+	rootCmd.AddCommand(displayCmd)
 	rootCmd.AddCommand(serverCmd)
 }

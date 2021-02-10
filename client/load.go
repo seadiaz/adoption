@@ -10,8 +10,8 @@ type Person struct {
 }
 
 // LoadPeople ...
-func (c *client) LoadPeople() {
-	rawData := readCsvFile(c.filename)
+func (c *CommandDispatcher) LoadPeople(filename string) {
+	rawData := readCsvFile(filename)
 	parsedData := mapArrayToPeople(rawData)
 	c.postPeople(parsedData)
 }
@@ -27,7 +27,7 @@ func mapArrayToPeople(array [][]string) []*Person {
 	return output
 }
 
-func (c *client) postPeople(people []*Person) {
+func (c *CommandDispatcher) postPeople(people []*Person) {
 	channel := make(chan string)
 	for _, item := range people {
 		go c.postPerson(item, channel)
@@ -36,13 +36,13 @@ func (c *client) postPeople(people []*Person) {
 	receiveResponses(channel, len(people))
 }
 
-func (c *client) postPerson(person *Person, channel chan string) {
-	doPostRequest(person, c.url+peoplePath, c.apiKey)
+func (c *CommandDispatcher) postPerson(person *Person, channel chan string) {
+	c.apiClient.doPostRequest(peoplePath, person)
 	channel <- person.Name
 }
 
-func (c *client) getPeople() []*Person {
-	res, _ := doGetRequest(c.url+peoplePath, c.apiKey)
+func (c *CommandDispatcher) getPeople() []*Person {
+	res, _ := c.apiClient.doGetRequest(peoplePath)
 	output := make([]*Person, 0, 0)
 	for _, item := range res {
 		output = append(output, &Person{

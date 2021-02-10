@@ -1,14 +1,9 @@
 package client
 
 import (
+	"github.com/fatih/structs"
 	"github.com/golang/glog"
 )
-
-type client struct {
-	url      string
-	filename string
-	apiKey   string
-}
 
 // Params ...
 type Params struct {
@@ -18,31 +13,40 @@ type Params struct {
 	Kind     string
 }
 
-func createClient(url string, filename string, apiKey string) *client {
-	return &client{
-		url:      url,
-		filename: filename,
-		apiKey:   apiKey,
+type command interface {
+	Notify(map[string]interface{}) error
+}
+
+// CommandDispatcher ...
+type CommandDispatcher struct {
+	commands  []command
+	apiClient *apiClient
+}
+
+// BuildCommandDispatcher ...
+func BuildCommandDispatcher(url, key string) *CommandDispatcher {
+	c := &CommandDispatcher{
+		commands:  make([]command, 0),
+		apiClient: createAPIClient(url, key),
+	}
+
+	return c
+}
+
+// Execute ...
+func (c *CommandDispatcher) Execute(cmdName string, params *Params) {
+	glog.Info("execute called")
+	paramsMap := structs.Map(params)
+	paramsMap["Command"] = cmdName
+	for _, item := range c.commands {
+		item.Notify(paramsMap)
 	}
 }
 
-// LoadData ...
-func LoadData(params *Params) {
-	client := createClient(params.URL, params.Filename, params.APIKey)
-	switch params.Kind {
-	case "adoptables":
-		client.LoadAdoptables()
-	case "people":
-		client.LoadPeople()
-	case "adoptions":
-		client.LoadAdoptions()
-	case "teams":
-		client.LoadTeams()
-	case "memberships":
-		client.LoadMemberships()
-	case "labels":
-		client.LoadLabels()
-	default:
-		glog.Fatalf("kind %s not supported", params.Kind)
-	}
-}
+// func createClient(url string, filename string, apiKey string) *client {
+// 	return &client{
+// 		url:      url,
+// 		filename: filename,
+// 		apiKey:   apiKey,
+// 	}
+// }
