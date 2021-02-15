@@ -14,34 +14,16 @@ type Person struct {
 	Email string `json:"email" csv:"Email" mapstructure:"email"`
 }
 
-// CommandHandler ...
-type CommandHandler struct {
-	baseURL string
-	apiKey  string
-}
-
-// CommandHandlerParams ...
-type CommandHandlerParams struct {
-	Action   global.ActionType
-	Filename string
-}
-
-// CreateCommandHandler ...
-func CreateCommandHandler(baseURL, apiKey string) *CommandHandler {
-	return &CommandHandler{
-		baseURL,
-		apiKey,
-	}
-}
-
 // Execute ...
-func (c *CommandHandler) Execute(params *CommandHandlerParams) error {
-	glog.Infof("display command handler dispatched")
+func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) error {
+	if params.Kind != global.People {
+		return nil
+	}
 	switch params.Action {
 	case global.Display:
-		c.display()
+		display(c)
 	case global.Load:
-		c.load(params.Filename)
+		load(c, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

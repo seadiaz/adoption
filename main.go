@@ -7,6 +7,7 @@ import (
 
 	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/people"
+	"github.com/seadiaz/adoption/client/teams"
 	"github.com/seadiaz/adoption/server"
 	"github.com/spf13/cobra"
 )
@@ -62,13 +63,14 @@ func mainCLI() {
 }
 
 func dispatchLoadCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := people.CreateCommandHandler(
+	commandDispatcher := createCommandDispatcher(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
 	)
 	cmd.Flags()
-	params := &people.CommandHandlerParams{
+	params := &global.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
+		Kind:     global.KindType(args[0]),
 		Action:   global.Load,
 	}
 
@@ -76,16 +78,28 @@ func dispatchLoadCommand(cmd *cobra.Command, args []string) {
 }
 
 func dispatchDisplayCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := people.CreateCommandHandler(
+	commandDispatcher := createCommandDispatcher(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
 	)
 	cmd.Flags()
-	params := &people.CommandHandlerParams{
+	params := &global.CommandHandlerParams{
+		Kind:   global.KindType(args[0]),
 		Action: global.Display,
 	}
 
 	commandDispatcher.Execute(params)
+}
+
+func createCommandDispatcher(url, apiKey string) *global.CommandHandler {
+	output := global.CreateCommandHandler(
+		url,
+		apiKey,
+	)
+	output.AddExecutor(people.Execute)
+	output.AddExecutor(teams.Execute)
+
+	return output
 }
 
 func doBootServer(cmd *cobra.Command, args []string) {

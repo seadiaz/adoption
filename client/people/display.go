@@ -4,13 +4,14 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
+	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/utils"
 
 	tm "github.com/buger/goterm"
 )
 
-func (c *CommandHandler) display() {
-	people := getPerson(c.baseURL+peoplePath, c.apiKey)
+func display(c *global.CommandHandler) {
+	people := getPerson(c.BaseURL+peoplePath, c.APIKey)
 	print(people)
 }
 
