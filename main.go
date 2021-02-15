@@ -5,8 +5,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/seadiaz/adoption/client/display"
-	"github.com/seadiaz/adoption/client/load"
+	"github.com/seadiaz/adoption/client/global"
+	"github.com/seadiaz/adoption/client/people"
 	"github.com/seadiaz/adoption/server"
 	"github.com/spf13/cobra"
 )
@@ -62,27 +62,27 @@ func mainCLI() {
 }
 
 func dispatchLoadCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := load.CreateCommandHandler(
+	commandDispatcher := people.CreateCommandHandler(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
 	)
 	cmd.Flags()
-	params := &load.CommandHandlerParams{
+	params := &people.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
-		Kind:     args[0],
+		Action:   global.Load,
 	}
 
 	commandDispatcher.Execute(params)
 }
 
 func dispatchDisplayCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := display.CreateCommandHandler(
+	commandDispatcher := people.CreateCommandHandler(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
 	)
 	cmd.Flags()
-	params := &display.CommandHandlerParams{
-		Kind: args[0],
+	params := &people.CommandHandlerParams{
+		Action: global.Display,
 	}
 
 	commandDispatcher.Execute(params)

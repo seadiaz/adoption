@@ -28,14 +28,14 @@ func printBodyMessage(body io.Reader) {
 	glog.Warning(output)
 }
 
-func (c *apiClient) doPostRequest(path string, body interface{}) error {
+// DoPostRequest ...
+func DoPostRequest(url, apiKey string, body interface{}) error {
 	reqBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(reqBodyBytes).Encode(body)
-	url := c.baseURL + path
 	req, _ := http.NewRequest(http.MethodPost, url, reqBodyBytes)
 	req.Header.Add("Content-Type", "application/json")
-	if c.apiKey != "" {
-		req.Header.Add("Authorization", c.apiKey)
+	if apiKey != "" {
+		req.Header.Add("Authorization", apiKey)
 	}
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -53,12 +53,12 @@ func (c *apiClient) doPostRequest(path string, body interface{}) error {
 	return nil
 }
 
-func (c *apiClient) doGetRequest(path string) ([]map[string]interface{}, error) {
-	url := c.baseURL + path
+// DoGetRequest ...
+func DoGetRequest(url, apiKey string) ([]map[string]interface{}, error) {
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header.Add("Content-Type", "application/json")
-	if c.apiKey != "" {
-		req.Header.Add("Authorization", c.apiKey)
+	if apiKey != "" {
+		req.Header.Add("Authorization", apiKey)
 	}
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {

@@ -4,6 +4,8 @@ import "github.com/golang/glog"
 
 // CommandHandler ...
 type CommandHandler struct {
+	baseURL string
+	apiKey  string
 }
 
 // CommandHandlerParams ...
@@ -13,19 +15,22 @@ type CommandHandlerParams struct {
 }
 
 // CreateCommandHandler ...
-func CreateCommandHandler(baseUrl, apiKey string) *CommandHandler {
-	return &CommandHandler{}
+func CreateCommandHandler(baseURL, apiKey string) *CommandHandler {
+	return &CommandHandler{
+		baseURL,
+		apiKey,
+	}
 }
 
 // Execute ...
-func (*CommandHandler) Execute(params *CommandHandlerParams) error {
+func (c *CommandHandler) Execute(params *CommandHandlerParams) error {
 	glog.Infof("display command handler dispatched")
 	// 	client := createClient(params.URL, params.Filename, params.APIKey)
 	switch params.Kind {
 	// 	case "adoptables":
 	// 		client.LoadAdoptables()
 	case "people":
-		client.LoadPeople()
+		c.loadPeople(params.Filename)
 	// 	case "adoptions":
 	// 		client.LoadAdoptions()
 	// 	case "teams":

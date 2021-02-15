@@ -1,33 +1,16 @@
 package utils
 
 import (
-	"encoding/csv"
-	"io"
-	"os"
+	"fmt"
+	"io/ioutil"
 
-	"github.com/golang/glog"
+	"github.com/jszwec/csvutil"
 )
 
 // ReadCsvFile ...
-func ReadCsvFile(fileName string) [][]string {
-	csvfile, err := os.Open(fileName)
-	if err != nil {
-		glog.Fatalln("couldn't open the csv file", err)
+func ReadCsvFile(filename string, output interface{}) {
+	content, _ := ioutil.ReadFile(filename)
+	if err := csvutil.Unmarshal(content, output); err != nil {
+		fmt.Println("error:", err)
 	}
-
-	r := csv.NewReader(csvfile)
-
-	output := make([][]string, 0, 0)
-	for {
-		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			glog.Fatal(err)
-		}
-		output = append(output, record)
-	}
-
-	return output
 }
