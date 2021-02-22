@@ -1,29 +1,30 @@
-package teams
+package memberships
 
 import (
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/client/global"
+	"github.com/seadiaz/adoption/client/people"
+	"github.com/seadiaz/adoption/client/teams"
 )
 
-// Path ..
-const Path = "/teams"
-
-// Team ...
-type Team struct {
-	ID   string `json:"id,omitempty" mapstructure:"id"`
-	Name string `json:"name" csv:"Name" mapstructure:"name"`
+// Membership ...
+type Membership struct {
+	PersonEmail string
+	TeamName    string
+	Team        *teams.Team
+	Person      *people.Person
 }
 
 // Execute ...
 func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) error {
-	if params.Kind != global.Teams {
+	if params.Kind != global.Memberships {
 		return nil
 	}
 	switch params.Action {
 	case global.Display:
 		display(c)
-	case global.Load:
-		load(c, params.Filename)
+	// case global.Load:
+	// 	load(c, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

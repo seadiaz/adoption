@@ -5,7 +5,8 @@ import (
 	"github.com/seadiaz/adoption/client/global"
 )
 
-const peoplePath = "/people"
+// Path ...
+const Path = "/people"
 
 // Person ...
 type Person struct {

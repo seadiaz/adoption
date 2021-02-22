@@ -10,7 +10,7 @@ func load(c *global.CommandHandler, filename string) {
 	utils.ReadCsvFile(filename, &people)
 	channel := make(chan string)
 	for _, item := range people {
-		go postPerson(c.BaseURL+peoplePath, c.APIKey, item, channel)
+		go postPerson(c.BaseURL+Path, c.APIKey, item, channel)
 	}
 
 	utils.ReceiveResponses(channel, len(people))

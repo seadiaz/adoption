@@ -3,27 +3,14 @@ package people
 import (
 	"fmt"
 
-	"github.com/mitchellh/mapstructure"
 	"github.com/seadiaz/adoption/client/global"
-	"github.com/seadiaz/adoption/client/utils"
 
 	tm "github.com/buger/goterm"
 )
 
 func display(c *global.CommandHandler) {
-	people := getPerson(c.BaseURL+peoplePath, c.APIKey)
+	people := GetPeople(c.BaseURL+Path, c.APIKey)
 	print(people)
-}
-
-func getPerson(url, apiKey string) []*Person {
-	res, _ := utils.DoGetRequest(url, apiKey)
-	output := make([]*Person, 0, 0)
-	for _, item := range res {
-		var person Person
-		mapstructure.Decode(item, &person)
-		output = append(output, &person)
-	}
-	return output
 }
 
 func print(people []*Person) {

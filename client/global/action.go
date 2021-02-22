@@ -18,6 +18,9 @@ const (
 
 	// Teams ...
 	Teams KindType = "teams"
+
+	// Memberships ...
+	Memberships KindType = "memberships"
 )
 
 // CommandHandler ...
