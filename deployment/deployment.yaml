@@ -17,28 +17,28 @@ spec:
         app: adoption-api
     spec:
       containers:
-        - name: adoption-api
-          image: seadiaz/adoption:build-78
-          args:
-            - "server"
-            - "-s"
-            - "badger"
-            - "--badger-path"
-            - "/badger/data"
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-          ports:
-            - containerPort: 3000
-          volumeMounts:
-            - name: badger
-              mountPath: /badger/data
-  volumeClaimTemplates:
-    - metadata:
-        name: badger
-      spec:
-        accessModes: ['ReadWriteOnce']
+      - name: adoption-api
+        image: seadiaz/adoption:build-80
+        args:
+        - "server"
+        - "-s"
+        - "badger"
+        - "--badger-path"
+        - "/badger/data"
         resources:
-          requests:
-            storage: 1Gi
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: badger
+          mountPath: /badger/data
+  volumeClaimTemplates:
+  - metadata:
+      name: badger
+    spec:
+      accessModes: ['ReadWriteOnce']
+      resources:
+        requests:
+          storage: 1Gi
