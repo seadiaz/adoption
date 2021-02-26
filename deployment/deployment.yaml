@@ -34,11 +34,6 @@ spec:
         volumeMounts:
         - name: badger
           mountPath: /badger/data
-  volumeClaimTemplates:
-  - metadata:
-      name: badger
-    spec:
-      accessModes: ['ReadWriteOnce']
-      resources:
-        requests:
-          storage: 1Gi
+      volumes:
+        - name: badger
+          emptyDir: {}
