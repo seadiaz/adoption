@@ -20,8 +20,9 @@ spec:
       - name: adoption-api
         image: seadiaz/adoption:build-78
         args:
-        - "-s"
-        - "badger"
+          - "server"
+          - "-s"
+          - "badger"
         resources:
           limits:
             memory: "128Mi"
