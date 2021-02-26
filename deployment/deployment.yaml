@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: adoption-api
   namespace: adoption
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.adoption-api: glob:build-*
 spec:
   selector:
     matchLabels:
