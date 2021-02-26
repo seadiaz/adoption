@@ -19,6 +19,9 @@ spec:
       containers:
       - name: adoption-api
         image: seadiaz/adoption:build-76
+        command:
+          - "-s"
+          - "badger"
         resources:
           limits:
             memory: "128Mi"
