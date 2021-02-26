@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adoption-api
+  namespace: adoption
+spec:
+  selector:
+    matchLabels:
+      app: adoption-api
+  template:
+    metadata:
+      labels:
+        app: adoption-api
+    spec:
+      containers:
+      - name: adoption-api
+        image: seadiaz/adoption:b-63
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
