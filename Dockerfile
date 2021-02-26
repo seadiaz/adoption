@@ -5,6 +5,5 @@ FROM scratch
 COPY /adoption /adoption
 COPY --from=0 /etc/passwd /etc/passwd
 USER 1000
-ENV PORT 3000
 ENTRYPOINT [ "/adoption" ]
-CMD ["server", "--port", "${PORT}"]
+CMD ["server"]
