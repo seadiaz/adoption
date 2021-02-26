@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: adoption-api
-        image: seadiaz/adoption:b-63
+        image: seadiaz/adoption:build-67
         resources:
           limits:
             memory: "128Mi"

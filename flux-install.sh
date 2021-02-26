@@ -9,9 +9,9 @@ kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/d
 kubectl create namespace flux
 
 helm upgrade -i flux fluxcd/flux \
-  --set git.url=git@github.com/seadiaz/adoption \
   --namespace flux \
   --set helm.versions=v3 \
-  --set git.path=/deployment \
-  --set git.readonly=false
+  --set git.path=deployment \
+  --set git.url=ssh://git@github.com/seadiaz/adoption
   
+kubectl -n flux logs deployment/flux | grep identity.pub | cut -d '"' -f2
