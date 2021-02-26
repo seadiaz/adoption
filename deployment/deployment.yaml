@@ -19,7 +19,7 @@ spec:
       containers:
       - name: adoption-api
         image: seadiaz/adoption:build-76
-        command:
+        args:
           - "-s"
           - "badger"
         resources:
