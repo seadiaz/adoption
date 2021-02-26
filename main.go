@@ -105,10 +105,11 @@ func createCommandDispatcher(url, apiKey string) *global.CommandHandler {
 func doBootServer(cmd *cobra.Command, args []string) {
 	redisPort, _ := strconv.Atoi(cmd.Flag("redis-port").Value.String())
 	params := &server.Params{
-		Port:      cmd.Flag("port").Value.String(),
-		Storage:   cmd.Flag("storage").Value.String(),
-		RedisPort: redisPort,
-		RedisHost: cmd.Flag("redis-host").Value.String(),
+		Port:       cmd.Flag("port").Value.String(),
+		Storage:    cmd.Flag("storage").Value.String(),
+		RedisPort:  redisPort,
+		RedisHost:  cmd.Flag("redis-host").Value.String(),
+		BadgerPath: cmd.Flag("badger-path").Value.String(),
 	}
 	server.Boot(params)
 }
@@ -126,6 +127,7 @@ func init() {
 	serverCmd.Flags().StringP("storage", "s", "memory", "storage type where data going to be persisted")
 	serverCmd.Flags().Int("redis-port", 6379, "redis port for using with redis storage")
 	serverCmd.Flags().IP("redis-host", net.IPv4(127, 0, 0, 1), "redis host for using with redis storage")
+	serverCmd.Flags().StringP("badger-path", "", "/tmp/badger", "badger path for using with badger storage")
 
 	rootCmd.AddCommand(loadCmd)
 	rootCmd.AddCommand(displayCmd)

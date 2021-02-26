@@ -14,8 +14,8 @@ type BadgerPersistence struct {
 }
 
 // BuildBadgerPersistence ...
-func BuildBadgerPersistence() adapters.Persistence {
-	db, err := badger.Open(badger.DefaultOptions("/tmp/badger"))
+func BuildBadgerPersistence(path string) adapters.Persistence {
+	db, err := badger.Open(badger.DefaultOptions(path))
 	if err != nil {
 		glog.Fatal(err)
 	}

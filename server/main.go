@@ -13,10 +13,11 @@ import (
 
 // Params ...
 type Params struct {
-	Port      string
-	Storage   string
-	RedisPort int
-	RedisHost string
+	Port       string
+	Storage    string
+	RedisPort  int
+	RedisHost  string
+	BadgerPath string
 }
 
 // Boot ...
@@ -33,7 +34,7 @@ func Boot(params *Params) {
 		persistence = details.BuildRedisPersistence(params.RedisHost, params.RedisPort)
 	} else if params.Storage == "badger" {
 		glog.Info("using badger for storage")
-		persistence = details.BuildBadgerPersistence()
+		persistence = details.BuildBadgerPersistence(params.BadgerPath)
 	}
 
 	adoptableRepository := adapters.CreateAdoptableRepository(persistence)
