@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +18,7 @@ spec:
     spec:
       containers:
       - name: adoption-api
-        image: seadiaz/adoption:build-71
+        image: seadiaz/adoption:build-76
         resources:
           limits:
             memory: "128Mi"
