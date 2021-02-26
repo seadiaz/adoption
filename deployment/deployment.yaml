@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: adoption-api
-        image: seadiaz/adoption:build-80
+        image: seadiaz/adoption:build-81
         args:
         - "server"
         - "-s"
@@ -35,5 +35,5 @@ spec:
         - name: badger
           mountPath: /badger/data
       volumes:
-        - name: badger
-          emptyDir: {}
+      - name: badger
+        emptyDir: {}
