@@ -1,0 +1,9 @@
+repos:
+- repo: https://github.com/alan-turing-institute/CleverCSV-pre-commit
+  rev: v0.6.6
+  hooks:
+  - id: clevercsv-standardize
+- repo: git@github.com:Yelp/detect-secrets
+  rev: v0.14.3
+  hooks:
+  - id: detect-secrets

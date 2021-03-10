@@ -11,12 +11,12 @@ import (
 func load(c *global.CommandHandler, teamName, filename string) {
 	team := teams.FindTeamByName(c.BaseURL+teams.Path, c.APIKey, teamName)
 	glog.Info(team)
-	var items []people.Person
+	var items []MembershipInput
 	utils.ReadCsvFile(filename, &items)
 	channel := make(chan string)
 	for _, item := range items {
-		p := people.FindPersonByEmail(c.BaseURL+people.Path, c.APIKey, item.Email)
-		go postMembership(c.BaseURL+teams.Path+"/"+team.ID+people.Path, c.APIKey, *p, channel)
+		person := people.FindPersonByEmail(c.BaseURL+people.Path, c.APIKey, item.PersonEmail)
+		go postMembership(c.BaseURL+teams.Path+"/"+team.ID+people.Path, c.APIKey, *person, channel)
 	}
 
 	utils.ReceiveResponses(channel, len(items))

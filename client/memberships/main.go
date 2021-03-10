@@ -3,16 +3,18 @@ package memberships
 import (
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/client/global"
-	"github.com/seadiaz/adoption/client/people"
-	"github.com/seadiaz/adoption/client/teams"
 )
 
-// Membership ...
-type Membership struct {
-	PersonEmail string
-	TeamName    string
-	Team        *teams.Team
-	Person      *people.Person
+// MembershipInput ...
+type MembershipInput struct {
+	PersonEmail string `csv:"Email"`
+	TeamName    string `csv:"Team"`
+}
+
+// MembershipOutput ...
+type MembershipOutput struct {
+	TeamName   string
+	PersonName string
 }
 
 // Execute ...

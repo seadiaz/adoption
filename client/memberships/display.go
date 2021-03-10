@@ -13,14 +13,26 @@ import (
 func display(c *global.CommandHandler, teamName string) {
 	team := teams.FindTeamByName(c.BaseURL+teams.Path, c.APIKey, teamName)
 	people := teams.GetMembersByTeam(c.BaseURL+teams.Path+"/"+team.ID+people.Path, c.APIKey)
-	print(people)
+	output := prepareToDisplay(team, people)
+	print(output)
 }
 
-func print(people []*people.Person) {
+func prepareToDisplay(team *teams.Team, people []*people.Person) []*MembershipOutput {
+	output := make([]*MembershipOutput, len(people))
+	for i, v := range people {
+		output[i] = &MembershipOutput{
+			TeamName:   team.Name,
+			PersonName: v.Name,
+		}
+	}
+	return output
+}
+
+func print(items []*MembershipOutput) {
 	table := tm.NewTable(0, 10, 5, ' ', 0)
-	fmt.Fprintf(table, "ID\tName\tEmail\n")
-	for _, p := range people {
-		fmt.Fprintf(table, "%s\t%s\t%s\n", p.ID, p.Name, p.Email)
+	fmt.Fprintf(table, "Team\tPerson\n")
+	for _, v := range items {
+		fmt.Fprintf(table, "%s\t%s\n", v.TeamName, v.PersonName)
 	}
 	tm.Println(table)
 	tm.Flush()

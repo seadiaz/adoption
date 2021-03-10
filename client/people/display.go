@@ -22,13 +22,3 @@ func print(people []*Person) {
 	tm.Println(table)
 	tm.Flush()
 }
-
-// func findPersonByEmail(people []*Person, email string) *Person {
-// 	for _, item := range people {
-// 		if item.Email == email {
-// 			return item
-// 		}
-// 	}
-
-// 	return nil
-// }
