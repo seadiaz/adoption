@@ -34,6 +34,7 @@ type CommandHandler struct {
 type CommandHandlerParams struct {
 	Action   ActionType
 	Kind     KindType
+	Parent   string
 	Filename string
 }
 

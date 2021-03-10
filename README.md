@@ -9,10 +9,20 @@ and also have awareness that the work doesn't end when the
 implementation is up and running, but when the implementation
 is been used by different people.
 
+## Endpoints
+
+* GET /teams
+* POST /teams
+* GET /teams/{id}/people
+* POST /teams/{id}/people
+* GET /people
+* POST /people
+* POST /people/{id}/adoptables
+
 ## Build the Binary
 
 ```sh
-go build src/adoption.go
+go build -o adoption main.go
 ```
 
 ## Run the server

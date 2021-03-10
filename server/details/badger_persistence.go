@@ -1,8 +1,6 @@
 package details
 
 import (
-	"fmt"
-
 	badger "github.com/dgraph-io/badger/v3"
 	"github.com/golang/glog"
 	"github.com/seadiaz/adoption/server/details/adapters"
@@ -66,9 +64,7 @@ func (p *BadgerPersistence) GetAll(kind string, proto adapters.PersistedData) ([
 			item := it.Item()
 			entity := proto.Clone()
 			list = append(list, entity)
-			k := item.Key()
 			err := item.Value(func(v []byte) error {
-				fmt.Printf("key=%s, value=%s\n", k, v)
 				entity.UnmarshalBinary(v)
 				return nil
 			})
@@ -86,7 +82,7 @@ func (p *BadgerPersistence) GetAll(kind string, proto adapters.PersistedData) ([
 func (p *BadgerPersistence) Find(kind string, id string, proto adapters.PersistedData) (interface{}, error) {
 	entity := proto.Clone()
 	err := p.db.View(func(txn *badger.Txn) error {
-		item, _ := txn.Get([]byte("answer"))
+		item, _ := txn.Get([]byte(kind + "-" + id))
 		err := item.Value(func(val []byte) error {
 			entity.UnmarshalBinary(val)
 			return nil

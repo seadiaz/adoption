@@ -22,9 +22,9 @@ func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) erro
 	}
 	switch params.Action {
 	case global.Display:
-		display(c)
-	// case global.Load:
-	// 	load(c, params.Filename)
+		display(c, params.Parent)
+	case global.Load:
+		load(c, params.Parent, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

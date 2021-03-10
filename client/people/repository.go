@@ -16,3 +16,20 @@ func GetPeople(url, apiKey string) []*Person {
 	}
 	return output
 }
+
+// FindPersonByEmail ...
+func FindPersonByEmail(url, apiKey, email string) *Person {
+	items := GetPeople(url, apiKey)
+	item := filterPersonByEmail(items, email)
+	return item
+}
+
+func filterPersonByEmail(items []*Person, email string) *Person {
+	for _, v := range items {
+		if v.Email == email {
+			return v
+		}
+	}
+
+	return nil
+}

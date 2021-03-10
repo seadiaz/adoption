@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/seadiaz/adoption/client/global"
+	"github.com/seadiaz/adoption/client/memberships"
 	"github.com/seadiaz/adoption/client/people"
 	"github.com/seadiaz/adoption/client/teams"
 	"github.com/seadiaz/adoption/server"
@@ -37,16 +38,60 @@ var (
 		Use:   "load <kind>",
 		Short: "load csv data into adoption server",
 		Long:  "load csv data into adoption server",
+	}
+
+	loadPeopleCmd = &cobra.Command{
+		Use:   "people",
+		Short: "load people from a csv file",
+		Long:  "load people from a csv file",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchLoadPeopleCommand,
+	}
+
+	loadTeamsCmd = &cobra.Command{
+		Use:   "teams",
+		Short: "load teams from a csv file",
+		Long:  "load teams from a csv file",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchLoadTeamsCommand,
+	}
+
+	loadMembershipsCmd = &cobra.Command{
+		Use:   "memberships",
+		Short: "load memberships from a csv file",
+		Long:  "load memberships from a csv file",
 		Args:  cobra.ExactArgs(1),
-		Run:   dispatchLoadCommand,
+		Run:   dispatchLoadMembershipsCommand,
 	}
 
 	displayCmd = &cobra.Command{
-		Use:   "display <kind>",
+		Use:   "display",
 		Short: "display the information stored in the server",
 		Long:  "display the information stored in the server",
+	}
+
+	displayPeopleCmd = &cobra.Command{
+		Use:   "people",
+		Short: "display people information",
+		Long:  "display people information",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchDisplayPeopleCommand,
+	}
+
+	displayTeamsCmd = &cobra.Command{
+		Use:   "teams",
+		Short: "display teams information",
+		Long:  "display teams information",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchDisplayTeamsCommand,
+	}
+
+	displayMembershipsCmd = &cobra.Command{
+		Use:   "memberships <tean>",
+		Short: "display memberships information",
+		Long:  "display memberships information",
 		Args:  cobra.ExactArgs(1),
-		Run:   dispatchDisplayCommand,
+		Run:   dispatchDisplayMembershipsCommand,
 	}
 
 	serverCmd = &cobra.Command{
@@ -62,7 +107,7 @@ func mainCLI() {
 	rootCmd.Execute()
 }
 
-func dispatchLoadCommand(cmd *cobra.Command, args []string) {
+func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
 	commandDispatcher := createCommandDispatcher(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
@@ -70,24 +115,83 @@ func dispatchLoadCommand(cmd *cobra.Command, args []string) {
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
-		Kind:     global.KindType(args[0]),
+		Kind:     global.People,
 		Action:   global.Load,
 	}
 
 	commandDispatcher.Execute(params)
 }
 
-func dispatchDisplayCommand(cmd *cobra.Command, args []string) {
+func dispatchLoadTeamsCommand(cmd *cobra.Command, args []string) {
 	commandDispatcher := createCommandDispatcher(
 		cmd.Flag("url").Value.String(),
 		cmd.Flag("api-key").Value.String(),
 	)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
-		Kind:   global.KindType(args[0]),
+		Filename: cmd.Flag("file").Value.String(),
+		Kind:     global.Teams,
+		Action:   global.Load,
+	}
+
+	commandDispatcher.Execute(params)
+}
+
+func dispatchLoadMembershipsCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := createCommandDispatcher(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Filename: cmd.Flag("file").Value.String(),
+		Kind:     global.Memberships,
+		Action:   global.Load,
+		Parent:   args[0],
+	}
+
+	commandDispatcher.Execute(params)
+}
+
+func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := createCommandDispatcher(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Kind:   global.People,
 		Action: global.Display,
 	}
 
+	commandDispatcher.Execute(params)
+}
+
+func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := createCommandDispatcher(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Kind:   global.Teams,
+		Action: global.Display,
+	}
+
+	commandDispatcher.Execute(params)
+}
+
+func dispatchDisplayMembershipsCommand(cmd *cobra.Command, args []string) {
+	commandDispatcher := createCommandDispatcher(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Kind:   global.Memberships,
+		Action: global.Display,
+		Parent: args[0],
+	}
 	commandDispatcher.Execute(params)
 }
 
@@ -98,6 +202,7 @@ func createCommandDispatcher(url, apiKey string) *global.CommandHandler {
 	)
 	output.AddExecutor(people.Execute)
 	output.AddExecutor(teams.Execute)
+	output.AddExecutor(memberships.Execute)
 
 	return output
 }
@@ -115,13 +220,13 @@ func doBootServer(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	loadCmd.Flags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
-	loadCmd.Flags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
-	loadCmd.Flags().StringP("file", "f", "", "Load data from `FILE` (required)")
+	loadCmd.PersistentFlags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
+	loadCmd.PersistentFlags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
+	loadCmd.PersistentFlags().StringP("file", "f", "", "Load data from `FILE` (required)")
 	loadCmd.MarkFlagRequired("file")
 
-	displayCmd.Flags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
-	displayCmd.Flags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
+	displayCmd.PersistentFlags().StringP("url", "u", defaultURL, "The URL of the running instance of adoption server")
+	displayCmd.PersistentFlags().StringP("api-key", "k", "", "API Key which is going to be send by Authorization header")
 
 	serverCmd.Flags().IntP("port", "p", 3000, "port the server will bind")
 	serverCmd.Flags().StringP("storage", "s", "memory", "storage type where data going to be persisted")
@@ -129,6 +234,12 @@ func init() {
 	serverCmd.Flags().IP("redis-host", net.IPv4(127, 0, 0, 1), "redis host for using with redis storage")
 	serverCmd.Flags().StringP("badger-path", "", "/tmp/badger", "badger path for using with badger storage")
 
+	loadCmd.AddCommand(loadPeopleCmd)
+	loadCmd.AddCommand(loadTeamsCmd)
+	loadCmd.AddCommand(loadMembershipsCmd)
+	displayCmd.AddCommand(displayPeopleCmd)
+	displayCmd.AddCommand(displayTeamsCmd)
+	displayCmd.AddCommand(displayMembershipsCmd)
 	rootCmd.AddCommand(loadCmd)
 	rootCmd.AddCommand(displayCmd)
 	rootCmd.AddCommand(serverCmd)

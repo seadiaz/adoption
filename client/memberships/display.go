@@ -1,39 +1,29 @@
 package memberships
 
 import (
+	"fmt"
+
 	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/people"
 	"github.com/seadiaz/adoption/client/teams"
+
+	tm "github.com/buger/goterm"
 )
 
-func display(c *global.CommandHandler) {
-	people := people.GetPeople(c.BaseURL+people.Path, c.APIKey)
-	teams := teams.GetTeams(c.BaseURL+teams.Path, c.APIKey)
-
+func display(c *global.CommandHandler, teamName string) {
+	team := teams.FindTeamByName(c.BaseURL+teams.Path, c.APIKey, teamName)
+	people := teams.GetMembersByTeam(c.BaseURL+teams.Path+"/"+team.ID+people.Path, c.APIKey)
+	print(people)
 }
 
-func fulfillMembershipTeamFromTeamName(Memberships []*Membership, teams []*teams.Team, people []*people.Person) []*Membership {
-	output := make([]*Membership, 0, 0)
-	for _, item := range Memberships {
-		team := filterTeamByName(teams, item.TeamName)
-		person := filterPersonByEmail(people, item.PersonEmail)
-		if team != nil {
-			item.Team = team
-			item.Person = person
-		}
-		output = append(output, item)
+func print(people []*people.Person) {
+	table := tm.NewTable(0, 10, 5, ' ', 0)
+	fmt.Fprintf(table, "ID\tName\tEmail\n")
+	for _, p := range people {
+		fmt.Fprintf(table, "%s\t%s\t%s\n", p.ID, p.Name, p.Email)
 	}
-	return output
-}
-
-func filterTeamByName(teams []*teams.Team, name string) *teams.Team {
-	for _, v := range teams {
-		if v.Name == name {
-			return v
-		}
-	}
-
-	return nil
+	tm.Println(table)
+	tm.Flush()
 }
 
 func filterPersonByEmail(teams []*people.Person, email string) *people.Person {
