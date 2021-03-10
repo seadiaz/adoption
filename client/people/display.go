@@ -3,13 +3,11 @@ package people
 import (
 	"fmt"
 
-	"github.com/seadiaz/adoption/client/global"
-
 	tm "github.com/buger/goterm"
 )
 
-func display(c *global.CommandHandler) {
-	people := GetPeople(c.BaseURL+Path, c.APIKey)
+func displayV2(r *Repository) {
+	people := r.GetPeople()
 	print(people)
 }
 

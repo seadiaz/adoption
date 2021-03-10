@@ -1,0 +1,106 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  AdoptableResponse:
+    properties:
+      id:
+        type: string
+        x-go-name: ID
+      labels:
+        items:
+          $ref: '#/definitions/LabelResponse'
+        type: array
+        x-go-name: Labels
+      name:
+        type: string
+        x-go-name: Name
+    title: AdoptableResponse ...
+    type: object
+    x-go-package: github.com/seadiaz/adoption/server/details/adapters
+  LabelResponse:
+    properties:
+      kind:
+        type: string
+        x-go-name: Kind
+      value:
+        type: string
+        x-go-name: Value
+    title: LabelResponse ...
+    type: object
+    x-go-package: github.com/seadiaz/adoption/server/details/adapters
+  PersonRequest:
+    properties:
+      email:
+        type: string
+        x-go-name: Email
+      id:
+        type: string
+        x-go-name: ID
+      name:
+        type: string
+        x-go-name: Name
+    title: PersonRequest ...
+    type: object
+    x-go-package: github.com/seadiaz/adoption/server/details/adapters
+  PersonResponse:
+    properties:
+      adoptables:
+        items:
+          $ref: '#/definitions/AdoptableResponse'
+        type: array
+        x-go-name: Adoptables
+      email:
+        type: string
+        x-go-name: Email
+      id:
+        type: string
+        x-go-name: ID
+      name:
+        type: string
+        x-go-name: Name
+    title: PersonResponse ...
+    type: object
+    x-go-package: github.com/seadiaz/adoption/server/details/adapters
+host: localhost:3000
+info:
+  description: Documentation of our awesome API.
+  title: Adoptions.
+  version: 1.0.0
+paths:
+  /people:
+    get:
+      description: Fetch the all the people
+      operationId: getPeople
+      responses:
+        "200":
+          $ref: '#/responses/personResponse'
+      tags:
+      - people
+    post:
+      description: Create a new person
+      operationId: postPeople
+      parameters:
+      - description: This text will appear as description of your request body.
+        in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/PersonRequest'
+      responses:
+        "200":
+          $ref: '#/responses/personResponse'
+      tags:
+      - people
+produces:
+- application/json
+responses:
+  personResponse:
+    description: This text will appear as description of your response body.
+    schema:
+      $ref: '#/definitions/PersonResponse'
+schemes:
+- http
+securityDefinitions:
+  basic:
+    type: basic
+swagger: "2.0"

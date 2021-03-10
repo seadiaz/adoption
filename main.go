@@ -9,8 +9,11 @@ import (
 	"github.com/seadiaz/adoption/client/memberships"
 	"github.com/seadiaz/adoption/client/people"
 	"github.com/seadiaz/adoption/client/teams"
+	"github.com/seadiaz/adoption/client/utils"
 	"github.com/seadiaz/adoption/server"
 	"github.com/spf13/cobra"
+
+	_ "github.com/seadiaz/adoption/docs"
 )
 
 func init() {
@@ -108,9 +111,11 @@ func mainCLI() {
 }
 
 func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
+	repository := people.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
 	)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
@@ -119,7 +124,7 @@ func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
 		Action:   global.Load,
 	}
 
-	commandDispatcher.Execute(params)
+	people.ExecuteV2(repository, params)
 }
 
 func dispatchLoadTeamsCommand(cmd *cobra.Command, args []string) {
@@ -154,9 +159,11 @@ func dispatchLoadMembershipsCommand(cmd *cobra.Command, args []string) {
 }
 
 func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
+	repository := people.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
 	)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
@@ -164,7 +171,7 @@ func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
 		Action: global.Display,
 	}
 
-	commandDispatcher.Execute(params)
+	people.ExecuteV2(repository, params)
 }
 
 func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
@@ -200,7 +207,6 @@ func createCommandDispatcher(url, apiKey string) *global.CommandHandler {
 		url,
 		apiKey,
 	)
-	output.AddExecutor(people.Execute)
 	output.AddExecutor(teams.Execute)
 	output.AddExecutor(memberships.Execute)
 

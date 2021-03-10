@@ -15,16 +15,16 @@ type Person struct {
 	Email string `json:"email" csv:"Email" mapstructure:"email"`
 }
 
-// Execute ...
-func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) error {
+// ExecuteV2 ...
+func ExecuteV2(r *Repository, params *global.CommandHandlerParams) error {
 	if params.Kind != global.People {
 		return nil
 	}
 	switch params.Action {
 	case global.Display:
-		display(c)
+		displayV2(r)
 	case global.Load:
-		load(c, params.Filename)
+		load(r, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

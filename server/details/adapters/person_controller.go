@@ -17,7 +17,8 @@ var (
 	}
 )
 
-type personForm struct {
+// PersonRequest ...
+type PersonRequest struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
@@ -49,7 +50,7 @@ func (c *PersonController) getAllPeople(w http.ResponseWriter, r *http.Request) 
 }
 
 func (c *PersonController) createPerson(w http.ResponseWriter, r *http.Request) {
-	person := &personForm{}
+	person := &PersonRequest{}
 	err := validateRequest(r, createPersonRules, person)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)

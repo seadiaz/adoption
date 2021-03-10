@@ -73,7 +73,7 @@ func (c *TeamController) createTeam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *TeamController) addMemberToTeam(w http.ResponseWriter, r *http.Request) {
-	person := &personForm{}
+	person := &PersonRequest{}
 	err := validateRequest(r, addMemberToTeamRules, person)
 	if err != nil {
 		replyWithError(w, http.StatusBadRequest, err)
