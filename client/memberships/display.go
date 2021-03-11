@@ -3,29 +3,14 @@ package memberships
 import (
 	"fmt"
 
-	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/people"
-	"github.com/seadiaz/adoption/client/teams"
 
 	tm "github.com/buger/goterm"
 )
 
-func display(c *global.CommandHandler, teamName string) {
-	team := teams.FindTeamByName(c.BaseURL+teams.Path, c.APIKey, teamName)
-	people := teams.GetMembersByTeam(c.BaseURL+teams.Path+"/"+team.ID+people.Path, c.APIKey)
-	output := prepareToDisplay(team, people)
-	print(output)
-}
-
-func prepareToDisplay(team *teams.Team, people []*people.Person) []*MembershipOutput {
-	output := make([]*MembershipOutput, len(people))
-	for i, v := range people {
-		output[i] = &MembershipOutput{
-			TeamName:   team.Name,
-			PersonName: v.Name,
-		}
-	}
-	return output
+func display(r *Repository, teamName string) {
+	members := r.GetMembersByTeam(teamName)
+	print(members)
 }
 
 func print(items []*MembershipOutput) {

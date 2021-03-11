@@ -7,15 +7,7 @@ import (
 func load(r *Repository, filename string) {
 	var people []Person
 	utils.ReadCsvFile(filename, &people)
-	channel := make(chan string)
-	for _, item := range people {
-		go postPerson(r, item, channel)
+	for _, v := range people {
+		r.SavePerson(&v)
 	}
-
-	utils.ReceiveResponses(channel, len(people))
-}
-
-func postPerson(r *Repository, person Person, channel chan string) {
-	r.Client.DoPostRequest(Path, person)
-	channel <- person.Name
 }

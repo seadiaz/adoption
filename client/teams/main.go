@@ -15,15 +15,15 @@ type Team struct {
 }
 
 // Execute ...
-func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) error {
+func Execute(r *Repository, params *global.CommandHandlerParams) error {
 	if params.Kind != global.Teams {
 		return nil
 	}
 	switch params.Action {
 	case global.Display:
-		display(c)
+		display(r)
 	case global.Load:
-		load(c, params.Filename)
+		load(r, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

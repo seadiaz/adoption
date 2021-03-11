@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	"github.com/buger/goterm"
-	"github.com/seadiaz/adoption/client/global"
 )
 
-func display(c *global.CommandHandler) {
-	people := GetTeams(c.BaseURL+Path, c.APIKey)
+func display(r *Repository) {
+	people := r.GetTeams()
 	print(people)
 }
 

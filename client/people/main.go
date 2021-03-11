@@ -15,8 +15,8 @@ type Person struct {
 	Email string `json:"email" csv:"Email" mapstructure:"email"`
 }
 
-// ExecuteV2 ...
-func ExecuteV2(r *Repository, params *global.CommandHandlerParams) error {
+// Execute ...
+func Execute(r *Repository, params *global.CommandHandlerParams) error {
 	if params.Kind != global.People {
 		return nil
 	}

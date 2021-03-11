@@ -60,7 +60,7 @@ var (
 	}
 
 	loadMembershipsCmd = &cobra.Command{
-		Use:   "memberships",
+		Use:   "memberships <team>",
 		Short: "load memberships from a csv file",
 		Long:  "load memberships from a csv file",
 		Args:  cobra.ExactArgs(1),
@@ -111,12 +111,7 @@ func mainCLI() {
 }
 
 func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
-	repository := people.CreateRepository(
-		utils.CreateAPIClient(
-			cmd.Flag("url").Value.String(),
-			cmd.Flag("api-key").Value.String(),
-		),
-	)
+	r := createPeopleRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
@@ -124,14 +119,20 @@ func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
 		Action:   global.Load,
 	}
 
-	people.ExecuteV2(repository, params)
+	people.Execute(r, params)
+}
+
+func createPeopleRepository(cmd *cobra.Command) *people.Repository {
+	return people.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
+	)
 }
 
 func dispatchLoadTeamsCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
-	)
+	r := createTeamsRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
@@ -139,14 +140,20 @@ func dispatchLoadTeamsCommand(cmd *cobra.Command, args []string) {
 		Action:   global.Load,
 	}
 
-	commandDispatcher.Execute(params)
+	teams.Execute(r, params)
+}
+
+func createTeamsRepository(cmd *cobra.Command) *teams.Repository {
+	return teams.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
+	)
 }
 
 func dispatchLoadMembershipsCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
-	)
+	r := createMembershipsRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Filename: cmd.Flag("file").Value.String(),
@@ -155,7 +162,18 @@ func dispatchLoadMembershipsCommand(cmd *cobra.Command, args []string) {
 		Parent:   args[0],
 	}
 
-	commandDispatcher.Execute(params)
+	memberships.Execute(r, params)
+}
+
+func createMembershipsRepository(cmd *cobra.Command) *memberships.Repository {
+	client := utils.CreateAPIClient(
+		cmd.Flag("url").Value.String(),
+		cmd.Flag("api-key").Value.String(),
+	)
+	return memberships.CreateRepository(
+		people.CreateRepository(client),
+		teams.CreateRepository(client),
+	)
 }
 
 func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
@@ -171,13 +189,15 @@ func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
 		Action: global.Display,
 	}
 
-	people.ExecuteV2(repository, params)
+	people.Execute(repository, params)
 }
 
 func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
+	r := teams.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
 	)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
@@ -185,32 +205,18 @@ func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
 		Action: global.Display,
 	}
 
-	commandDispatcher.Execute(params)
+	teams.Execute(r, params)
 }
 
 func dispatchDisplayMembershipsCommand(cmd *cobra.Command, args []string) {
-	commandDispatcher := createCommandDispatcher(
-		cmd.Flag("url").Value.String(),
-		cmd.Flag("api-key").Value.String(),
-	)
+	r := createMembershipsRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Kind:   global.Memberships,
 		Action: global.Display,
 		Parent: args[0],
 	}
-	commandDispatcher.Execute(params)
-}
-
-func createCommandDispatcher(url, apiKey string) *global.CommandHandler {
-	output := global.CreateCommandHandler(
-		url,
-		apiKey,
-	)
-	output.AddExecutor(teams.Execute)
-	output.AddExecutor(memberships.Execute)
-
-	return output
+	memberships.Execute(r, params)
 }
 
 func doBootServer(cmd *cobra.Command, args []string) {

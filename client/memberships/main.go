@@ -18,15 +18,15 @@ type MembershipOutput struct {
 }
 
 // Execute ...
-func Execute(c *global.CommandHandler, params *global.CommandHandlerParams) error {
+func Execute(r *Repository, params *global.CommandHandlerParams) error {
 	if params.Kind != global.Memberships {
 		return nil
 	}
 	switch params.Action {
 	case global.Display:
-		display(c, params.Parent)
+		display(r, params.Parent)
 	case global.Load:
-		load(c, params.Parent, params.Filename)
+		load(r, params.Parent, params.Filename)
 	default:
 		glog.Fatalf("action %s not supported", params.Action)
 	}

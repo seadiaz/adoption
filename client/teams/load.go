@@ -1,22 +1,13 @@
 package teams
 
 import (
-	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/utils"
 )
 
-func load(c *global.CommandHandler, filename string) {
+func load(r *Repository, filename string) {
 	var teams []Team
 	utils.ReadCsvFile(filename, &teams)
-	channel := make(chan string)
-	for _, item := range teams {
-		go postTeam(c.BaseURL+Path, c.APIKey, item, channel)
+	for _, v := range teams {
+		r.SaveTeam(&v)
 	}
-
-	utils.ReceiveResponses(channel, len(teams))
-}
-
-func postTeam(url, apiKey string, team Team, channel chan string) {
-	utils.DoPostRequest(url, apiKey, team)
-	channel <- team.Name
 }
