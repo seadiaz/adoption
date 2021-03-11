@@ -62,7 +62,7 @@ func (s *AdoptableServiceExpert) CreateAdoptable(name string) (*entities.Adoptab
 		}
 	}
 
-	adoptable := entities.CreateAdoptableWithName(name)
+	adoptable := entities.CreateAdoptableWithNameAndStrategy(name, entities.StrategyTypeSingle)
 	adoptable, _ = s.repository.SaveAdoptable(adoptable)
 	return adoptable, nil
 }

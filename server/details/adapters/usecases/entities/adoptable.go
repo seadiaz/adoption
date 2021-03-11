@@ -1,14 +1,23 @@
 package entities
 
+// StrategyType ...
+type StrategyType string
+
+const (
+	// StrategyTypeSingle ...
+	StrategyTypeSingle StrategyType = "single"
+)
+
 // Adoptable ...
 type Adoptable struct {
-	ID     *ID
-	Name   string
-	Labels []*Label
+	ID       *ID
+	Name     string
+	Labels   []*Label
+	Strategy StrategyType
 }
 
-// CreateAdoptableWithName ...
-func CreateAdoptableWithName(name string) *Adoptable {
+// CreateAdoptableWithNameAndStrategy ...
+func CreateAdoptableWithNameAndStrategy(name string, strategy StrategyType) *Adoptable {
 	return &Adoptable{
 		Name: name,
 		ID:   generateID(),

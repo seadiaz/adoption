@@ -9,7 +9,7 @@ import (
 )
 
 func createDummyAdoptableWithName(name string) *entities.Adoptable {
-	return entities.CreateAdoptableWithName(name)
+	return entities.CreateAdoptableWithNameAndStrategy(name, entities.StrategyTypeSingle)
 }
 
 var _ = Describe("person", func() {
@@ -30,7 +30,7 @@ var _ = Describe("person", func() {
 
 		for i := 1; i <= 2; i++ {
 			adoptableName := fmt.Sprintf("Dummy %d", i)
-			adoptable := entities.CreateAdoptableWithName(adoptableName)
+			adoptable := entities.CreateAdoptableWithNameAndStrategy(adoptableName, entities.StrategyTypeSingle)
 			person.AdoptAdoptable(adoptable)
 		}
 

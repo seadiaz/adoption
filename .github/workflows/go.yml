@@ -25,7 +25,13 @@ jobs:
 
       - name: Run unit tests
         run: |
-            
+            go test -v ./client/... ./server/...
+        env:
+          GO111MODULE: "on"
+
+      - name: Run functional tests
+        run: |
+            go test -v ./bdd/.
         env:
           GO111MODULE: "on"
 
@@ -59,6 +65,6 @@ jobs:
         uses: opspresso/action-docker@master
         env:
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          PASSWORD: ${{ secrets.DOCKER_PASSWORD }} #pragma: allowlist secret
           IMAGE_NAME: seadiaz/adoption
           LATEST: "true"
