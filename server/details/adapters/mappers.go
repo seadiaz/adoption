@@ -33,9 +33,10 @@ type PersonResponse struct {
 
 // AdoptableResponse ...
 type AdoptableResponse struct {
-	ID     string           `json:"id"`
-	Name   string           `json:"name,omitempty"`
-	Labels []*LabelResponse `json:"labels,omitempty"`
+	ID       string           `json:"id"`
+	Name     string           `json:"name"`
+	Labels   []*LabelResponse `json:"labels,omitempty"`
+	Strategy string           `json:"strategy"`
 }
 
 // LabelResponse ...
@@ -94,9 +95,10 @@ func CreateAdoptableResponseListFromAdoptableList(adoptables []*entities.Adoptab
 // CreateAdoptableResponseFromAdoptable ...
 func CreateAdoptableResponseFromAdoptable(adoptable *entities.Adoptable) *AdoptableResponse {
 	return &AdoptableResponse{
-		ID:     adoptable.ID.String(),
-		Name:   adoptable.Name,
-		Labels: CreateLabelResponseListFromLabelList(adoptable.Labels),
+		ID:       adoptable.ID.String(),
+		Name:     adoptable.Name,
+		Labels:   CreateLabelResponseListFromLabelList(adoptable.Labels),
+		Strategy: string(adoptable.Strategy),
 	}
 }
 

@@ -11,7 +11,8 @@ import (
 
 var (
 	createAdoptableRules = map[string]string{
-		"name": "required|string",
+		"name":     "required|string",
+		"strategy": "required|string",
 	}
 
 	labelRules = map[string]string{

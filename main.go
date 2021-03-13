@@ -5,6 +5,7 @@ import (
 	"net"
 	"strconv"
 
+	"github.com/seadiaz/adoption/client/adoptables"
 	"github.com/seadiaz/adoption/client/global"
 	"github.com/seadiaz/adoption/client/memberships"
 	"github.com/seadiaz/adoption/client/people"
@@ -67,6 +68,14 @@ var (
 		Run:   dispatchLoadMembershipsCommand,
 	}
 
+	loadAdoptablesCmd = &cobra.Command{
+		Use:   "adoptables",
+		Short: "load adoptables from a csv file",
+		Long:  "load adoptables from a csv file",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchLoadAdoptablesCommand,
+	}
+
 	displayCmd = &cobra.Command{
 		Use:   "display",
 		Short: "display the information stored in the server",
@@ -97,6 +106,14 @@ var (
 		Run:   dispatchDisplayMembershipsCommand,
 	}
 
+	displayAdoptablesCmd = &cobra.Command{
+		Use:   "adoptables",
+		Short: "display adoptables information",
+		Long:  "display adoptables information",
+		Args:  cobra.ExactArgs(0),
+		Run:   dispatchDisplayAdoptablesCommand,
+	}
+
 	serverCmd = &cobra.Command{
 		Use:   "server",
 		Short: "boot adoption server",
@@ -122,8 +139,29 @@ func dispatchLoadPeopleCommand(cmd *cobra.Command, args []string) {
 	people.Execute(r, params)
 }
 
+func dispatchLoadAdoptablesCommand(cmd *cobra.Command, args []string) {
+	r := createAdoptableRepository(cmd)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Filename: cmd.Flag("file").Value.String(),
+		Kind:     global.Adoptables,
+		Action:   global.Load,
+	}
+
+	adoptables.Execute(r, params)
+}
+
 func createPeopleRepository(cmd *cobra.Command) *people.Repository {
 	return people.CreateRepository(
+		utils.CreateAPIClient(
+			cmd.Flag("url").Value.String(),
+			cmd.Flag("api-key").Value.String(),
+		),
+	)
+}
+
+func createAdoptableRepository(cmd *cobra.Command) *adoptables.Repository {
+	return adoptables.CreateRepository(
 		utils.CreateAPIClient(
 			cmd.Flag("url").Value.String(),
 			cmd.Flag("api-key").Value.String(),
@@ -177,12 +215,7 @@ func createMembershipsRepository(cmd *cobra.Command) *memberships.Repository {
 }
 
 func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
-	repository := people.CreateRepository(
-		utils.CreateAPIClient(
-			cmd.Flag("url").Value.String(),
-			cmd.Flag("api-key").Value.String(),
-		),
-	)
+	repository := createPeopleRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Kind:   global.People,
@@ -193,12 +226,7 @@ func dispatchDisplayPeopleCommand(cmd *cobra.Command, args []string) {
 }
 
 func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
-	r := teams.CreateRepository(
-		utils.CreateAPIClient(
-			cmd.Flag("url").Value.String(),
-			cmd.Flag("api-key").Value.String(),
-		),
-	)
+	r := createTeamsRepository(cmd)
 	cmd.Flags()
 	params := &global.CommandHandlerParams{
 		Kind:   global.Teams,
@@ -206,6 +234,17 @@ func dispatchDisplayTeamsCommand(cmd *cobra.Command, args []string) {
 	}
 
 	teams.Execute(r, params)
+}
+
+func dispatchDisplayAdoptablesCommand(cmd *cobra.Command, args []string) {
+	r := createAdoptableRepository(cmd)
+	cmd.Flags()
+	params := &global.CommandHandlerParams{
+		Kind:   global.Adoptables,
+		Action: global.Display,
+	}
+
+	adoptables.Execute(r, params)
 }
 
 func dispatchDisplayMembershipsCommand(cmd *cobra.Command, args []string) {
@@ -249,9 +288,11 @@ func init() {
 	loadCmd.AddCommand(loadPeopleCmd)
 	loadCmd.AddCommand(loadTeamsCmd)
 	loadCmd.AddCommand(loadMembershipsCmd)
+	loadCmd.AddCommand(loadAdoptablesCmd)
 	displayCmd.AddCommand(displayPeopleCmd)
 	displayCmd.AddCommand(displayTeamsCmd)
 	displayCmd.AddCommand(displayMembershipsCmd)
+	displayCmd.AddCommand(displayAdoptablesCmd)
 	rootCmd.AddCommand(loadCmd)
 	rootCmd.AddCommand(displayCmd)
 	rootCmd.AddCommand(serverCmd)

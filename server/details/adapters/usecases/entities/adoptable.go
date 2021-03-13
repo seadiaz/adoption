@@ -19,8 +19,9 @@ type Adoptable struct {
 // CreateAdoptableWithNameAndStrategy ...
 func CreateAdoptableWithNameAndStrategy(name string, strategy StrategyType) *Adoptable {
 	return &Adoptable{
-		Name: name,
-		ID:   generateID(),
+		Name:     name,
+		ID:       generateID(),
+		Strategy: strategy,
 	}
 }
 

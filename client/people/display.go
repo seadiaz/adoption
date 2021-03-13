@@ -6,7 +6,7 @@ import (
 	tm "github.com/buger/goterm"
 )
 
-func displayV2(r *Repository) {
+func display(r *Repository) {
 	people := r.GetPeople()
 	print(people)
 }

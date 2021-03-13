@@ -21,6 +21,9 @@ const (
 
 	// Memberships ...
 	Memberships KindType = "memberships"
+
+	// Adoptables ...
+	Adoptables KindType = "adoptables"
 )
 
 // CommandHandler ...

@@ -16,9 +16,10 @@ type AdoptableRepository struct {
 }
 
 type persistedAdoptable struct {
-	ID     string
-	Name   string
-	Labels []persistedLabel
+	ID       string
+	Name     string
+	Labels   []persistedLabel
+	Strategy string
 }
 
 type persistedLabel struct {
@@ -28,17 +29,19 @@ type persistedLabel struct {
 
 func createPersistedAdoptableFromAdoptable(entity *entities.Adoptable) *persistedAdoptable {
 	return &persistedAdoptable{
-		ID:     entity.ID.String(),
-		Name:   entity.Name,
-		Labels: createPersistedLabelListFromLabelList(entity.Labels),
+		ID:       entity.ID.String(),
+		Name:     entity.Name,
+		Labels:   createPersistedLabelListFromLabelList(entity.Labels),
+		Strategy: string(entity.Strategy),
 	}
 }
 
 func createAdoptableFromPersistedAdoptable(pEntity *persistedAdoptable) *entities.Adoptable {
 	return &entities.Adoptable{
-		ID:     entities.BuildID(pEntity.ID),
-		Name:   pEntity.Name,
-		Labels: createLabelListFromPersistedLabelList(pEntity.Labels),
+		ID:       entities.BuildID(pEntity.ID),
+		Name:     pEntity.Name,
+		Labels:   createLabelListFromPersistedLabelList(pEntity.Labels),
+		Strategy: entities.StrategyType(pEntity.Strategy),
 	}
 }
 
