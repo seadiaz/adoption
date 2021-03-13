@@ -15,6 +15,7 @@ func CreateAdoptableWithName(name string) (map[string]interface{}, error) {
 	path := "/adoptables"
 	body := make(map[string]interface{})
 	body["name"] = name
+	body["strategy"] = "single"
 	res, err := postMessage(body, path)
 	if err != nil {
 		glog.Warning(err)
