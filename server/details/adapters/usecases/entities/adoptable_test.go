@@ -8,14 +8,14 @@ import (
 
 var _ = Describe("adoptable", func() {
 	It("should create an instance", func() {
-		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingle)
+		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingleMember)
 
 		Expect(actual).ToNot(BeNil())
 		Expect(actual.Labels).To(HaveLen(0))
 	})
 
 	It("should add a label to the adoptable", func() {
-		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingle)
+		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingleMember)
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 
 		actual.AddLabel(label)
@@ -26,7 +26,7 @@ var _ = Describe("adoptable", func() {
 	})
 
 	It("should replace a label to the adoptable", func() {
-		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingle)
+		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingleMember)
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 		label2 := entities.CreateLabelWithKindAndValue("tag", "my-new-tag")
 
@@ -39,7 +39,7 @@ var _ = Describe("adoptable", func() {
 	})
 
 	It("should remove a label to the adoptable", func() {
-		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingle)
+		actual := entities.CreateAdoptableWithNameAndStrategy("Dummy Name", entities.StrategyTypeSingleMember)
 		label := entities.CreateLabelWithKindAndValue("tag", "my-tag")
 		actual.AddLabel(label)
 

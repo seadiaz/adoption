@@ -4,8 +4,8 @@ package entities
 type StrategyType string
 
 const (
-	// StrategyTypeSingle ...
-	StrategyTypeSingle StrategyType = "single"
+	// StrategyTypeSingleMember ...
+	StrategyTypeSingleMember StrategyType = "single-member"
 )
 
 // Adoptable ...

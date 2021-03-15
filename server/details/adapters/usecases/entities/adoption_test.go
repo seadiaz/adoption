@@ -44,7 +44,7 @@ var _ = Describe("adoption", func() {
 		person := createDummyPersonWithNameAndEmailAndAdoptable("Stanley Sherman", defaultEmail, adoptable)
 		adoption.IncludePerson(person)
 		expectedAdoptableName := "Adoptable 2"
-		expectedAdoptable := entities.CreateAdoptableWithNameAndStrategy(expectedAdoptableName, entities.StrategyTypeSingle)
+		expectedAdoptable := entities.CreateAdoptableWithNameAndStrategy(expectedAdoptableName, entities.StrategyTypeSingleMember)
 
 		actual := adoption.CalculateOverPeopleForAdoptable(expectedAdoptable)
 
